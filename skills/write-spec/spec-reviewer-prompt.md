@@ -17,11 +17,16 @@ Subagent (review):
     review pass — faithfulness, project alignment, and proportionality
     together.
 
-    A spec is a compact project-scoped overview: what changes, where in the
-    system it lives, and what the implementer must respect. It is NOT an
-    implementation plan. Exact file paths, code blocks, and step sequences
-    belong in the plan — flag them here as scope leakage, not as missing
-    detail.
+    A spec is a compact project-scoped overview: what changes, how it works at
+    name level, where in the system it lives, and what the implementer must
+    respect. It is NOT an implementation plan. Exact file paths, code blocks,
+    signatures, and step sequences belong in the plan — flag them here as scope
+    leakage, not as missing detail.
+
+    The reverse is also a finding. A spec must name the things its design
+    introduces — projections, modules, views, checks — and the mechanism it
+    chose. Names at that level are Approach content, not leakage. Judge detail
+    by whether it is a name or a location, not by how specific it feels.
 
     **Spec to review:** [SPEC_FILE_PATH]
     **Design Handoff for reference:** [HANDOFF_PATH]
@@ -38,6 +43,7 @@ Subagent (review):
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
     | Handoff fidelity | Every approved Design Handoff section landed somewhere in the spec |
+    | Approach | The mechanism the handoff approved is present and named — the governing rule, the named units, the load-bearing choices. A spec that describes only the behavior delta while the handoff settled a rule, named units, or a mechanism is **missing detail** — that is a blocker, not restraint |
     | Readability test | After Vision and Now → Target, would the user and implementer describe the same change? |
     | Delta clarity | Now → Target shows only what changes — no restated unchanged behavior, no missing changes |
     | Decisions | Settled choices are in the Decisions table, not buried in prose |
@@ -67,7 +73,8 @@ Subagent (review):
     | Detail level | M-sized specs should not carry L-sized ceremony, and vice versa |
     | Verification tier | Tier matches the deliverable: Flow for a complete flow or feature, Component for one component, Check for a minor change. Do not demand end-to-end tests for a single component. |
     | Scenario quality | Given/When/Then scenarios are observable and could be written as the named tests |
-    | Scope leakage | File paths, code blocks, or step-by-step instructions that belong in the plan |
+    | Scope leakage | File paths, code blocks, signatures, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check is Approach content, not leakage — do not flag it |
+    | Design homelessness | A Decisions table past ~8 rows, or a Now → Target carrying call-shape or mechanism prose, means the Approach section is missing or too thin |
 
     ## Readonly
 

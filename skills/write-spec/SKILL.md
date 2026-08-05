@@ -65,7 +65,7 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 | Size | Looks like | What to write |
 |------|------------|---------------|
 | **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
-| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision`, `Now → Target`, `Scope`, `Verification`. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
+| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision`, `Now → Target`, `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
 | **L** | A complete flow or feature; new architecture, new integration, cross-domain behavior, anything others will build on | All sections. A **Full** plan downstream. |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
@@ -82,8 +82,9 @@ Fixed section order. Section names are literal — use them verbatim.
 |---------|---------|---------------|
 | **Vision** | What are we building, in this project's context? | Human language, 3–6 sentences. What exists today, what exists after, why it matters. No jargon, no file paths. |
 | **Now → Target** | What actually changes? | Type-dependent before/after visualization. Only the delta — unchanged behavior is not described. |
+| **Approach** | How does it work, at name level? | The governing rule, the named units it introduces, the mechanism where the choice matters. Names, not locations. |
 | **Scope** | Where does this live and what must be respected? | Areas and components at name level, reuse pointers, docs to read, skills to use, guardrails. **No file paths, no code.** |
-| **Decisions** | What is settled? | Lean table. Only entries someone might plausibly re-litigate. |
+| **Decisions** | What is settled? | Lean table. Only entries someone might plausibly re-litigate. What the design *is* belongs in Approach; only the contested *why* belongs here. |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
 | **Verification** | How do we know it works? | Scaled to what the spec delivers — see Verification Tiers. |
 
@@ -111,6 +112,23 @@ Show the delta, minimally, in whatever form makes it fastest to read. Mermaid di
 | **mixed** | The flow that crosses the boundary, once — not one section per layer |
 
 Do not restate behavior that stays the same. A reader should be able to point at this section and say "that is the change."
+
+### Approach
+
+The design the brainstorm settled, at a level someone can hold in their head. Without this section the mechanism has nowhere to live, and it ends up either dropped on the way out of brainstorming or crammed into the Decisions table.
+
+Cover, in this order:
+
+- **The rule** — the one or two sentences that make the change coherent, plus its corollaries. Everything else in the section should follow from it.
+- **Named units** — the projections, modules, views, jobs, components, or checks this introduces or reshapes, as a table of name to responsibility. Name them. "A named projection per surface" is not a design; six named projections are.
+- **Mechanism** — where the choice of mechanism is load-bearing: a view versus an RPC, a queue versus a cron, where a cache lives. One line each. The contested *why* goes to Decisions; what it *is* stays here.
+- **Unchanged** — the structure this deliberately leaves alone, so the plan does not go looking.
+
+**Level test — names, not locations.** If it would come up by name in a code review conversation, it belongs here. If it is a file path, a function signature, SQL, or a step sequence, it belongs in the plan. "`LibraryListRow`, served by one narrow repository method behind a `security_invoker` view" is a spec sentence. "`lib/library/read-models/list-library-documents.ts:130`" is a plan sentence.
+
+**By size:** L always. M only when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
+
+**This is where design detail belongs, so the other sections can stay in their lane.** A Decisions table past roughly eight rows, or a `Now → Target` that grew a subsection about call shapes, means the design is homeless — move it here.
 
 ### Scope
 
@@ -190,6 +208,18 @@ what exists today, what exists after, why it matters>
 
 **UI states that change:** ...
 
+## Approach
+
+**Rule:** <the governing rule and its corollaries>
+
+| Unit | Serves | Responsibility |
+|------|--------|----------------|
+| `<Name>` | <surface> | <what it carries> |
+
+**Mechanism:** <the load-bearing mechanism choices, one line each>
+
+**Unchanged:** <structure this leaves alone>
+
 ## Scope
 
 **Areas involved**
@@ -245,7 +275,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, readability test, project alignment (does `Now → Target` describe the real current state, do the named components and reuse pointers exist), proportionality (detail and verification tier match the size), and scope discipline (no plan-level detail leaking in).
+**Scope:** placeholders, handoff fidelity, approach fidelity (the rule, named units, and mechanism the handoff approved are present and named), readability test, project alignment (does `Now → Target` describe the real current state, do the named components and reuse pointers exist), proportionality (detail and verification tier match the size), and scope discipline (no plan-level detail leaking in — names are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate

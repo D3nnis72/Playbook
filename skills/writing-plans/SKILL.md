@@ -15,7 +15,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Upstream:** The spec, when there is one, has passed write-spec's review pass and user approval. Plan review verifies traceability, buildability, parsimony, and execution topology — it does not re-audit whether the design is doable, which write-spec settled.
 
-**Downstream of the spec:** the spec is a compact project-scoped overview — it names components and areas, not files. This plan owns all file-level detail. The spec's `Verification` scenarios become real tests.
+**Downstream of the spec:** the spec is a compact project-scoped overview — it names components and areas, not files. This plan owns all file-level detail. The spec's `Verification` scenarios become real tests, and every unit named in its `Approach` section gets a file and a task here, under the name the spec gave it. If a named unit has no home in the plan, either the plan is incomplete or the spec's design changed — resolve it before execution rather than silently renaming.
 
 **Context:** If working in an isolated worktree, it should have been created via the `playbook:using-git-worktrees` skill at execution time.
 

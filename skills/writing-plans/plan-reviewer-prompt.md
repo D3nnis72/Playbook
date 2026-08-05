@@ -46,6 +46,7 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Coverage | Every spec requirement maps to at least one plan task/step |
+    | Named units | Every unit named in the spec's Approach section — projections, modules, views, checks — appears in the plan under the same name, with a file and a task. A missing or silently renamed unit is a blocker |
     | Scope | No major scope creep — tasks not anchored in the spec |
     | Correctness | Plan implements what the spec describes, not a different feature |
     | Constraints | Plan's Global Constraints section matches the spec verbatim |
@@ -67,8 +68,9 @@ Subagent (review):
     ### Parsimony
 
     The plan should build the least new surface that satisfies the spec. Read
-    the spec's Scope section for reuse pointers, then verify the plan honors
-    them.
+    the spec's Approach section for the units the design sanctions and its Scope
+    section for reuse pointers, then verify the plan honors both. New surface the
+    Approach section does not sanction is the first thing to question.
 
     | Category | What to Look For |
     |----------|------------------|

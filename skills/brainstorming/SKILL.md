@@ -113,6 +113,7 @@ Required fields mirror the spec sections write-spec will author:
 ## Approved sections
 - [x] Vision
 - [x] Now → Target
+- [x] Approach
 - [x] Scope
 - [x] Decisions
 - [x] Not now
@@ -125,6 +126,12 @@ today, what exists after, why it matters.
 ## Now → Target
 The delta as agreed — user flow before/after for frontend, contract or call
 sequence for backend, schema for data. Only what changes.
+
+## Approach
+The rule the design turns on, the named units it introduces (name plus what
+each is responsible for), and the mechanism choices that are load-bearing.
+Name things — this is the part of the conversation that gets lost otherwise.
+Names, not file paths.
 
 ## Scope
 Areas and components involved (named, not file paths), what to reuse rather
@@ -151,6 +158,8 @@ ui, generation
 **Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement.
 
 Sketch each section to the depth the conversation reached. Do not invent file paths or code — the spec names components, and the plan names files.
+
+**The mechanism you reasoned through is part of the handoff, not just the transcript.** When the conversation settled on a rule, a set of named units, or a choice of mechanism, write them into `Approach` by name. Anything that exists only in the chat is lost at the handoff, and the spec that follows will describe the behavior while quietly forgetting how it works.
 
 **Handoff to write-spec** (substantive features only):
 
