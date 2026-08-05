@@ -4,6 +4,8 @@ Use this template when dispatching the **single** plan reviewer subagent.
 
 **Purpose:** Verify the plan is spec-complete, buildable, and ready for subagent execution — one pass.
 
+**Full plans only.** Lite plans get the four-question self-check in writing-plans Step 5 instead. Dispatching a reviewer at a Lite plan costs more than the change it describes.
+
 **Dispatch after:** The complete plan is written and saved, including the Execution Schedule. Do not dispatch before the plan file exists.
 
 **Agent:** `Subagent (review):` on OpenCode if configured; otherwise any dedicated review subagent your runtime exposes; else `Subagent (general-purpose):`.
@@ -24,6 +26,12 @@ Subagent (review):
     The spec names components and areas, not files — the plan is where
     file-level detail belongs. Do not flag the plan for being more specific
     than the spec.
+
+    Plans specify decisions, not transcriptions. An implementation step may
+    describe a function in prose when its signature, behavior, and test are
+    already pinned — that is complete, not a placeholder. Flag a missing code
+    block only where the exact content is itself the decision: test cases,
+    interfaces, schemas, migrations, config values, user-visible copy.
 
     **Plan to review:** [PLAN_FILE_PATH]
     **Spec for reference:** [SPEC_FILE_PATH]
@@ -46,7 +54,7 @@ Subagent (review):
 
     | Category | What to Look For |
     |----------|------------------|
-    | Placeholders | TBD, TODO, "implement later", vague steps, missing code blocks |
+    | Placeholders | TBD, TODO, "implement later", unnamed error cases or validation rules, tests without names and assertions, missing interfaces or commands |
     | Followability | Could an engineer follow this plan without getting stuck? |
     | Task decomposition | Clear task boundaries, actionable steps, right-sized tasks |
     | Type consistency | Types, signatures, and names match across tasks |
@@ -79,7 +87,8 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Coverage | Every plan task appears in exactly one work unit |
-    | Sizing | Work units are neither trivial nor oversized for one subagent dispatch |
+    | Sizing | Work units are neither trivial nor oversized for one subagent dispatch. Tasks or scope added to fill out a work unit are a finding — the 45-minute figure is a ceiling, not a quota |
+    | Tier fit | A Full plan whose work all stands or falls together, with one deliverable and one test surface, should have been a Lite plan. Say so as a blocker |
     | Dependencies | Depends-on column matches task Interfaces — no circular deps |
     | Parallel safety | Work units in the same wave do not write the same files |
     | Sequencing | Integration/wiring units run after the units they consume |

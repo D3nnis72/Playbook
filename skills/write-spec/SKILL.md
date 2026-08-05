@@ -40,7 +40,7 @@ digraph write_spec {
     node [shape=box];
 
     "Read Design Handoff" -> "Size the work (S/M/L)";
-    "Size the work (S/M/L)" -> "Exit: implement or writing-plans directly" [label="S"];
+    "Size the work (S/M/L)" -> "Exit: implement, or writing-plans at Lite tier" [label="S"];
     "Size the work (S/M/L)" -> "Write spec at sized detail level" [label="M or L"];
     "Write spec at sized detail level" -> "Dispatch spec reviewer (./spec-reviewer-prompt.md)";
     "Dispatch spec reviewer (./spec-reviewer-prompt.md)" -> "Approved?";
@@ -64,13 +64,15 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 
 | Size | Looks like | What to write |
 |------|------------|---------------|
-| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Go straight to writing-plans, or implement directly if the change is obvious. |
-| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision`, `Now → Target`, `Scope`, `Verification`. Skip `Decisions` and `Not now` when there is nothing contested to record. |
-| **L** | A complete flow or feature; new architecture, new integration, cross-domain behavior, anything others will build on | All sections. |
+| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
+| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision`, `Now → Target`, `Scope`, `Verification`. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
+| **L** | A complete flow or feature; new architecture, new integration, cross-domain behavior, anything others will build on | All sections. A **Full** plan downstream. |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
 
 Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming handed off but the work is clearly **S**, say so and move on — do not pad a small change into a full spec.
+
+**Size travels downstream.** writing-plans sizes the plan itself (Direct / Lite / Full) and owns those definitions. Name the plan tier you expect when you hand off, so a small spec does not collect a full plan's ceremony on the way out.
 
 ## Step 3: Spec Format
 

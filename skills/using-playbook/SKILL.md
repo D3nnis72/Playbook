@@ -119,7 +119,9 @@ For **small, already-scoped changes** — a typo, a one-file fix, a rename, a co
 
 Rough signal: if you could describe the done state in one line and touch one or two files, the planning pipeline is probably more ceremony than the change needs.
 
-If the user **asks** for specs, plans, or subagent dispatch on a small change, follow their request — they may want documentation or a teachable artifact.
+**Right-sizing is a decision each process skill makes explicitly, not a vibe.** write-spec sizes the spec S / M / L, and writing-plans sizes the plan Direct / Lite / Full — writing-plans owns those tier definitions and the gates each one turns on. Announce the size you chose and why. Skipping a phase because the work is small is following the process, not cutting a corner.
+
+If the user **asks** for specs, plans, or subagent dispatch on a small change, follow their request — they may want documentation or a teachable artifact. Ask which tier, or pick the smallest one that satisfies the request and say so.
 
 ## Process Skill Chain
 
@@ -129,12 +131,19 @@ Substantive features follow this sequence — do not skip phases unless the work
 digraph process_chain {
     rankdir=TB;
     node [shape=box];
+    "Implement directly\n(docs updated with the change)" [shape=doublecircle];
 
-    "brainstorming\n(discovery + design approval)" -> "write-spec\n(spec authorship + one review)";
-    "write-spec\n(spec authorship + one review)" -> "writing-plans\n(implementation plan + one review)";
-    "writing-plans\n(implementation plan + one review)" -> "subagent-driven-development\nor executing-plans\n(final work unit updates docs)";
+    "brainstorming\n(discovery + design approval)" -> "write-spec\n(sizes the spec S/M/L)";
+    "brainstorming\n(discovery + design approval)" -> "Implement directly\n(docs updated with the change)" [label="small pinned change"];
+    "write-spec\n(sizes the spec S/M/L)" -> "writing-plans\n(sizes the plan Direct/Lite/Full)";
+    "write-spec\n(sizes the spec S/M/L)" -> "Implement directly\n(docs updated with the change)" [label="size S"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "Implement directly\n(docs updated with the change)" [label="Direct"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "executing-plans\n(Lite plans, straight execution)" [label="Lite"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "subagent-driven-development\nor executing-plans\n(waves + declared checkpoints)" [label="Full"];
 }
 ```
+
+Each phase can exit to direct implementation. The chain is a maximum, not a minimum.
 
 ## Skill Types
 

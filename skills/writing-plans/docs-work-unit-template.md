@@ -1,6 +1,6 @@
 # Documentation Work Unit Template
 
-Copy this into every plan as its **final task**. It is the plan's mandatory documentation work unit.
+Copy this into every **Full** plan as its final task — it is the plan's mandatory documentation work unit. Lite plans use the compressed version at the bottom of this file as steps inside their closing task, not as a work unit of their own.
 
 **Why it lives at the end and not in the spec:** canonical docs explain current truth. At spec time the code does not exist, so any list of docs to update is a guess that goes stale the moment a plan task changes. At the end of implementation the diff is real.
 
@@ -79,3 +79,17 @@ git commit -m "docs: update <feature> documentation"
 ````
 
 **Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, and that route shards match reality — not that the docs match a list written before implementation.
+
+## Lite variant
+
+Same job, no dispatch and no checkpoint. These are steps in the Lite plan's closing task:
+
+````markdown
+- [ ] Run playbook:docdriven-audit in change-scoped mode over `<PLAN_BASE_COMMIT>..HEAD`
+- [ ] Read each doc the audit flagged, then apply its actions per playbook:docdriven —
+      update what became false, link rather than restate, append gap rows to
+      `docs/agent/gaps.md`
+- [ ] Commit
+````
+
+The audit is what makes this safe to compress: when it returns nothing, the task costs one command. Do not replace it with a guess at which docs changed, and do not skip it because the change felt small — that judgment is exactly what the audit exists to check.

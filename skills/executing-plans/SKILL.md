@@ -13,7 +13,9 @@ Load plan, review critically, execute all tasks, report when complete.
 
 **Announce at start:** "I'm using the executing-plans skill to implement this plan."
 
-**Note:** For multi-work-unit plans with parallel dispatch, playbook:subagent-driven-development is usually faster — but it adds review gates at the plan's declared checkpoints. If subagents are available and you want maximum throughput with lighter ceremony, stay on executing-plans. If you want isolated implementer context per work unit, use subagent-driven-development instead.
+**This is the default path for Lite plans.** writing-plans sizes plans Direct, Lite, or Full. A Lite plan is one work unit with its documentation audit folded into the closing task — execute it here, or inline when it is only a task or two. Do not route it through subagent-driven-development, and do not grow it a schedule to qualify.
+
+**Note:** For Full plans with parallel dispatch, playbook:subagent-driven-development is usually faster — but it adds review gates at the plan's declared checkpoints. If subagents are available and you want maximum throughput with lighter ceremony, stay on executing-plans. If you want isolated implementer context per work unit, use subagent-driven-development instead.
 
 ## The Process
 
@@ -33,7 +35,7 @@ For each task:
 
 For long plans (8+ tasks), pause once at the halfway point and give your human partner a one-paragraph progress summary — not a subagent review, just a checkpoint.
 
-**The plan's final work unit is the documentation update** — never skip it. Run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Work whose docs are stale is unfinished work.
+**The plan closes out by updating documentation** — never skip it. On a Full plan that is the final work unit; on a Lite plan it is the last steps of the closing task. Either way, run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Work whose docs are stale is unfinished work.
 
 ### Step 3: Complete Development
 
@@ -72,5 +74,5 @@ After all tasks complete and verified:
 
 **Required workflow skills:**
 - **playbook:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **playbook:writing-plans** - Creates the plan this skill executes
+- **playbook:writing-plans** - Sizes and creates the plan this skill executes (Lite or Full)
 - **playbook:finishing-a-development-branch** - Complete development after all tasks

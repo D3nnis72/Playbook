@@ -1,84 +1,165 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Use when a change needs a written implementation plan before touching code - sizes the plan Direct, Lite, or Full so small work stays small
 ---
 
 # Writing Plans
 
 ## Overview
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+Write implementation plans for an engineer who has zero context for this codebase: which files to touch, what each task must produce, and how to prove it works. Assume they are skilled but know almost nothing about our toolset or problem domain, and do not know our test conventions well.
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+**Plans carry decisions, not volume.** Size the plan before writing it. Most changes need far less than the full template, and ceremony spent on a small change is not recoverable. DRY. YAGNI. TDD. Frequent commits.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan — [tier] tier, because [reason]."
 
-**Upstream:** The spec should have passed write-spec's review pass and user approval. Plan review verifies traceability, buildability, parsimony, and execution topology — do not re-audit whether the design is doable, settled upstream.
+**Upstream:** The spec, when there is one, has passed write-spec's review pass and user approval. Plan review verifies traceability, buildability, parsimony, and execution topology — it does not re-audit whether the design is doable, which write-spec settled.
 
-**Downstream of the spec:** the spec is a compact project-scoped overview — it names components and areas, not files. This plan owns all file-level detail. The spec's `Verification` scenarios become real tests, and the plan's final work unit updates the documentation from the implemented diff.
+**Downstream of the spec:** the spec is a compact project-scoped overview — it names components and areas, not files. This plan owns all file-level detail. The spec's `Verification` scenarios become real tests.
 
 **Context:** If working in an isolated worktree, it should have been created via the `playbook:using-git-worktrees` skill at execution time.
 
 **Save plans to:** `docs/playbook/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
 
-## When to skip
+## Checklist
 
-Skip this skill when the change is already scoped and small — one or two files, no design open questions, done state obvious from the request. Implement directly instead.
+You MUST create a task for each item and complete them in order:
 
-Use this skill when the work spans multiple tasks, files, or test surfaces, or when you need an Execution Schedule for subagent dispatch. If the user asks for a plan on a small change anyway, write a short one — you do not need the full task template for a one-line fix.
+1. **Size the plan** — Direct / Lite / Full; **Direct exits this skill**
+2. **Map the files** — what gets created or modified, and what each one owns
+3. **Decompose** — tasks, then work units (Full only)
+4. **Write the plan** — at the tier's shape, saved to `docs/playbook/plans/`
+5. **Check the plan** — self-check (Lite) or one reviewer pass (Full)
+6. **Hand off to execution** — at the tier's execution path
 
-## Tasks vs Work Units
+## Step 1: Size the plan
+
+Decide the tier **before writing anything** and state it in the plan header.
+
+| Tier | The work looks like | You write |
+|------|---------------------|-----------|
+| **Direct** | Scope pinned by the request: one or two files, obvious done state, no open design questions — a typo, a rename, a config tweak, a bug with a known cause | **No plan.** Implement it. |
+| **Lite** | One cohesive deliverable, one test surface, nothing downstream gets built on it, no parallel work to schedule | **Lite plan** — about a page: goal, file map, ordered tasks, one closing task |
+| **Full** | Several deliverables or test surfaces, new architecture, work others will build on, or work you want dispatched across parallel subagents | **Full plan** — header, Global Constraints, Execution Schedule, detailed tasks, documentation work unit |
+
+**Announce the tier and why** in one sentence. If the user names a different tier, take theirs.
+
+**Coming from a spec:**
+
+| Spec size | Usual plan tier |
+|-----------|-----------------|
+| S, or no spec at all | Direct — Lite when the user wants a written artifact |
+| M | Lite, or Full when it spans several test surfaces |
+| L | Full |
+
+**Do not pad up a tier.** A Lite plan that grows an Execution Schedule, a documentation work unit, and a reviewer dispatch is a Full plan in costume, and the ceremony now costs more than the change it describes. Adding tasks, abstraction, or scope to justify a higher tier is a plan failure.
+
+**Do not tier down to dodge the gates** on work others will build on. The reviewer and the checkpoints exist because an early mistake in load-bearing work gets built on top of.
+
+**When torn between Lite and Full:** choose Full only if a reviewer could plausibly reject one part while approving the rest. If the whole change stands or falls together, it is Lite.
+
+### What each tier requires
+
+| | Direct | Lite | Full |
+|--|--------|------|------|
+| Plan file | — | ✓ | ✓ |
+| Global Constraints section | — | only if the spec has them | ✓ |
+| Execution Schedule table | — | — (single work unit) | ✓ |
+| Review checkpoints | — | one review at the end | ✓ as declared |
+| Plan reviewer subagent | — | — (self-check instead) | ✓ |
+| Documentation update | fold into the change | final task of the plan | own work unit + checkpoint |
+| Execution path | implement inline | playbook:executing-plans, or inline | playbook:subagent-driven-development |
+
+This table is the contract downstream skills read. Do not invent a fourth shape.
+
+## Step 2: Map the files
+
+Before defining tasks, map which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+
+- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
+- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
+- Files that change together should live together. Split by responsibility, not by technical layer.
+- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure — but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+
+## Step 3: Decompose
+
+**Scope check:** if the spec covers multiple independent subsystems, suggest breaking this into separate plans — one per subsystem, each producing working, testable software on its own.
 
 Plans use two levels of decomposition:
 
 | Concept | Purpose | Granularity |
 |---------|---------|-------------|
 | **Task** | Planning fidelity — files, interfaces, TDD steps | Smallest independently testable chunk |
-| **Work unit (WU)** | Execution dispatch — one subagent, reviewed at the next checkpoint | 15–45 min of focused work; often spans multiple tasks |
+| **Work unit (WU)** | Execution dispatch — one subagent, reviewed at the next checkpoint | One cohesive deliverable; often spans several tasks |
 
-**Steps** (2–5 min TDD actions) live inside tasks. **Tasks** define what to build in detail. **Work units** define how subagent-driven development dispatches the work — they are often 1:1 with a task but frequently group 2–5 related tasks into one subagent dispatch.
+**Steps** (2–5 min TDD actions) live inside tasks. **Tasks** define what to build. **Work units** define how execution dispatches the work. A detailed Full plan may have 12 tasks and 4 work units. A Lite plan has one work unit and does not name it.
 
-Do not conflate them: a detailed plan may have 12 tasks and 4 work units.
+### Task right-sizing
 
-## Scope Check
+A task is the smallest unit that carries its own test cycle. Fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where the deliverable or test surface is genuinely separate. Each task ends with an independently testable deliverable.
 
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+Task boundaries optimize for **planning clarity**, not dispatch. Each step inside a task is one action of 2–5 minutes: write the failing test, run it and watch it fail, write the minimal implementation, run the tests, commit.
 
-## File Structure
+### Work unit sizing (Full only)
 
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+A work unit is **one cohesive deliverable a reviewer could accept or reject on its own.**
 
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+- **Merge** tasks when they share files, when one is pure scaffolding for the next, or when dispatch overhead would dominate the work
+- **Split** when tasks cross test surfaces or subsystems, or when a reviewer could reject one while approving its neighbor
+- **Ceiling:** roughly 45 minutes of implementer time and about 5 commits. This is where a work unit becomes too big to review as one thing — **it is not a quota to fill.** Never add scope, tasks, or abstraction to reach it. A twenty-minute change is one work unit, and a Lite plan besides.
 
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+## Step 4: Write the plan
 
-## Task Right-Sizing
+### Lite plan
 
-A task is the smallest unit that carries its own test cycle. When drawing task boundaries: fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where the deliverable or test surface is genuinely separate. Each task ends with an independently testable deliverable.
+One page. No Execution Schedule, no work unit table, no separate documentation work unit.
 
-Task boundaries optimize for **planning clarity**, not subagent dispatch. Dispatch boundaries are defined later in the Execution Schedule.
+````markdown
+# <Feature> Plan
 
-## Bite-Sized Task Granularity
+**Tier:** Lite      **Goal:** <one sentence — what this builds>
 
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
+**Files**
+- Create: `src/export/filename.ts` — builds the download filename
+- Modify: `src/export/dialog.tsx:120-150` — call the builder instead of inlining
+- Test: `tests/export/filename.test.ts`
 
-## Plan Document Header
+### Task 1: Filename builder
 
-**Every plan MUST start with this header:**
+**Produces:** `buildFilename(project: string, at: Date): string`
+
+- [ ] Write failing tests in `tests/export/filename.test.ts`:
+      `slugifies the project name`, `appends an ISO date`,
+      `truncates names over 64 chars`
+- [ ] Run `npm test tests/export/filename.test.ts` — expect FAIL, no such module
+- [ ] Implement `buildFilename` in `src/export/filename.ts` — slug + `-` + `YYYY-MM-DD`,
+      project slug truncated at 64 chars
+- [ ] Run `npm test tests/export/filename.test.ts` — expect PASS
+- [ ] Commit
+
+### Task 2: Wire the dialog and close out
+
+- [ ] Replace the inline filename expression at `src/export/dialog.tsx:134` with
+      `buildFilename(project.name, new Date())`
+- [ ] Run `npm test` — expect PASS
+- [ ] Run playbook:docdriven-audit in change-scoped mode over `<base>..HEAD`;
+      apply what it flags per playbook:docdriven
+- [ ] Commit
+````
+
+**The last task always closes out:** the full test command, the change-scoped documentation audit, and a commit. That is how a Lite plan keeps the docs-never-go-stale invariant without a dedicated work unit and checkpoint.
+
+### Full plan header
+
+**Every Full plan starts with this header:**
 
 ```markdown
 # [Feature Name] Implementation Plan
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use playbook:subagent-driven-development (recommended) or playbook:executing-plans to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
+
+**Tier:** Full
 
 **Goal:** [One sentence describing what this builds]
 
@@ -95,8 +176,6 @@ include this section.]
 
 ## Execution Schedule
 
-Write this with the plan — one row per work unit:
-
 | WU | Tasks | Summary | Files (write) | Depends on | Wave | Review |
 |----|-------|---------|---------------|------------|------|--------|
 | WU-1 | 1–2 | Auth types + store | `src/auth/types.ts`, ... | — | 1 | — |
@@ -112,22 +191,13 @@ Write this with the plan — one row per work unit:
 ---
 ```
 
-The Execution Schedule is required before plan review. Do not offer execution without it.
+The Execution Schedule is required before a Full plan's review. Do not offer Full-plan execution without it.
 
-**Work unit sizing:**
-- **Merge** tasks when: same files, pure scaffolding for the next task, or dispatch overhead would dominate (< ~15 min of work)
-- **Keep separate** when: different subsystems, different test surfaces, or a reviewer could reject one while approving its neighbor
-- **Target:** 15–45 minutes of focused implementer time, 1–5 commits, one cohesive deliverable per work unit
+**Parallelization:** work units in the same wave have no `Depends on` relationship to each other and must have **disjoint write file sets**. Integration and wiring work units go in later waves after their dependencies.
 
-**Parallelization:**
-- Assign a **wave** number to each work unit
-- Work units in the same wave have no `Depends on` relationship to each other
-- Work units in the same wave must have **disjoint write file sets**
-- Integration/wiring work units go in later waves after their dependencies
+### Review checkpoints (Full only)
 
-## Review Checkpoints
-
-**The plan decides where implementation gets reviewed.** Reviewing after every work unit spends real time without producing progress; reviewing only at the very end lets an early mistake get built on. Checkpoints sit at the boundaries where a mistake would actually be expensive.
+**The plan decides where implementation gets reviewed.** Reviewing after every work unit spends real time without producing progress; reviewing only at the very end lets an early mistake get built on. Checkpoints sit where a mistake would actually be expensive.
 
 Place a checkpoint on a work unit when:
 
@@ -136,13 +206,13 @@ Place a checkpoint on a work unit when:
 - It is the **last code work unit** — required
 - It is the **documentation work unit** — required
 
-Do not mark a checkpoint on every work unit. Target roughly **one checkpoint per two to four work units**, plus the two required ones. A three-work-unit package with a checkpoint at its end is right; three consecutive checkpoints inside it is not.
+Target roughly **one checkpoint per two to four work units**, plus the two required ones. A three-work-unit package with a checkpoint at its end is right; three consecutive checkpoints inside it is not.
 
 A checkpoint reviews **everything since the previous checkpoint**, not just the last work unit — the reviewer sees the whole package as one diff, which is also how it catches integration problems a single-unit review misses.
 
-## Documentation Work Unit (mandatory)
+### Documentation work unit (Full only)
 
-**Every plan's final work unit is the documentation update.** It is always in its own last wave, depends on all preceding work units, and always carries a review checkpoint. A plan without it is incomplete and fails plan review.
+**Every Full plan's final work unit is the documentation update.** It is always in its own last wave, depends on all preceding work units, and always carries a review checkpoint. A Full plan without it fails plan review. On a Lite plan the same job is the last task's audit step — do not promote it to a work unit.
 
 Copy [docs-work-unit-template.md](docs-work-unit-template.md) into the plan as its final task, filling in the feature name and affected domains.
 
@@ -155,9 +225,9 @@ The work unit **discovers** what to document rather than following a pre-written
 
 Why discovery instead of a list: at spec time the code does not exist, so any list of docs to update is a guess that goes stale as soon as a plan task changes. At the end of implementation the evidence is real. This also means the docs describe what was **built** — where implementation diverged from the spec, the divergence gets documented and recorded in `gaps.md` instead of silently contradicting the docs.
 
-**Do not restate documentation rules in the plan.** One canonical explanation per concept applies to this skill too: the plan's docs task names the two skills and the diff range, and those skills carry the procedure.
+**Do not restate documentation rules in the plan.** The plan's docs task names the two skills and the diff range; those skills carry the procedure.
 
-## Task Structure
+### Full task structure
 
 ````markdown
 ### Task N: [Component Name]
@@ -188,10 +258,8 @@ Expected: FAIL with "function not defined"
 
 - [ ] **Step 3: Write minimal implementation**
 
-```python
-def function(input):
-    return expected
-```
+`function(input: Input) -> Output` in `src/path/file.py` — [what it does,
+in terms the test already pins]
 
 - [ ] **Step 4: Run test to verify it passes**
 
@@ -206,81 +274,89 @@ git commit -m "feat: add specific feature"
 ```
 ````
 
-## No Placeholders
+## Completeness
 
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
+**A step is complete when the implementer cannot make a wrong choice from it** — not when it contains the most text. Show code where the code *is* the decision; use prose where prose pins the outcome exactly.
+
+**Always show the real content:**
+- Test cases — names, inputs, expected values
+- Interfaces — signatures, parameter and return types, exported names
+- Data shapes — schemas, migrations, config values, user-visible copy
+- Commands — exact invocation and expected output
+
+**Prose is enough** for an implementation step whose test and signature already determine the behavior. Name the function, its signature, and what it does. Pre-writing a function body the test already specifies makes the plan the change written twice — once in Markdown, once in code — and only the second one runs.
+
+**Never write these** — they are plan failures:
 - "TBD", "TODO", "implement later", "fill in details"
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
+- "Add appropriate error handling" / "add validation" / "handle edge cases" — name the errors, the rules, the cases
+- "Write tests for the above" without test names and assertions
+- "Similar to Task N" — repeat it; tasks get read out of order
+- Steps that state an outcome without the interface or command that pins it
+- References to types, functions, or methods no task defines
 
 **One exception:** the documentation work unit's file list is discovered at execution time, because which docs became false is only knowable from the finished diff. Its steps must still be complete — the discovery procedure itself is the content.
 
-## Remember
-- Exact file paths always
-- Complete code in every step — if a step changes code, show the code
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+Mechanical code is still worth transcribing when it is genuinely mechanical: subagent-driven-development dispatches fully-specified work units on the cheapest model. That is a reason to spell out rote code, not a reason to spell out all of it.
 
-## Plan Review
+## Step 5: Check the plan
 
-**Review subagent:** Before dispatching, check whether your runtime has a dedicated review subagent configured. **OpenCode:** use your `review` subagent (`Subagent (review):` in [plan-reviewer-prompt.md](plan-reviewer-prompt.md)). **Other runtimes:** look in platform config, agent manifests, or project docs for a subagent named `review`, `code-reviewer`, or similar with readonly/edit-deny permissions — use it when present. Fall back to `general-purpose` only when no review subagent exists. Do not substitute an inline self-review when a review subagent is available.
+### Lite: self-check
 
-When subagents are **not** available at all, perform the same review scope yourself in readonly mode.
+No reviewer dispatch. Read the plan once against four questions — all four answer yes, or you fix it:
 
-After writing and saving the complete plan (including Execution Schedule), dispatch **one** readonly plan reviewer. Fix blockers yourself — do not re-dispatch the reviewer after self-fixes.
+- Is every file the change needs in the file map?
+- Does every task end with a command that proves it?
+- Does every step pin its decisions, leaving nothing for the implementer to invent?
+- Does the last task run the full test command and the change-scoped docs audit?
 
-```dot
-digraph plan_review {
-    rankdir=TB;
-    node [shape=box];
+Fix what fails and move to execution. If the plan keeps failing these because it has grown several deliverables, it was a Full plan — re-size it rather than patching.
 
-    "Write complete plan + Execution Schedule" -> "Dispatch plan reviewer (./plan-reviewer-prompt.md)";
-    "Dispatch plan reviewer (./plan-reviewer-prompt.md)" -> "Approved?";
-    "Approved?" -> "Fix blockers in plan" [label="no"];
-    "Fix blockers in plan" -> "Execution handoff" [label="self-fix, no re-review"];
-    "Approved?" -> "Execution handoff" [label="yes"];
-}
-```
+### Full: one reviewer pass
 
-### Plan reviewer
+**Review subagent:** check whether your runtime has a dedicated review subagent configured. **OpenCode:** use your `review` subagent (`Subagent (review):` in [plan-reviewer-prompt.md](plan-reviewer-prompt.md)). **Other runtimes:** look in platform config, agent manifests, or project docs for a subagent named `review`, `code-reviewer`, or similar with readonly/edit-deny permissions — use it when present. Fall back to `general-purpose` only when no review subagent exists. Do not substitute an inline self-review when a review subagent is available. When subagents are unavailable entirely, perform the same review scope yourself in readonly mode.
 
-Dispatch using [plan-reviewer-prompt.md](plan-reviewer-prompt.md) — `review` subagent on OpenCode, otherwise configured review subagent or `general-purpose`.
+After writing and saving the complete plan including its Execution Schedule, dispatch **one** readonly plan reviewer using [plan-reviewer-prompt.md](plan-reviewer-prompt.md). Fill in `[PLAN_FILE_PATH]`, `[SPEC_FILE_PATH]`, and `[GLOBAL_CONSTRAINTS]` copied verbatim from the plan.
 
-Fill in:
-- `[PLAN_FILE_PATH]` — the saved plan
-- `[SPEC_FILE_PATH]` — the spec this plan implements
-- `[GLOBAL_CONSTRAINTS]` — copy verbatim from the plan's Global Constraints section
+Fix blockers yourself, then proceed to execution. Do not re-dispatch the reviewer after self-fixes — only when the user edits the plan or you changed scope by adding or removing tasks.
 
-**Scope:** Spec traceability, buildability (placeholders, types, DRY), **parsimony** (no unnecessary new components, types, or files where something existing should be extended; fixtures and test helpers reused), and Execution Schedule topology — including the mandatory documentation work unit and sane review checkpoints. Do not re-audit whether the design is doable — write-spec settled that.
+**Scope:** spec traceability, buildability, **parsimony** (no unnecessary new components, types, or files where something existing should be extended; fixtures and helpers reused), and Execution Schedule topology — including the documentation work unit and sane checkpoints. It does not re-audit whether the design is doable.
 
-**If Issues Found:** Fix blockers in the plan yourself. Do not re-dispatch the reviewer unless the user edits the plan or you changed scope (added/removed tasks).
-
-### Reviewer prompt rules
-
+**Reviewer prompt rules:**
 - Do not pre-judge findings — let the reviewer raise issues; you adjudicate when fixing
 - Do not paste session history into reviewer dispatches — paths and global constraints only
 - Advisory items do not block approval; fix blockers only unless you choose to act on advisory suggestions
 - If a finding conflicts with an intentional spec decision, present both to the user and ask which governs
 
-## Execution Handoff
+## Step 6: Hand off to execution
 
-After plan review passes (or you fixed blockers yourself), offer execution choice:
+The tier decides the execution path — do not offer a menu the tier already settled.
 
-**"Plan complete and saved to `docs/playbook/plans/<filename>.md`. Two execution options:**
+**Lite:**
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per work unit, parallel within waves, review at the plan's checkpoints
+> "Plan saved to `docs/playbook/plans/<filename>.md` — one work unit. I'll execute it directly with playbook:executing-plans unless you want subagent dispatch."
 
-**2. Inline Execution** - Execute work units in this session using executing-plans, batch execution with checkpoints
+**REQUIRED SUB-SKILL:** playbook:executing-plans, or implement inline for the shortest plans.
 
-**Which approach?"**
+**Full:**
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use playbook:subagent-driven-development
-- Fresh subagent per work unit + review after each + parallel within waves
+> "Plan complete and saved to `docs/playbook/plans/<filename>.md`. Two execution options:
+>
+> **1. Subagent-Driven (recommended)** — I dispatch a fresh subagent per work unit, parallel within waves, review at the plan's checkpoints
+>
+> **2. Inline Execution** — I execute work units in this session using executing-plans, batch execution with checkpoints
+>
+> Which approach?"
 
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use playbook:executing-plans
-- Batch execution with checkpoints for review
+- Subagent-Driven → **REQUIRED SUB-SKILL:** playbook:subagent-driven-development
+- Inline → **REQUIRED SUB-SKILL:** playbook:executing-plans
+
+## Red Flags
+
+| Thought | Reality |
+|---------|---------|
+| "I'll write the full template to be safe" | The template is the Full tier. Safety on a small change is cost, not rigor. |
+| "This Lite plan needs an Execution Schedule too" | Then it is a Full plan, or it is padded. Re-read Step 1. |
+| "Let me add a task so the work unit hits 45 minutes" | The ceiling is a limit, never a quota. Ship the small work unit. |
+| "I should spell out every function body" | Spell out decisions. A body the test already pins is transcription. |
+| "One more reviewer pass will help" | One pass, then you fix. Loops that don't change the outcome are waste. |
+| "The user asked for a plan, so it needs the whole shape" | Ask which tier they want, or size it yourself and say so. |

@@ -41,9 +41,11 @@ brainstorming → write-spec → writing-plans → subagent-driven-development
                                             (or executing-plans)
 ```
 
-Small, already-scoped changes skip the full chain. A typo, a one-file fix, or a
-known bug can go straight to implementation after a short design check when
-needed.
+**The chain is a maximum, not a minimum.** Every phase sizes its own output and
+can exit early: `write-spec` sizes the spec S / M / L, and `writing-plans` sizes
+the plan Direct (no plan, just implement), Lite (one page, one work unit), or
+Full (work units, waves, checkpoint reviews). A typo, a one-file fix, or a known
+bug goes straight to implementation after a short design check.
 
 ## What's Inside
 
@@ -54,17 +56,18 @@ needed.
 | `using-playbook` | Entry point — find and invoke skills before acting |
 | `brainstorming` | Explore intent and get design approval before building |
 | `write-spec` | Author and validate the design spec after brainstorming |
-| `writing-plans` | Turn a spec into a bite-sized implementation plan |
-| `subagent-driven-development` | Execute the plan with work units and checkpoint reviews |
-| `executing-plans` | Execute a plan in a separate session with review checkpoints |
+| `writing-plans` | Size the plan, then turn a spec into bite-sized tasks |
+| `subagent-driven-development` | Execute a Full plan with work units and checkpoint reviews |
+| `executing-plans` | Execute a Lite plan, or a Full plan in a separate session |
 | `writing-skills` | Create or improve skills with a TDD-style process |
 
 ### Process Chain
 
 1. **Brainstorm** — understand the problem, propose approaches, get approval.
-2. **Spec** — write the design handoff into a durable spec file.
-3. **Plan** — break the work into tasks and work units with checkpoints.
-4. **Execute** — implement work units, review at checkpoints, update docs.
+2. **Spec** — size the work, then write the design handoff into a durable spec file.
+3. **Plan** — size the plan, then break the work into tasks, and into work units
+   with checkpoints when the tier calls for them.
+4. **Execute** — implement, review where the plan said to, update docs.
 
 ```text
 skill check → design → spec → plan → implement + review → done
@@ -75,7 +78,9 @@ skill check → design → spec → plan → implement + review → done
 - Skills before action. Check first; do not rationalize past the check.
 - User instructions win. Project files and direct requests override Playbook.
 - Process skills first, then implementation skills.
-- Right-size the process. Small scoped work does not need a full plan.
+- Right-size the process. Every phase names its size and can exit early.
+- Ceremony is a cost. Padding small work up to a bigger shape is a failure, not caution.
+- Plans carry decisions, not transcriptions. A plan that pre-writes the code is the change written twice.
 - Specs and plans earn their keep on multi-step work others will build on.
 - Rigid skills (discipline) are followed exactly. Flexible skills adapt.
 

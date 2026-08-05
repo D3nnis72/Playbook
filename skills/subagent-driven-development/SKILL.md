@@ -23,24 +23,28 @@ ledger and the tool results carry the record.
 ```dot
 digraph when_to_use {
     "Have implementation plan?" [shape=diamond];
-    "Plan has Execution Schedule?" [shape=diamond];
+    "Full-tier plan with Execution Schedule?" [shape=diamond];
     "Stay in this session?" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
     "Manual execution or writing-plans first" [shape=box];
 
-    "Have implementation plan?" -> "Plan has Execution Schedule?" [label="yes"];
+    "Have implementation plan?" -> "Full-tier plan with Execution Schedule?" [label="yes"];
     "Have implementation plan?" -> "Manual execution or writing-plans first" [label="no"];
-    "Plan has Execution Schedule?" -> "Stay in this session?" [label="yes"];
-    "Plan has Execution Schedule?" -> "writing-plans first" [label="no"];
+    "Full-tier plan with Execution Schedule?" -> "Stay in this session?" [label="yes"];
+    "Full-tier plan with Execution Schedule?" -> "executing-plans" [label="no - Lite plan"];
     "Stay in this session?" -> "subagent-driven-development" [label="yes"];
     "Stay in this session?" -> "executing-plans" [label="no - parallel session"];
 }
 ```
 
-If the plan has no Execution Schedule, run **writing-plans** to add one before dispatching.
+**This skill executes Full-tier plans.** writing-plans sizes every plan Direct, Lite, or Full and owns those definitions; only Full plans carry the Execution Schedule, waves, and declared checkpoints this skill dispatches against.
 
-**When to skip:** Small changes the user scoped directly — implement inline without subagent dispatch. This skill is for plans with a real Execution Schedule (typically multiple work units or parallel waves). A single obvious edit does not need an implementer subagent and a review gate.
+If a **Lite** plan lands here — one work unit, no schedule, docs folded into its closing task — hand it to **playbook:executing-plans** instead. Do not send it back to writing-plans to grow a schedule: the tier already decided that dispatch overhead would cost more than the change.
+
+If a plan that should be Full has no Execution Schedule, run **writing-plans** to add one before dispatching.
+
+**When to skip:** Small changes the user scoped directly — implement inline without subagent dispatch. A single obvious edit does not need an implementer subagent and a review gate.
 
 **vs. Executing Plans (parallel session):**
 - Same session (no context switch)
@@ -128,7 +132,7 @@ Read the `Review` column of the Execution Schedule. Work units marked `✅ check
 
 Record `CHECKPOINT_BASE` at the start of execution (the plan's base commit) and update it to HEAD each time a checkpoint clears.
 
-Two checkpoints are always present because writing-plans requires them:
+Two checkpoints are always present because writing-plans requires them on Full plans:
 
 | Checkpoint | Reviews | Template |
 |------------|---------|----------|
@@ -373,7 +377,8 @@ Done! (2 reviews for 4 work units)
 
 **Never:**
 - Start implementation on main/master without explicit user consent
-- Execute a plan with no Execution Schedule
+- Execute a plan with no Execution Schedule — a Lite plan goes to executing-plans, not through this skill
+- Upgrade a Lite plan to Full so it can be dispatched here
 - Skip a declared checkpoint, or accept a report missing either verdict
 - Add a review after a work unit the plan did not mark as a checkpoint
 - Skip the final documentation work unit — a plan whose docs are stale is unfinished
@@ -401,7 +406,7 @@ Done! (2 reviews for 4 work units)
 
 **Required workflow skills:**
 - **playbook:using-git-worktrees** - Isolated workspace
-- **playbook:writing-plans** - Creates the plan and Execution Schedule
+- **playbook:writing-plans** - Sizes the plan and, at Full tier, creates the Execution Schedule this skill dispatches against
 - **playbook:requesting-code-review** - Final whole-branch review template
 - **playbook:finishing-a-development-branch** - Complete development after all work units
 
