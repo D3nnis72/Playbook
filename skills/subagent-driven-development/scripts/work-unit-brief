@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+# Extract one work unit's task text from an implementation plan into a file
+# the implementer reads in one call. A work unit spans Task FIRST through
+# Task LAST inclusive (use the same number for both when the unit is one task).
+#
+# Usage: work-unit-brief PLAN_FILE FIRST_TASK [LAST_TASK] [OUTFILE]
+# Default OUTFILE: <git-dir>/sdd/wu-<FIRST>-<LAST>-brief.md
+set -euo pipefail
+
+if [ $# -lt 2 ] || [ $# -gt 4 ]; then
+  echo "usage: work-unit-brief PLAN_FILE FIRST_TASK [LAST_TASK] [OUTFILE]" >&2
+  exit 2
+fi
+
+plan=$1
+first=$2
+last=${3:-$first}
+out=""
+
+if [ $# -eq 4 ]; then
+  out=$4
+elif [ $# -eq 3 ] && [[ "$3" == *"/"* || "$3" == *.md ]]; then
+  last=$first
+  out=$3
+else
+  dir=$(git rev-parse --git-path sdd)
+  mkdir -p "$dir"
+  dir=$(cd "$dir" && pwd)
+  if [ "$first" = "$last" ]; then
+    out="$dir/wu-${first}-brief.md"
+  else
+    out="$dir/wu-${first}-${last}-brief.md"
+  fi
+fi
+
+[ -f "$plan" ] || { echo "no such plan file: $plan" >&2; exit 2; }
+[[ "$first" =~ ^[0-9]+$ && "$last" =~ ^[0-9]+$ ]] || {
+  echo "FIRST_TASK and LAST_TASK must be numbers" >&2
+  exit 2
+}
+[ "$first" -le "$last" ] || {
+  echo "FIRST_TASK must be <= LAST_TASK" >&2
+  exit 2
+}
+
+awk -v first="$first" -v last="$last" '
+  /^```/ { infence = !infence }
+  !infence && /^#+[ \t]+Task[ \t]+[0-9]+/ {
+    line = $0
+    sub(/^#+[ \t]+Task[ \t]+/, "", line)
+    num = line + 0
+    if (num >= first && num <= last) inrange = 1
+    else {
+      inrange = 0
+      if (num > last) exit
+    }
+  }
+  inrange { print }
+' "$plan" > "$out"
+
+if [ ! -s "$out" ]; then
+  echo "tasks ${first}-${last} not found in ${plan}" >&2
+  exit 3
+fi
+
+echo "wrote ${out}: $(wc -l < "$out" | tr -d ' ') lines"
