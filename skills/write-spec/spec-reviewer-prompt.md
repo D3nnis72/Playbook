@@ -44,17 +44,17 @@ Subagent (review):
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
     | Handoff fidelity | Every approved Design Handoff section landed somewhere in the spec |
     | Approach | The mechanism the handoff approved is present and named — the governing rule, the named units, the load-bearing choices. A spec that describes only the behavior delta while the handoff settled a rule, named units, or a mechanism is **missing detail** — that is a blocker, not restraint |
-    | Readability test | After Vision and Now → Target, would the user and implementer describe the same change? |
-    | Delta clarity | Now → Target shows only what changes — no restated unchanged behavior, no missing changes |
+    | Readability test | After Vision (including its Target), would the user and implementer describe the same outcome? |
+    | Target clarity | Vision's Target shows the concrete done state — and only a baseline when something real exists to contrast. Empty Today tables on greenfield work are a finding; missing Target content is a blocker |
     | Decisions | Settled choices are in the Decisions table, not buried in prose |
-    | Not now | Exclusions do not contradict what Vision or Now → Target promises |
+    | Not now | Exclusions do not contradict what Vision promises |
     | Ambiguity | Requirements interpretable two ways |
 
     ### Project alignment
 
     | Category | What to Look For |
     |----------|------------------|
-    | Current state | The "Now" side matches the real current behavior of the codebase |
+    | Current state | When Target includes a baseline, that baseline matches the real current behavior of the codebase. Greenfield work with no baseline is fine — do not demand a Today table |
     | Named components | Components and areas named in Scope actually exist (or are clearly marked as new) |
     | Reuse pointers | Reuse claims are true — the primitive named exists and fits; and nothing obvious to reuse is missing |
     | Fantasy APIs | The target assumes types, hooks, endpoints, or modules that do not exist and are not planned |
@@ -74,7 +74,7 @@ Subagent (review):
     | Verification tier | Tier matches the deliverable: Flow for a complete flow or feature, Component for one component, Check for a minor change. Do not demand end-to-end tests for a single component. |
     | Scenario quality | Given/When/Then scenarios are observable and could be written as the named tests |
     | Scope leakage | File paths, code blocks, signatures, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check is Approach content, not leakage — do not flag it |
-    | Design homelessness | A Decisions table past ~8 rows, or a Now → Target carrying call-shape or mechanism prose, means the Approach section is missing or too thin |
+    | Design homelessness | A Decisions table past ~8 rows, or a Vision Target carrying call-shape or mechanism prose, means the Approach section is missing or too thin |
 
     ## Readonly
 

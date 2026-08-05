@@ -111,8 +111,7 @@ Required fields mirror the spec sections write-spec will author:
 **Size:** S / M / L      **Type:** frontend | backend | data | mixed
 
 ## Approved sections
-- [x] Vision
-- [x] Now → Target
+- [x] Vision (including Target)
 - [x] Approach
 - [x] Scope
 - [x] Decisions
@@ -120,12 +119,14 @@ Required fields mirror the spec sections write-spec will author:
 - [x] Verification
 
 ## Vision
-Human language: what the user wants in this project's context, what exists
-today, what exists after, why it matters.
+Shared vision in human form — what you intend to build in this project's
+context, why it matters, and what is wrong or incomplete about today when
+something already exists. As long and as technical as the idea needs.
 
-## Now → Target
-The delta as agreed — user flow before/after for frontend, contract or call
-sequence for backend, schema for data. Only what changes.
+### Target
+The concrete done state as agreed — user flow for frontend, contract or call
+sequence for backend, schema for data. Include a Today / baseline only when
+something real exists to contrast; greenfield shows Target only.
 
 ## Approach
 The rule the design turns on, the named units it introduces (name plus what

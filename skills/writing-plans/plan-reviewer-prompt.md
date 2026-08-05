@@ -79,7 +79,7 @@ Subagent (review):
     | New files | New files where an existing module is the natural home — especially inside packages with an established layout |
     | Fixtures and helpers | Test fixtures, factories, or helpers rebuilt instead of reused |
     | Package layout | Files placed outside the structure the project already uses |
-    | Behavior fidelity | The plan builds the behavior in the spec's Now → Target — not a more general or more elaborate version of it |
+    | Behavior fidelity | The plan builds the behavior in the spec's Vision Target — not a more general or more elaborate version of it |
 
     Verify reuse claims against the codebase before flagging: an existing
     primitive must actually fit for its non-use to be a finding.

@@ -65,7 +65,7 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 | Size | Looks like | What to write |
 |------|------------|---------------|
 | **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
-| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision`, `Now → Target`, `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
+| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision` (with its `Target` subsection), `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
 | **L** | A complete flow or feature; new architecture, new integration, cross-domain behavior, anything others will build on | All sections. A **Full** plan downstream. |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
@@ -80,8 +80,7 @@ Fixed section order. Section names are literal — use them verbatim.
 
 | Section | Answers | Content rules |
 |---------|---------|---------------|
-| **Vision** | What are we building, in this project's context? | Human language, 3–6 sentences. What exists today, what exists after, why it matters. No jargon, no file paths. |
-| **Now → Target** | What actually changes? | Type-dependent before/after visualization. Only the delta — unchanged behavior is not described. |
+| **Vision** | What are we intending to build, and what does done look like? | Shared vision in human form — as long and as technical as the idea needs. Ends with a **`### Target`** subsection: the concrete picture of the done state. |
 | **Approach** | How does it work, at name level? | The governing rule, the named units it introduces, the mechanism where the choice matters. Names, not locations. |
 | **Scope** | Where does this live and what must be respected? | Areas and components at name level, reuse pointers, docs to read, skills to use, guardrails. **No file paths, no code.** |
 | **Decisions** | What is settled? | Lean table. Only entries someone might plausibly re-litigate. What the design *is* belongs in Approach; only the contested *why* belongs here. |
@@ -94,24 +93,32 @@ Fixed section order. Section names are literal — use them verbatim.
 **Size:** M      **Type:** frontend      **Depends on:** —
 ```
 
-`Type` is `frontend`, `backend`, `data`, or `mixed`. It selects the `Now → Target` shape.
+`Type` is `frontend`, `backend`, `data`, or `mixed`. It selects the Vision `Target` subsection shape.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
-**Readability test:** after Vision and Now → Target, would the user and the implementer describe the same change? If not, the spec fails review.
+**Readability test:** after Vision (including its Target), would the user and the implementer describe the same outcome? If not, the spec fails review.
 
-### Now → Target
+### Vision
 
-Show the delta, minimally, in whatever form makes it fastest to read. Mermaid diagrams, before/after tables, and short step lists all qualify. Pick by `Type`:
+Write the shared vision of what you intend to do with this work — in human form, for a reader who was not in the brainstorm. Length follows the idea: a small capability may need a paragraph; a cross-domain redesign may need a page. Be as technical as the idea needs to be clear. File paths and step sequences still belong in the plan, not here.
+
+Cover what matters for shared understanding: the problem or opportunity in this project's context, what you intend to build, why it matters, and — when something already exists — what is wrong or incomplete about today. Do not pad, and do not truncate a real vision to hit a sentence count.
+
+Every Vision ends with a **`### Target`** subsection. That is the concrete picture of the done state — tables, flows, contracts, schemas — so a reader can point at it and say "that is what we are building."
+
+Pick the Target shape by `Type`:
 
 | Type | Show |
 |------|------|
-| **frontend** | User flow before → after (step table or Mermaid), plus the UI states that change |
-| **backend** | Contract or call sequence before → after — endpoints, function signatures at name level, who calls whom |
-| **data** | Schema or derivation before → after, plus which consumers are affected |
+| **frontend** | The user-facing flow and UI states at done — step table or Mermaid |
+| **backend** | The contract or call sequence at done — endpoints, function names, who calls whom |
+| **data** | The schema or derivation at done, plus which consumers are affected |
 | **mixed** | The flow that crosses the boundary, once — not one section per layer |
 
-Do not restate behavior that stays the same. A reader should be able to point at this section and say "that is the change."
+**Baseline is optional.** When the work changes existing behavior, a short Today / After contrast (or a "Today" column) earns its keep. When the work is greenfield — nothing there yet — show only the target. Do not invent an empty before-state to fill the template.
+
+Do not restate behavior that stays the same. Approach owns how the design works; Target owns what done looks like.
 
 ### Approach
 
@@ -128,7 +135,7 @@ Cover, in this order:
 
 **By size:** L always. M only when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
 
-**This is where design detail belongs, so the other sections can stay in their lane.** A Decisions table past roughly eight rows, or a `Now → Target` that grew a subsection about call shapes, means the design is homeless — move it here.
+**This is where design detail belongs, so the other sections can stay in their lane.** A Decisions table past roughly eight rows, or a Vision `Target` that grew call-shape or mechanism prose, means the design is homeless — move it here.
 
 ### Scope
 
@@ -191,22 +198,24 @@ Project-wide requirements that bind every task: version floors, dependency limit
 **Size:** L      **Type:** frontend      **Depends on:** [`YYYY-MM-DD-other-design.md`](./YYYY-MM-DD-other-design.md)
 
 ## Vision
-<3–6 sentences, human language: what the user wants in this project's context,
-what exists today, what exists after, why it matters>
 
-## Now → Target
+<Shared vision in human form — as long and as technical as the idea needs:
+what you intend to build in this project's context, why it matters, and what
+is wrong or incomplete about today when something already exists.>
 
-**Today**
+### Target
+
+**Today** *(omit this block when the work is greenfield)*
 | Step | What happens |
 |------|--------------|
 | ... | ... |
 
-**After**
+**Done**
 | Step | What happens |
 |------|--------------|
 | ... | ... |
 
-**UI states that change:** ...
+**UI states:** ...
 
 ## Approach
 
@@ -261,7 +270,7 @@ what exists today, what exists after, why it matters>
 
 There is no doc-impact section. Documentation updates are discovered from the real diff and performed by the plan's final work unit.
 
-**Legacy specs** may use Problem / Goal / Non-Goals / Design / Testing Strategy, or the older Vision Contract (Deliverables / Acceptance criteria / Locked decisions / Blueprint). Migrate to this format when implementation touches them. Blueprint content that is file-level detail moves into the plan, not the new spec.
+**Legacy specs** may use Problem / Goal / Non-Goals / Design / Testing Strategy, the older Vision Contract (Deliverables / Acceptance criteria / Locked decisions / Blueprint), or a top-level `Now → Target` section. Migrate to this format when implementation touches them: fold `Now → Target` into Vision's `### Target` subsection (baseline optional), and move Blueprint content that is file-level detail into the plan, not the new spec.
 
 ## Step 4: Review Pass
 
@@ -275,7 +284,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, approach fidelity (the rule, named units, and mechanism the handoff approved are present and named), readability test, project alignment (does `Now → Target` describe the real current state, do the named components and reuse pointers exist), proportionality (detail and verification tier match the size), and scope discipline (no plan-level detail leaking in — names are not leakage).
+**Scope:** placeholders, handoff fidelity, approach fidelity (the rule, named units, and mechanism the handoff approved are present and named), readability test, project alignment (does Vision's Target match reality when it includes a baseline, do the named components and reuse pointers exist), proportionality (detail and verification tier match the size), and scope discipline (no plan-level detail leaking in — names are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate
