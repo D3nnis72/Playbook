@@ -40,22 +40,24 @@ Decide the tier **before writing anything** and state it in the plan header.
 | Tier | The work looks like | You write |
 |------|---------------------|-----------|
 | **Direct** | Scope pinned by the request: one or two files, obvious done state, no open design questions — a typo, a rename, a config tweak, a bug with a known cause | **No plan.** Implement it. |
-| **Lite** | One cohesive deliverable, one test surface, nothing downstream gets built on it, no parallel work to schedule | **Lite plan** — about a page: goal, file map, ordered tasks, one closing task |
-| **Full** | Several deliverables or test surfaces, new architecture, work others will build on, or work you want dispatched across parallel subagents | **Full plan** — header, Global Constraints, Execution Schedule, detailed tasks, documentation work unit |
+| **Lite** | One cohesive deliverable that stands or falls together — many files, runtimes, or check commands are fine; no independent packages to review separately, no parallel waves to schedule | **Lite plan** — about a page: goal, file map, ordered tasks, one closing task |
+| **Full** | Several independently reviewable packages, genuine parallel waves, or sequencing where an early mistake in this plan gets built on before the next gate | **Full plan** — header, Global Constraints, Execution Schedule, detailed tasks, documentation work unit |
 
-**Announce the tier and why** in one sentence. If the user names a different tier, take theirs.
+**Announce the tier and why** in one sentence. If the user names a different tier, take theirs. If the spec header names a `Plan tier`, start from that — revise only with a stated reason, never because "it touches a lot of files."
 
 **Coming from a spec:**
 
 | Spec size | Usual plan tier |
 |-----------|-----------------|
 | S, or no spec at all | Direct — Lite when the user wants a written artifact |
-| M | Lite, or Full when it spans several test surfaces |
+| M | **Lite** by default |
 | L | Full |
 
 **Do not pad up a tier.** A Lite plan that grows an Execution Schedule, a documentation work unit, and a reviewer dispatch is a Full plan in costume, and the ceremony now costs more than the change it describes. Adding tasks, abstraction, or scope to justify a higher tier is a plan failure.
 
-**Do not tier down to dodge the gates** on work others will build on. The reviewer and the checkpoints exist because an early mistake in load-bearing work gets built on top of.
+**Several check commands ≠ Full.** Web tests + generation tests + an import-map check for one contract move is still Lite. Full requires packages a reviewer could accept or reject independently — not merely multiple commands that prove the same deliverable.
+
+**Load-bearing ≠ Full.** A shared package others will import later can still be a Lite extraction plan. Choose Full when wrong sequencing *during this plan* would get built on, not because the result will be reused later.
 
 **When torn between Lite and Full:** choose Full only if a reviewer could plausibly reject one part while approving the rest. If the whole change stands or falls together, it is Lite.
 
@@ -356,6 +358,8 @@ The tier decides the execution path — do not offer a menu the tier already set
 |---------|---------|
 | "I'll write the full template to be safe" | The template is the Full tier. Safety on a small change is cost, not rigor. |
 | "This Lite plan needs an Execution Schedule too" | Then it is a Full plan, or it is padded. Re-read Step 1. |
+| "It touches three runtimes / five check commands, so Full" | One deliverable that stands or falls together is Lite. Independently reviewable packages make Full. |
+| "Others will import this package, so Full" | Reuse later is not sequencing risk during this plan. Lite extractions are allowed. |
 | "Let me add a task so the work unit hits 45 minutes" | The ceiling is a limit, never a quota. Ship the small work unit. |
 | "I should spell out every function body" | Spell out decisions. A body the test already pins is transcription. |
 | "One more reviewer pass will help" | One pass, then you fix. Loops that don't change the outcome are waste. |

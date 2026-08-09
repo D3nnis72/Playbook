@@ -69,7 +69,7 @@ Subagent (review):
 
     | Category | What to Look For |
     |----------|------------------|
-    | Size fit | Declared size matches the actual work. An S-sized change should not have a spec at all; an epic should decompose. |
+    | Size fit | Declared size matches the actual work. An S-sized change should not have a spec at all; an epic should decompose. Multi-domain or multi-runtime touchpoints alone do not make L — one capability that stands or falls together is M. Plan tier in the header should match: M → Lite by default, L → Full |
     | Detail level | M-sized specs should not carry L-sized ceremony, and vice versa |
     | Verification tier | Tier matches the deliverable: Flow for a complete flow or feature, Component for one component, Check for a minor change. Do not demand end-to-end tests for a single component. |
     | Scenario quality | Given/When/Then scenarios are observable and could be written as the named tests |

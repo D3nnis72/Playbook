@@ -108,7 +108,7 @@ Required fields mirror the spec sections write-spec will author:
 ```markdown
 # Design Handoff: <topic>
 
-**Size:** S / M / L      **Type:** frontend | backend | data | mixed
+**Size:** S / M / L      **Type:** frontend | backend | data | mixed      **Plan tier:** Direct | Lite | Full
 
 ## Approved sections
 - [x] Vision (including Target)
@@ -156,7 +156,7 @@ ui, generation
 ...
 ```
 
-**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement.
+**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently.
 
 Sketch each section to the depth the conversation reached. Do not invent file paths or code — the spec names components, and the plan names files.
 

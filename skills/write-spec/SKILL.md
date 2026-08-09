@@ -65,14 +65,16 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 | Size | Looks like | What to write |
 |------|------------|---------------|
 | **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
-| **M** | One component or one contained capability; a few areas touched; no new architecture | `Vision` (with its `Target` subsection), `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. Usually a **Lite** plan downstream. |
-| **L** | A complete flow or feature; new architecture, new integration, cross-domain behavior, anything others will build on | All sections. A **Full** plan downstream. |
+| **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually Check or Component | `Vision` (with its `Target` subsection), `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. **Usual plan tier: Lite.** |
+| **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with its own Verification Flow. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
 
+**Multi-domain ≠ L.** A shared-package extraction, a cross-runtime contract move, or a change that lists several Affected domains is still M when it is one capability that stands or falls together. L is for scope that could be split into separate specs, or for a flow others will extend as a subsystem.
+
 Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming handed off but the work is clearly **S**, say so and move on — do not pad a small change into a full spec.
 
-**Size travels downstream.** writing-plans sizes the plan itself (Direct / Lite / Full) and owns those definitions. Name the plan tier you expect when you hand off, so a small spec does not collect a full plan's ceremony on the way out.
+**Size travels downstream.** Put the expected plan tier in the header (`Direct` / `Lite` / `Full`). writing-plans owns the final call and the tier definitions, but it starts from this hint — do not leave it blank and let "several files" upgrade an M spec into a Full plan.
 
 ## Step 3: Spec Format
 
@@ -90,10 +92,10 @@ Fixed section order. Section names are literal — use them verbatim.
 **Header block** — every spec starts with it:
 
 ```markdown
-**Size:** M      **Type:** frontend      **Depends on:** —
+**Size:** M      **Type:** frontend      **Plan tier:** Lite      **Depends on:** —
 ```
 
-`Type` is `frontend`, `backend`, `data`, or `mixed`. It selects the Vision `Target` subsection shape.
+`Type` is `frontend`, `backend`, `data`, or `mixed`. It selects the Vision `Target` subsection shape. `Plan tier` is the expected writing-plans tier (`Direct` / `Lite` / `Full`) — writing-plans may revise it, but only with a stated reason.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
@@ -195,7 +197,7 @@ Project-wide requirements that bind every task: version floors, dependency limit
 ````markdown
 # <Feature Name>
 
-**Size:** L      **Type:** frontend      **Depends on:** [`YYYY-MM-DD-other-design.md`](./YYYY-MM-DD-other-design.md)
+**Size:** L      **Type:** frontend      **Plan tier:** Full      **Depends on:** [`YYYY-MM-DD-other-design.md`](./YYYY-MM-DD-other-design.md)
 
 ## Vision
 
