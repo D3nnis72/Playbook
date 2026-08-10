@@ -9,7 +9,7 @@ description: Use when design is approved in brainstorming and you need to author
 
 Author and validate a design spec from an approved brainstorming outcome. Size the work, write the spec, run **one** review pass, get user approval, then invoke writing-plans.
 
-A spec is a **compact project-scoped overview**: what changes, where in the system it lives, and what the implementer must respect. It is not an implementation plan. If a section could be pasted into a plan as-is — exact file paths, code blocks, step sequences — it belongs in writing-plans, not here.
+A spec is a **human-readable design note**: what you intend, what done looks like, how it works at name level, and what the implementer must respect. Prefer prose over tables. It is not an implementation plan. If a section could be pasted into a plan as-is — exact file paths, code blocks, step sequences — it belongs in writing-plans, not here.
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
@@ -65,8 +65,8 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 | Size | Looks like | What to write |
 |------|------------|---------------|
 | **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
-| **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually Check or Component | `Vision` (with its `Target` subsection), `Scope`, `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Decisions` and `Not now` when there is nothing contested to record. **Usual plan tier: Lite.** |
-| **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with its own Verification Flow. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
+| **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually a short Check | `Vision` (with `Target`), `Scope`, short `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Not now` when there is nothing to exclude. **Usual plan tier: Lite.** |
+| **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with Flow-level verification. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
 
@@ -82,12 +82,13 @@ Fixed section order. Section names are literal — use them verbatim.
 
 | Section | Answers | Content rules |
 |---------|---------|---------------|
-| **Vision** | What are we intending to build, and what does done look like? | Shared vision in human form — as long and as technical as the idea needs. Ends with a **`### Target`** subsection: the concrete picture of the done state. |
-| **Approach** | How does it work, at name level? | The governing rule, the named units it introduces, the mechanism where the choice matters. Names, not locations. |
-| **Scope** | Where does this live and what must be respected? | Areas and components at name level, reuse pointers, docs to read, skills to use, guardrails. **No file paths, no code.** |
-| **Decisions** | What is settled? | Lean table. Only entries someone might plausibly re-litigate. What the design *is* belongs in Approach; only the contested *why* belongs here. |
+| **Vision** | What are we intending, and what does done look like? | Human-readable prose. As long and as technical as the idea needs. Ends with **`### Target`**: free-text done state — not a table. |
+| **Approach** | How does it work, and why these choices? | Named units and mechanisms in prose. Settled trade-offs live here next to what they decide — not in a separate Decisions table. |
+| **Scope** | Where does this live and what must be respected? | Short bullets: areas, reuse, docs to read, skills, guardrails. **No file paths, no code.** |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
-| **Verification** | How do we know it works? | Scaled to what the spec delivers — see Verification Tiers. |
+| **Verification** | How do we know it worked? | A few observable outcomes — not a unit-test inventory. See Verification. |
+
+**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification default to paragraphs and short bullets. A spec that is mostly tables fails the readability test.
 
 **Header block** — every spec starts with it:
 
@@ -95,11 +96,11 @@ Fixed section order. Section names are literal — use them verbatim.
 **Size:** M      **Type:** frontend      **Plan tier:** Lite      **Depends on:** —
 ```
 
-`Type` is `frontend`, `backend`, `data`, or `mixed`. It selects the Vision `Target` subsection shape. `Plan tier` is the expected writing-plans tier (`Direct` / `Lite` / `Full`) — writing-plans may revise it, but only with a stated reason.
+`Type` is `frontend`, `backend`, `data`, or `mixed`. It steers what Target should describe, not which table template to fill. `Plan tier` is the expected writing-plans tier (`Direct` / `Lite` / `Full`) — writing-plans may revise it, but only with a stated reason.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
-**Readability test:** after Vision (including its Target), would the user and the implementer describe the same outcome? If not, the spec fails review.
+**Readability test:** after Vision (including Target), would a colleague who missed the brainstorm understand the intent and the done state in one sitting? If they would reach for a decoder ring, the spec fails review.
 
 ### Vision
 
@@ -107,37 +108,37 @@ Write the shared vision of what you intend to do with this work — in human for
 
 Cover what matters for shared understanding: the problem or opportunity in this project's context, what you intend to build, why it matters, and — when something already exists — what is wrong or incomplete about today. Do not pad, and do not truncate a real vision to hit a sentence count.
 
-Every Vision ends with a **`### Target`** subsection. That is the concrete picture of the done state — tables, flows, contracts, schemas — so a reader can point at it and say "that is what we are building."
+Every Vision ends with a **`### Target`** subsection — free text describing the done state. Write it as you would explain to a teammate: what exists when this is finished, how the important surfaces behave, what is gone. No Today/Done tables, no step grids unless a tiny comparison truly helps (and even then prefer two short paragraphs).
 
-Pick the Target shape by `Type`:
+By `Type`, make sure Target covers the right kind of done state:
 
-| Type | Show |
-|------|------|
-| **frontend** | The user-facing flow and UI states at done — step table or Mermaid |
-| **backend** | The contract or call sequence at done — endpoints, function names, who calls whom |
-| **data** | The schema or derivation at done, plus which consumers are affected |
-| **mixed** | The flow that crosses the boundary, once — not one section per layer |
+| Type | Cover in prose |
+|------|----------------|
+| **frontend** | What the user sees and can do when it is done; important UI states |
+| **backend** | Who calls what, and what contracts or results exist at done |
+| **data** | What the model or derivation looks like at done, and which consumers care |
+| **mixed** | The cross-boundary outcome once — not one mini-essay per layer |
 
-**Baseline is optional.** When the work changes existing behavior, a short Today / After contrast (or a "Today" column) earns its keep. When the work is greenfield — nothing there yet — show only the target. Do not invent an empty before-state to fill the template.
+**Baseline is optional.** When something already exists, say what is wrong with today inside Vision or Target in a sentence or two. Greenfield needs no fake before-state.
 
-Do not restate behavior that stays the same. Approach owns how the design works; Target owns what done looks like.
+Approach owns how the design works; Target owns what done looks like. Do not turn Target into a mechanism dump.
 
 ### Approach
 
-The design the brainstorm settled, at a level someone can hold in their head. Without this section the mechanism has nowhere to live, and it ends up either dropped on the way out of brainstorming or crammed into the Decisions table.
+The design the brainstorm settled, at a level someone can hold in their head — and the reasons that matter. Without this section the mechanism has nowhere to live and gets forgotten between chat and plan.
 
-Cover, in this order:
+Write it as prose (short paragraphs or a few bullets), covering:
 
-- **The rule** — the one or two sentences that make the change coherent, plus its corollaries. Everything else in the section should follow from it.
-- **Named units** — the projections, modules, views, jobs, components, or checks this introduces or reshapes, as a table of name to responsibility. Name them. "A named projection per surface" is not a design; six named projections are.
-- **Mechanism** — where the choice of mechanism is load-bearing: a view versus an RPC, a queue versus a cron, where a cache lives. One line each. The contested *why* goes to Decisions; what it *is* stays here.
-- **Unchanged** — the structure this deliberately leaves alone, so the plan does not go looking.
+- **The rule** — the one or two sentences that make the change coherent, plus any corollaries.
+- **Named units** — name each projection, module, package, view, job, or check and say what it is responsible for. Prefer a short paragraph or bullet per unit over a grid. "A named projection per surface" is not a design; naming them is.
+- **Mechanism and why** — the load-bearing choices *and* why they won (view vs RPC, package vs importing the web app, vendor vs publish). Decisions live here, next to the thing they decide. Do not park them in a separate Decisions table.
+- **Unchanged** — what this deliberately leaves alone, so the plan does not go looking.
 
-**Level test — names, not locations.** If it would come up by name in a code review conversation, it belongs here. If it is a file path, a function signature, SQL, or a step sequence, it belongs in the plan. "`LibraryListRow`, served by one narrow repository method behind a `security_invoker` view" is a spec sentence. "`lib/library/read-models/list-library-documents.ts:130`" is a plan sentence.
+**Level test — names, not locations.** If it would come up by name in a code review conversation, it belongs here. If it is a file path, a function signature, SQL, or a step sequence, it belongs in the plan.
 
 **By size:** L always. M only when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
 
-**This is where design detail belongs, so the other sections can stay in their lane.** A Decisions table past roughly eight rows, or a Vision `Target` that grew call-shape or mechanism prose, means the design is homeless — move it here.
+**No separate Decisions section.** A standalone Decisions table is legacy. If you find yourself building one, fold each row into the Approach paragraph it belongs to.
 
 ### Scope
 
@@ -166,27 +167,21 @@ The list should be short and specific: three or four documents an implementer mu
 
 **Docs to read are not docs to update.** Which docs need *updating* is discovered after the code exists — the plan's final work unit runs a change-scoped docdriven audit against the real diff. Do not try to predict that list here.
 
-### Verification Tiers
+### Verification
 
-Pick the tier that matches what the spec actually delivers. Over-testing a small change is as much a review failure as under-testing a flow.
+How would a skeptical teammate know this worked? Write that — briefly.
 
-| Tier | When | Verification looks like |
-|------|------|-------------------------|
-| **Flow** | The spec delivers a complete user flow or feature — a new user flow, billing, a full information flow | Given / When / Then scenarios written as end-to-end tests: Playwright for frontend flows, request/response e2e for backend functions. Name each scenario so it becomes the test title. |
-| **Component** | The spec delivers one component or one contained capability | Component-level checks: states and props behavior, or "extend existing test X with case Y". No full e2e. |
-| **Check** | An M-sized change that rode through the spec anyway | One or two observable checks, manual acceptable. Proportionality over ceremony. |
+**Default lean.** Prefer extending or running checks that already exist over inventing a new unit-test suite in the spec. Over-specifying tests is a review failure: a wall of Given/When/Then that mirrors every Approach unit usually means the spec is doing the plan's job and will produce unnecessary tests downstream.
 
-State the tier explicitly so the reviewer can judge proportionality:
+| Tier | When | What to write |
+|------|------|---------------|
+| **Check** | Most M work; refactors; ownership moves; contract consolidations | One to three observable outcomes, or "run X existing suite / command and expect Y." Manual is fine when that is the honest bar. |
+| **Component** | One new component or contained capability with real behavior branches | A handful of user-visible or API-visible cases — not one case per private function. |
+| **Flow** | A complete user or system flow | A few end-to-end scenarios worth automating. Name the journey, not every assertion. |
 
-```markdown
-## Verification
+State the tier. Prefer short bullets in plain language over formal Given/When/Then unless the form genuinely helps. Cap it: if you have more than about five bullets, you are writing a test plan — cut to the outcomes that would change a ship decision.
 
-**Tier:** Flow
-
-- **Given** a project with two exports pending, **when** the user opens the export dialog and confirms, **then** both exports move to running and the dialog closes.
-```
-
-Written this way, the scenarios **are** the acceptance criteria — writing-plans converts them into tests nearly verbatim. Do not add a separate acceptance-criteria section.
+These outcomes are acceptance criteria for the plan. writing-plans turns them into verification steps; it must not invent a unit test for every named unit the Approach mentioned unless the outcome actually requires it.
 
 ### Global constraints (optional)
 
@@ -197,39 +192,23 @@ Project-wide requirements that bind every task: version floors, dependency limit
 ````markdown
 # <Feature Name>
 
-**Size:** L      **Type:** frontend      **Plan tier:** Full      **Depends on:** [`YYYY-MM-DD-other-design.md`](./YYYY-MM-DD-other-design.md)
+**Size:** M      **Type:** mixed      **Plan tier:** Lite      **Depends on:** —
 
 ## Vision
 
-<Shared vision in human form — as long and as technical as the idea needs:
-what you intend to build in this project's context, why it matters, and what
-is wrong or incomplete about today when something already exists.>
+<Prose: what you intend to build in this project's context, why it matters,
+and what is wrong or incomplete about today when something already exists.
+As long and as technical as the idea needs.>
 
 ### Target
 
-**Today** *(omit this block when the work is greenfield)*
-| Step | What happens |
-|------|--------------|
-| ... | ... |
-
-**Done**
-| Step | What happens |
-|------|--------------|
-| ... | ... |
-
-**UI states:** ...
+<Free text: what done looks like. How the important surfaces behave. What is
+gone. No required tables.>
 
 ## Approach
 
-**Rule:** <the governing rule and its corollaries>
-
-| Unit | Serves | Responsibility |
-|------|--------|----------------|
-| `<Name>` | <surface> | <what it carries> |
-
-**Mechanism:** <the load-bearing mechanism choices, one line each>
-
-**Unchanged:** <structure this leaves alone>
+<Prose: the governing rule; each named unit and what it owns; the mechanism
+choices and why they won; what stays unchanged.>
 
 ## Scope
 
@@ -240,8 +219,7 @@ is wrong or incomplete about today when something already exists.>
 - ...
 
 **Docs to read**
-- `docs/knowledge/architecture/frontend.md` — state placement and data flow
-- `docs/knowledge/design-language.md` — visual system this must match
+- `docs/knowledge/...` — why this one constrains the work
 
 **Skills to use**
 - ...
@@ -249,13 +227,7 @@ is wrong or incomplete about today when something already exists.>
 **Guardrails**
 - ...
 
-**Affected domains:** ui, generation
-
-## Decisions
-
-| # | Decision | Why |
-|---|----------|-----|
-| 1 | ... | ... |
+**Affected domains:** ...
 
 ## Not now
 - ...
@@ -265,14 +237,15 @@ is wrong or incomplete about today when something already exists.>
 
 ## Verification
 
-**Tier:** Flow | Component | Check
+**Tier:** Check
 
-- **Given** ..., **when** ..., **then** ...
+- <Observable outcome, or existing command/suite to run and what it should show>
+- <Only as many bullets as would change a ship decision>
 ````
 
 There is no doc-impact section. Documentation updates are discovered from the real diff and performed by the plan's final work unit.
 
-**Legacy specs** may use Problem / Goal / Non-Goals / Design / Testing Strategy, the older Vision Contract (Deliverables / Acceptance criteria / Locked decisions / Blueprint), or a top-level `Now → Target` section. Migrate to this format when implementation touches them: fold `Now → Target` into Vision's `### Target` subsection (baseline optional), and move Blueprint content that is file-level detail into the plan, not the new spec.
+**Legacy specs** may use Problem / Goal / Non-Goals / Design / Testing Strategy, a standalone Decisions table, Today/Done grids, the older Vision Contract, or a top-level `Now → Target` section. Migrate when implementation touches them: fold decisions into Approach prose, Target into free text under Vision, and Blueprint file-level detail into the plan.
 
 ## Step 4: Review Pass
 
@@ -286,7 +259,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, approach fidelity (the rule, named units, and mechanism the handoff approved are present and named), readability test, project alignment (does Vision's Target match reality when it includes a baseline, do the named components and reuse pointers exist), proportionality (detail and verification tier match the size), and scope discipline (no plan-level detail leaking in — names are not leakage).
+**Scope:** placeholders, handoff fidelity, approach fidelity (named units and mechanism-with-why present in prose), human readability (prose over tables; Target is free text; no standalone Decisions table), project alignment, proportional verification (few outcomes, not a unit-test inventory), and scope discipline (no plan-level detail leaking in — names are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate

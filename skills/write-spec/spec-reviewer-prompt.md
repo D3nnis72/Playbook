@@ -17,16 +17,16 @@ Subagent (review):
     review pass — faithfulness, project alignment, and proportionality
     together.
 
-    A spec is a compact project-scoped overview: what changes, how it works at
-    name level, where in the system it lives, and what the implementer must
-    respect. It is NOT an implementation plan. Exact file paths, code blocks,
+    A spec is a human-readable design note: what we intend, what done looks
+    like, how it works at name level, and what to respect. Prefer prose over
+    tables. It is NOT an implementation plan. Exact file paths, code blocks,
     signatures, and step sequences belong in the plan — flag them here as scope
     leakage, not as missing detail.
 
     The reverse is also a finding. A spec must name the things its design
-    introduces — projections, modules, views, checks — and the mechanism it
-    chose. Names at that level are Approach content, not leakage. Judge detail
-    by whether it is a name or a location, not by how specific it feels.
+    introduces and say why load-bearing choices won — in Approach prose.
+    Names at that level are Approach content, not leakage. Judge detail by
+    whether it is a name or a location, not by how specific it feels.
 
     **Spec to review:** [SPEC_FILE_PATH]
     **Design Handoff for reference:** [HANDOFF_PATH]
@@ -43,10 +43,10 @@ Subagent (review):
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
     | Handoff fidelity | Every approved Design Handoff section landed somewhere in the spec |
-    | Approach | The mechanism the handoff approved is present and named — the governing rule, the named units, the load-bearing choices. A spec that describes only the behavior delta while the handoff settled a rule, named units, or a mechanism is **missing detail** — that is a blocker, not restraint |
-    | Readability test | After Vision (including its Target), would the user and implementer describe the same outcome? |
-    | Target clarity | Vision's Target shows the concrete done state — and only a baseline when something real exists to contrast. Empty Today tables on greenfield work are a finding; missing Target content is a blocker |
-    | Decisions | Settled choices are in the Decisions table, not buried in prose |
+    | Approach | The mechanism the handoff approved is present and named in prose — rule, named units, choices and why. A behavior-only Vision while the handoff settled a design is **missing detail** |
+    | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding |
+    | Target | Free-text done state under Vision. Required tables, empty Today grids, or Target missing entirely are findings |
+    | Decisions | Settled trade-offs live in Approach next to what they decide. A standalone Decisions table is legacy — advisory to fold in, not a reason to demand one |
     | Not now | Exclusions do not contradict what Vision promises |
     | Ambiguity | Requirements interpretable two ways |
 
@@ -54,7 +54,7 @@ Subagent (review):
 
     | Category | What to Look For |
     |----------|------------------|
-    | Current state | When Target includes a baseline, that baseline matches the real current behavior of the codebase. Greenfield work with no baseline is fine — do not demand a Today table |
+    | Current state | Claims about today in Vision/Target match the codebase when they assert current behavior. Greenfield with no baseline is fine — do not demand a Today table |
     | Named components | Components and areas named in Scope actually exist (or are clearly marked as new) |
     | Reuse pointers | Reuse claims are true — the primitive named exists and fits; and nothing obvious to reuse is missing |
     | Fantasy APIs | The target assumes types, hooks, endpoints, or modules that do not exist and are not planned |
@@ -71,10 +71,11 @@ Subagent (review):
     |----------|------------------|
     | Size fit | Declared size matches the actual work. An S-sized change should not have a spec at all; an epic should decompose. Multi-domain or multi-runtime touchpoints alone do not make L — one capability that stands or falls together is M. Plan tier in the header should match: M → Lite by default, L → Full |
     | Detail level | M-sized specs should not carry L-sized ceremony, and vice versa |
-    | Verification tier | Tier matches the deliverable: Flow for a complete flow or feature, Component for one component, Check for a minor change. Do not demand end-to-end tests for a single component. |
-    | Scenario quality | Given/When/Then scenarios are observable and could be written as the named tests |
+    | Verification tier | Tier matches the deliverable. Check is the default for M. Do not demand Flow or a long scenario list for a contract/ownership move |
+    | Verification bulk | More than ~5 verification bullets, or a unit-test-shaped case per Approach unit, is over-testing — cut to ship-decision outcomes. Prefer existing suites over inventing new ones |
+    | Scenario quality | Outcomes are observable. Formal Given/When/Then is optional; plain language is fine |
     | Scope leakage | File paths, code blocks, signatures, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check is Approach content, not leakage — do not flag it |
-    | Design homelessness | A Decisions table past ~8 rows, or a Vision Target carrying call-shape or mechanism prose, means the Approach section is missing or too thin |
+    | Design homelessness | Mechanism and why missing from Approach, or Target stuffed with call-shape/mechanism prose that belongs in Approach |
 
     ## Readonly
 

@@ -114,40 +114,31 @@ Required fields mirror the spec sections write-spec will author:
 - [x] Vision (including Target)
 - [x] Approach
 - [x] Scope
-- [x] Decisions
 - [x] Not now
 - [x] Verification
 
 ## Vision
-Shared vision in human form — what you intend to build in this project's
-context, why it matters, and what is wrong or incomplete about today when
-something already exists. As long and as technical as the idea needs.
+Shared vision in human form — what you intend to build, why it matters, and
+what is wrong about today when something already exists. As long and as
+technical as the idea needs.
 
 ### Target
-The concrete done state as agreed — user flow for frontend, contract or call
-sequence for backend, schema for data. Include a Today / baseline only when
-something real exists to contrast; greenfield shows Target only.
+Free-text done state. No Today/Done tables. What exists when this is finished,
+how the important surfaces behave, what is gone.
 
 ## Approach
-The rule the design turns on, the named units it introduces (name plus what
-each is responsible for), and the mechanism choices that are load-bearing.
-Name things — this is the part of the conversation that gets lost otherwise.
-Names, not file paths.
+The rule, named units (name + responsibility in prose), mechanism choices and
+why they won. Decisions live here — not in a separate table.
 
 ## Scope
 Areas and components involved (named, not file paths), what to reuse rather
 than rebuild, docs that constrain the work, guardrails.
 
-## Decisions
-| # | Decision | Why |
-|---|----------|-----|
-| 1 | ... | ... |
-
 ## Not now
 ...
 
 ## Verification
-Tier (Flow / Component / Check) and the scenarios agreed, if any.
+Tier (usually Check for M) and a few observable outcomes — not a unit-test list.
 
 ## Affected domains
 ui, generation
