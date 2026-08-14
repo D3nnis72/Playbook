@@ -25,8 +25,9 @@ Subagent (review):
 
     The reverse is also a finding. A spec must name the things its design
     introduces and say why load-bearing choices won — in Approach prose.
-    Names at that level are Approach content, not leakage. Judge detail by
-    whether it is a name or a location, not by how specific it feels.
+    Names and settled field lists at that level are Approach content, not
+    leakage. Judge detail by whether it is a name/shape or a location, not by
+    how specific it feels. Do not demand a data model the handoff never had.
 
     **Spec to review:** [SPEC_FILE_PATH]
     **Design Handoff for reference:** [HANDOFF_PATH]
@@ -74,7 +75,7 @@ Subagent (review):
     | Verification tier | Tier matches the deliverable. Check is the default for M. Do not demand Flow or a long scenario list for a contract/ownership move |
     | Verification bulk | More than ~5 verification bullets, or a unit-test-shaped case per Approach unit, is over-testing — cut to ship-decision outcomes. Prefer existing suites over inventing new ones |
     | Scenario quality | Outcomes are observable. Formal Given/When/Then is optional; plain language is fine |
-    | Scope leakage | File paths, code blocks, signatures, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check is Approach content, not leakage — do not flag it |
+    | Scope leakage | File paths, code blocks, signatures, SQL, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check, and listing the fields a brainstormed shape carries, is Approach content — do not flag it |
     | Design homelessness | Mechanism and why missing from Approach, or Target stuffed with call-shape/mechanism prose that belongs in Approach |
 
     ## Readonly

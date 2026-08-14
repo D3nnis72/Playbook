@@ -15,7 +15,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Upstream:** The spec, when there is one, has passed write-spec's review pass and user approval. Plan review verifies traceability, buildability, parsimony, and execution topology — it does not re-audit whether the design is doable, which write-spec settled.
 
-**Downstream of the spec:** the spec is a human-readable design note — it names components and areas, not files. This plan owns all file-level detail. The spec's Verification outcomes become real checks (prefer existing suites); do not invent a unit test per Approach unit unless an outcome requires it. Every unit named in Approach gets a file and a task here under the name the spec gave it. If a named unit has no home in the plan, either the plan is incomplete or the spec's design changed — resolve it before execution rather than silently renaming.
+**Downstream of the spec:** the spec is a human-readable design note — it names components and areas, not files. This plan owns all file-level detail. The spec's Verification outcomes become real checks (prefer existing suites); do not invent a unit test per Approach unit unless an outcome requires it. Every unit named in Approach gets a file and a task here under the name the spec gave it. If Approach (or its `### Shapes`) lists what a unit carries, use those fields — do not silently invent a different model. If a named unit has no home in the plan, either the plan is incomplete or the spec's design changed — resolve it before execution rather than silently renaming.
 
 **Context:** If working in an isolated worktree, it should have been created via the `playbook:using-git-worktrees` skill at execution time.
 
@@ -283,7 +283,7 @@ git commit -m "feat: add specific feature"
 **Always show the real content:**
 - Test cases — names, inputs, expected values
 - Interfaces — signatures, parameter and return types, exported names
-- Data shapes — schemas, migrations, config values, user-visible copy
+- Data shapes — schemas, migrations, config values, user-visible copy. When the spec already listed what a shape carries, transcribe that into the task — do not invent a different one
 - Commands — exact invocation and expected output
 
 **Prose is enough** for an implementation step whose test and signature already determine the behavior. Name the function, its signature, and what it does. Pre-writing a function body the test already specifies makes the plan the change written twice — once in Markdown, once in code — and only the second one runs.

@@ -47,6 +47,7 @@ Subagent (review):
     |----------|------------------|
     | Coverage | Every spec requirement maps to at least one plan task/step |
     | Named units | Every unit named in the spec's Approach section — projections, modules, views, checks — appears in the plan under the same name, with a file and a task. A missing or silently renamed unit is a blocker |
+    | Settled shapes | If the spec's Approach or `### Shapes` lists fields, relationships, or payloads, the plan implements those — not a different model. Absence of Shapes in the spec is not a gap |
     | Scope | No major scope creep — tasks not anchored in the spec |
     | Correctness | Plan implements what the spec describes, not a different feature |
     | Constraints | Plan's Global Constraints section matches the spec verbatim |

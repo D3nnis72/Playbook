@@ -58,6 +58,10 @@ digraph write_spec {
 Do NOT invoke writing-plans until the review pass is clean (or its blockers are fixed) AND the user approves the written spec. Do NOT edit canonical documentation in this skill. Do NOT commit until the user approves — and only when the user requests a commit.
 </HARD-GATE>
 
+## Step 1: Carry settled shapes
+
+After reading the handoff, copy every concrete shape the conversation already agreed — fields a projection carries, entity relationships, API payloads, invariants — into Approach. If the handoff has no `### Shapes` and Approach never names contents, write none. Do not invent a data model so the spec looks complete.
+
 ## Step 2: Size the work
 
 Detail is proportional to size. Decide the size **before** writing anything, and state it in the spec header.
