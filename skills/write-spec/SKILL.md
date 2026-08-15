@@ -70,7 +70,7 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 | Size | Looks like | What to write |
 |------|------------|---------------|
 | **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, or write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
-| **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually a short Check | `Vision` (with `Target`), `Scope`, short `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Not now` when there is nothing to exclude. **Usual plan tier: Lite.** |
+| **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually a short Check walkthrough | `Vision` (with `Target`), `Scope`, short `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Not now` when there is nothing to exclude. **Usual plan tier: Lite.** |
 | **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with Flow-level verification. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
 
 **Announce the size and why** in one sentence before writing. If the user disagrees, take their size.
@@ -91,9 +91,9 @@ Fixed section order. Section names are literal — use them verbatim.
 | **Approach** | How does it work, and why these choices? | Named units with kind + conceptual home; mechanisms and why. Field-level shapes only when brainstorm already settled them. |
 | **Scope** | Where does this live and what must be respected? | Short bullets: areas, reuse, docs to read, skills, guardrails. **No file paths, no code.** |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
-| **Verification** | How do we know it worked? | A few observable outcomes — not a unit-test inventory. See Verification. |
+| **Verification** | What can you walk through when this is done? | Structured prose: the expected flow or verify path — screens/navigation for UI, contracts/behavior for backend. Not a unit-test inventory. |
 
-**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification default to paragraphs and short bullets. A spec that is mostly tables fails the readability test.
+**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification default to paragraphs (Verification may use a light numbered walkthrough). A spec that is mostly tables fails the readability test.
 
 **Header block** — every spec starts with it:
 
@@ -177,19 +177,31 @@ The list should be short and specific: three or four documents an implementer mu
 
 ### Verification
 
-How would a skeptical teammate know this worked? Write that — briefly.
+Describe **what someone should be able to walk through when this slice is done** — the expected delivered flow, not a test-case inventory.
 
-**Default lean.** Prefer extending or running checks that already exist over inventing a new unit-test suite in the spec. Over-specifying tests is a review failure: a wall of Given/When/Then that mirrors every Approach unit usually means the spec is doing the plan's job and will produce unnecessary tests downstream.
+Write it as structured prose (short paragraphs or a light numbered walkthrough). Prefer a readable path over a wall of bullets. Formal Given/When/Then is optional and usually worse here.
 
-| Tier | When | What to write |
-|------|------|---------------|
-| **Check** | Most M work; refactors; ownership moves; contract consolidations | One to three observable outcomes, or "run X existing suite / command and expect Y." Manual is fine when that is the honest bar. |
-| **Component** | One new component or contained capability with real behavior branches | A handful of user-visible or API-visible cases — not one case per private function. |
-| **Flow** | A complete user or system flow | A few end-to-end scenarios worth automating. Name the journey, not every assertion. |
+**By type:**
 
-State the tier. Prefer short bullets in plain language over formal Given/When/Then unless the form genuinely helps. Cap it: if you have more than about five bullets, you are writing a test plan — cut to the outcomes that would change a ship decision.
+| Type | Verification reads like |
+|------|-------------------------|
+| **frontend** / **mixed with UI** | A **user flow**: which screens or steps exist, how you enter them, where you can go next (continue / back / exit), what you confirm along the way, and what “done for this slice” looks like. Name the path, not every assertion. |
+| **backend** / **data** | A **verify path**: which functions or contracts exist, which schemas or records are in place, who can call what, and what observable result proves it (command, response shape, persisted row). No fake user journey. |
+| **mixed** | One cross-boundary walkthrough when the UI and backend meet; do not split into two mini-test plans. |
 
-These outcomes are acceptance criteria for the plan. writing-plans turns them into verification steps; it must not invent a unit test for every named unit the Approach mentioned unless the outcome actually requires it.
+**Default lean.** Prefer extending or running checks that already exist over inventing a new unit-test suite in the spec. Over-specifying tests is a review failure: a bullet list that mirrors every Approach unit usually means the spec is doing the plan's job.
+
+State a tier so the plan knows how heavy to automate:
+
+| Tier | When | What the prose covers |
+|------|------|------------------------|
+| **Check** | Most M work; refactors; ownership moves | A short verify path — one or two things you can observe or run |
+| **Component** | One contained capability with real branches | The main happy path plus the branches that would change a ship decision |
+| **Flow** | A complete user or system journey | The end-to-end walkthrough (screens or call sequence) for this slice |
+
+Keep it short enough to read once. If it turns into a QA checklist, cut to the path that would change a ship decision.
+
+This section is acceptance criteria for the plan. writing-plans turns it into verification steps; it must not invent a unit test for every named Approach unit unless the flow actually requires it.
 
 ### Global constraints (optional)
 
@@ -246,10 +258,11 @@ shapes only when brainstorm already settled them.>
 
 ## Verification
 
-**Tier:** Check
+**Tier:** Flow | Component | Check
 
-- <Observable outcome, or existing command/suite to run and what it should show>
-- <Only as many bullets as would change a ship decision>
+<Structured prose — the walkthrough someone should be able to do when this
+slice is done. For UI: screens, navigation, what you confirm. For backend:
+contracts, schemas, and the observable verify path. Not a unit-test bullet list.>
 ````
 
 There is no doc-impact section. Documentation updates are discovered from the real diff and performed by the plan's final work unit.
@@ -268,7 +281,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, proportional verification, and scope discipline (no plan-level paths — kind and home are not leakage).
+**Scope:** placeholders, handoff fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory), and scope discipline (no plan-level paths — kind and home are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate

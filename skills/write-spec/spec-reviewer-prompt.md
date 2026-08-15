@@ -72,9 +72,10 @@ Subagent (review):
     |----------|------------------|
     | Size fit | Declared size matches the actual work. An S-sized change should not have a spec at all; an epic should decompose. Multi-domain or multi-runtime touchpoints alone do not make L — one capability that stands or falls together is M. Plan tier in the header should match: M → Lite by default, L → Full |
     | Detail level | M-sized specs should not carry L-sized ceremony, and vice versa |
+    | Verification form | Prefer structured prose walkthrough over a bullet inventory. UI/mixed: expected user flow (screens, navigation). Backend/data: verify path (contracts, schemas, observable result). Do not demand a fake user journey for pure backend work |
     | Verification tier | Tier matches the deliverable. Check is the default for M. Do not demand Flow or a long scenario list for a contract/ownership move |
-    | Verification bulk | More than ~5 verification bullets, or a unit-test-shaped case per Approach unit, is over-testing — cut to ship-decision outcomes. Prefer existing suites over inventing new ones |
-    | Scenario quality | Outcomes are observable. Formal Given/When/Then is optional; plain language is fine |
+    | Verification bulk | A QA checklist or unit-test-shaped case per Approach unit is over-testing — cut to the ship-decision path. Prefer existing suites over inventing new ones |
+    | Scenario quality | A reader can tell what to walk through when the slice is done. Formal Given/When/Then is optional |
     | Scope leakage | File paths, code blocks, signatures, SQL, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check, and listing the fields a brainstormed shape carries, is Approach content — do not flag it |
     | Design homelessness | Mechanism and why missing from Approach, or Target stuffed with call-shape/mechanism prose that belongs in Approach |
 

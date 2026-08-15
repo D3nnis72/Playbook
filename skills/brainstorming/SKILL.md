@@ -194,7 +194,9 @@ than rebuild, docs that constrain the work, guardrails.
 ...
 
 ## Verification
-Tier (usually Check for M) and a few observable outcomes — not a unit-test list.
+Tier (Check / Component / Flow) and a short structured walkthrough of what
+you should be able to verify when this is done — user flow for UI, verify
+path for backend. Not a unit-test list.
 
 ## Affected domains
 ui, generation
