@@ -44,7 +44,7 @@ Subagent (review):
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
     | Handoff fidelity | Every approved Design Handoff section landed somewhere in the spec |
-    | Approach | The mechanism the handoff approved is present and named in prose — rule, named units, choices and why. A behavior-only Vision while the handoff settled a design is **missing detail** |
+    | Approach | The mechanism the handoff approved is present and named in prose — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.). Field lists only if the handoff settled them — do not demand a schema. A behavior-only Vision while the handoff settled a design is **missing detail** |
     | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding |
     | Target | Free-text done state under Vision. Required tables, empty Today grids, or Target missing entirely are findings |
     | Decisions | Settled trade-offs live in Approach next to what they decide. A standalone Decisions table is legacy — advisory to fold in, not a reason to demand one |

@@ -58,9 +58,9 @@ digraph write_spec {
 Do NOT invoke writing-plans until the review pass is clean (or its blockers are fixed) AND the user approves the written spec. Do NOT edit canonical documentation in this skill. Do NOT commit until the user approves — and only when the user requests a commit.
 </HARD-GATE>
 
-## Step 1: Carry settled shapes
+## Step 1: Carry what the conversation already settled
 
-After reading the handoff, copy every concrete shape the conversation already agreed — fields a projection carries, entity relationships, API payloads, invariants — into Approach. If the handoff has no `### Shapes` and Approach never names contents, write none. Do not invent a data model so the spec looks complete.
+After reading the handoff, pull into Approach anything concrete enough that a plan would otherwise re-invent it: **what kinds of things this slice creates** (UI step, durable record, shell mode, entry resolver, gate, …), **which area owns each**, and any **fields/shapes** the conversation already agreed. Skip inventing columns, enums, or schemas that were never discussed.
 
 ## Step 2: Size the work
 
@@ -87,7 +87,7 @@ Fixed section order. Section names are literal — use them verbatim.
 | Section | Answers | Content rules |
 |---------|---------|---------------|
 | **Vision** | What are we intending, and what does done look like? | Human-readable prose. As long and as technical as the idea needs. Ends with **`### Target`**: free-text done state — not a table. |
-| **Approach** | How does it work, and why these choices? | Named units and mechanisms in prose. Settled trade-offs live here next to what they decide — not in a separate Decisions table. |
+| **Approach** | How does it work, and why these choices? | Named units with kind + conceptual home; mechanisms and why. Field-level shapes only when brainstorm already settled them. |
 | **Scope** | Where does this live and what must be respected? | Short bullets: areas, reuse, docs to read, skills, guardrails. **No file paths, no code.** |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
 | **Verification** | How do we know it worked? | A few observable outcomes — not a unit-test inventory. See Verification. |
@@ -134,13 +134,14 @@ The design the brainstorm settled, at a level someone can hold in their head —
 Write it as prose (short paragraphs or a few bullets), covering:
 
 - **The rule** — the one or two sentences that make the change coherent, plus any corollaries.
-- **Named units** — name each projection, module, package, view, job, or check and say what it is responsible for. Prefer a short paragraph or bullet per unit over a grid. "A named projection per surface" is not a design; naming them is.
-- **Mechanism and why** — the load-bearing choices *and* why they won (view vs RPC, package vs importing the web app, vendor vs publish). Decisions live here, next to the thing they decide. Do not park them in a separate Decisions table.
+- **Named units** — name each unit and say (1) **what kind of thing it is** (UI step, durable record, shell mode, entry use-case, gate, bootstrap hook, …), (2) **which area owns it** conceptually (onboarding domain, workspace shell, Career Profile, …), and (3) what it is responsible for. Enough that a reader knows whether this slice creates UI, durable state, both, or something else — not file paths or component inventories.
+- **Settled shapes** *(only if the conversation already went there)* — fields, relationships, or payloads next to the unit they belong to. Omit when brainstorm stayed at intent; do not invent a model to look complete.
+- **Mechanism and why** — the load-bearing choices *and* why they won. Decisions live here, next to the thing they decide.
 - **Unchanged** — what this deliberately leaves alone, so the plan does not go looking.
 
-**Level test — names, not locations.** If it would come up by name in a code review conversation, it belongs here. If it is a file path, a function signature, SQL, or a step sequence, it belongs in the plan.
+**Level test — kind and home, not locations.** “A durable onboarding workflow record owned by the onboarding domain” belongs here. `src/onboarding/...` and SQL belong in the plan. Field lists belong here only when already agreed.
 
-**By size:** L always. M only when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
+**By size:** L always. M when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
 
 **No separate Decisions section.** A standalone Decisions table is legacy. If you find yourself building one, fold each row into the Approach paragraph it belongs to.
 
@@ -211,8 +212,9 @@ gone. No required tables.>
 
 ## Approach
 
-<Prose: the governing rule; each named unit and what it owns; the mechanism
-choices and why they won; what stays unchanged.>
+<Prose: the governing rule; each named unit as kind + conceptual home +
+responsibility; mechanism and why; what stays unchanged. Add field-level
+shapes only when brainstorm already settled them.>
 
 ## Scope
 
@@ -263,7 +265,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, approach fidelity (named units and mechanism-with-why present in prose), human readability (prose over tables; Target is free text; no standalone Decisions table), project alignment, proportional verification (few outcomes, not a unit-test inventory), and scope discipline (no plan-level detail leaking in — names are not leakage).
+**Scope:** placeholders, handoff fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, proportional verification, and scope discipline (no plan-level paths — kind and home are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate

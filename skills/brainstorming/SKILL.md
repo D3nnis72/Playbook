@@ -127,8 +127,9 @@ Free-text done state. No Today/Done tables. What exists when this is finished,
 how the important surfaces behave, what is gone.
 
 ## Approach
-The rule, named units (name + responsibility in prose), mechanism choices and
-why they won. Decisions live here — not in a separate table.
+The rule; named units with kind + conceptual home + responsibility
+(UI step, durable record, shell mode, … — not file paths); mechanism and why.
+Field-level shapes only when the conversation already settled them.
 
 ## Scope
 Areas and components involved (named, not file paths), what to reuse rather
@@ -151,7 +152,7 @@ ui, generation
 
 Sketch each section to the depth the conversation reached. Do not invent file paths or code — the spec names components, and the plan names files.
 
-**The mechanism you reasoned through is part of the handoff, not just the transcript.** When the conversation settled on a rule, a set of named units, or a choice of mechanism, write them into `Approach` by name. Anything that exists only in the chat is lost at the handoff, and the spec that follows will describe the behavior while quietly forgetting how it works.
+**The mechanism you reasoned through is part of the handoff, not just the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them into `Approach` — including what *kind* of thing each unit is and which area owns it. If you also agreed fields or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost at the handoff.
 
 **Handoff to write-spec** (substantive features only):
 
