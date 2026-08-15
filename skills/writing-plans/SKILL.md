@@ -21,6 +21,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Save plans to:** `docs/playbook/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+- Playbook plans/specs/canvases are **temporary**. After implementation + docdriven, delete leftovers when documentation is clearly done; ask only when ownership is unclear — see the documentation work unit.
 
 ## Checklist
 
@@ -147,10 +148,13 @@ One page. No Execution Schedule, no work unit table, no separate documentation w
 - [ ] Run `npm test` — expect PASS
 - [ ] Run playbook:docdriven-audit in change-scoped mode over `<base>..HEAD`;
       apply what it flags per playbook:docdriven
+- [ ] Clean up playbook leftovers for this slice: delete the plan (and unused
+      spec/canvas) when docdriven clearly covered them; ask only if Depends-on
+      links or unfinished slices make ownership unclear
 - [ ] Commit
 ````
 
-**The last task always closes out:** the full test command, the change-scoped documentation audit, and a commit. That is how a Lite plan keeps the docs-never-go-stale invariant without a dedicated work unit and checkpoint.
+**The last task always closes out:** the full test command, the change-scoped documentation audit, cleaning up temporary playbook files when safe, and a commit. That is how a Lite plan keeps the docs-never-go-stale invariant without a dedicated work unit and checkpoint.
 
 ### Full plan header
 
@@ -309,7 +313,7 @@ No reviewer dispatch. Read the plan once against four questions — all four ans
 - Is every file the change needs in the file map?
 - Does every task end with a command that proves it?
 - Does every step pin its decisions, leaving nothing for the implementer to invent?
-- Does the last task run the full test command and the change-scoped docs audit?
+- Does the last task run the full test command, the change-scoped docs audit, and clean up (or correctly defer) leftover playbook files?
 
 Fix what fails and move to execution. If the plan keeps failing these because it has grown several deliverables, it was a Full plan — re-size it rather than patching.
 

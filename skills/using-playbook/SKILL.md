@@ -133,8 +133,8 @@ digraph process_chain {
     node [shape=box];
     "Implement directly\n(docs updated with the change)" [shape=doublecircle];
 
-    "brainstorming\n(discovery + design approval)" -> "write-spec\n(sizes the spec S/M/L)";
-    "brainstorming\n(discovery + design approval)" -> "Implement directly\n(docs updated with the change)" [label="small pinned change"];
+    "brainstorming\n(canvas early + design approval)" -> "write-spec\n(sizes the spec S/M/L)";
+    "brainstorming\n(canvas early + design approval)" -> "Implement directly\n(docs updated with the change)" [label="small pinned change"];
     "write-spec\n(sizes the spec S/M/L)" -> "writing-plans\n(sizes the plan Direct/Lite/Full)";
     "write-spec\n(sizes the spec S/M/L)" -> "Implement directly\n(docs updated with the change)" [label="size S"];
     "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "Implement directly\n(docs updated with the change)" [label="Direct"];

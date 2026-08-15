@@ -35,7 +35,7 @@ For each task:
 
 For long plans (8+ tasks), pause once at the halfway point and give your human partner a one-paragraph progress summary — not a subagent review, just a checkpoint.
 
-**The plan closes out by updating documentation** — never skip it. On a Full plan that is the final work unit; on a Lite plan it is the last steps of the closing task. Either way, run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Work whose docs are stale is unfinished work.
+**The plan closes out by updating documentation** — never skip it. On a Full plan that is the final work unit; on a Lite plan it is the last steps of the closing task. Either way, run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Then delete leftover playbook files for this slice when documentation is clearly done; ask only when Depends-on links or unfinished canvas slices make ownership unclear. Work whose docs are stale is unfinished work.
 
 ### Step 3: Complete Development
 

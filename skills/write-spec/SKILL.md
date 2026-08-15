@@ -16,21 +16,22 @@ A spec is a **human-readable design note**: what you intend, what done looks lik
 **Inputs:** Design Handoff artifact from brainstorming (path or structured block).
 
 **Outputs:**
-1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md`
-2. Optional companion — same directory, `YYYY-MM-DD-<topic>-<kind>.md` where `<kind>` is `roadmap` or `adr` (only when the design needs a multi-spec slice or a durable decision record)
+1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md` — **temporary** working artifact, not durable product knowledge
+2. Optional companion — same directory, `YYYY-MM-DD-<topic>-<kind>.md` where `<kind>` is `roadmap` or `adr` (roadmap is temporary with the canvas; keep an ADR only when the team wants a durable decision record outside knowledge docs)
 
-**Not an output: documentation updates.** This skill never edits canonical docs and never guesses which docs will need editing. Canonical docs explain current truth, and the code does not exist yet. Every plan's final work unit discovers and performs the doc updates from the real diff — see writing-plans.
+**Not an output: documentation updates.** This skill never edits canonical docs and never guesses which docs will need editing. Canonical docs explain current truth, and the code does not exist yet. Every plan's final work unit discovers and performs the doc updates from the real diff — see writing-plans. After that, delete leftover playbook specs/plans/canvases when documentation is clearly done; ask only when dependencies or ownership are unclear.
 
 ## Checklist
 
 You MUST create a task for each item and complete them in order:
 
-1. **Read Design Handoff** — path or session block from brainstorming
-2. **Size the work** — S / M / L; **S exits this skill**
-3. **Write the spec** — at the detail level the size allows, save to `docs/playbook/specs/`
-4. **Review pass** — dispatch one reviewer, fix blockers yourself, no re-review
-5. **User review gate** — user approves the written spec
-6. **Transition to planning** — invoke writing-plans
+1. **Read Design Handoff** — and the linked **Canvas** when present; the canvas is the brainstorm summary the handoff/spec distill from
+2. **Carry what the conversation already settled** — kind + home + any shapes from canvas/handoff into Approach
+3. **Size the work** — S / M / L; **S exits this skill**
+4. **Write the spec** — at the detail level the size allows, save to `docs/playbook/specs/`
+5. **Review pass** — dispatch one reviewer, fix blockers yourself, no re-review
+6. **User review gate** — user approves the written spec
+7. **Transition to planning** — invoke writing-plans
 
 ## Process Flow
 
@@ -97,10 +98,10 @@ Fixed section order. Section names are literal — use them verbatim.
 **Header block** — every spec starts with it:
 
 ```markdown
-**Size:** M      **Type:** frontend      **Plan tier:** Lite      **Depends on:** —
+**Size:** M      **Type:** frontend      **Plan tier:** Lite      **Depends on:** —      **Canvas:** —
 ```
 
-`Type` is `frontend`, `backend`, `data`, or `mixed`. It steers what Target should describe, not which table template to fill. `Plan tier` is the expected writing-plans tier (`Direct` / `Lite` / `Full`) — writing-plans may revise it, but only with a stated reason.
+`Type` is `frontend`, `backend`, `data`, or `mixed`. It steers what Target should describe, not which table template to fill. `Plan tier` is the expected writing-plans tier (`Direct` / `Lite` / `Full`) — writing-plans may revise it, but only with a stated reason. `Canvas` links the brainstorming canvas this spec was distilled from; use `—` when there was none.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
@@ -126,6 +127,8 @@ By `Type`, make sure Target covers the right kind of done state:
 **Baseline is optional.** When something already exists, say what is wrong with today inside Vision or Target in a sentence or two. Greenfield needs no fake before-state.
 
 Approach owns how the design works; Target owns what done looks like. Do not turn Target into a mechanism dump.
+
+**UI mockups:** Brainstorm already put Markdown mockups on the canvas, grounded in this project's components. During or after the spec, only promote those into a real in-app / route mock when that would clarify a still-open choice — do not redesign arbitrarily outside the project's design system.
 
 ### Approach
 
@@ -197,7 +200,7 @@ Project-wide requirements that bind every task: version floors, dependency limit
 ````markdown
 # <Feature Name>
 
-**Size:** M      **Type:** mixed      **Plan tier:** Lite      **Depends on:** —
+**Size:** M      **Type:** mixed      **Plan tier:** Lite      **Depends on:** —      **Canvas:** —
 
 ## Vision
 

@@ -70,7 +70,23 @@ spec divergence.
 Per playbook:docdriven: docs read, routes used, code changed, docs updated,
 validation run, gaps recorded.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Clean up playbook leftovers**
+
+`docs/playbook/**` is temporary. After durable knowledge is updated via
+docdriven:
+
+1. **Delete** this plan (and its `.handoff` scratch if any) when the audit
+   clearly covered what this slice shipped.
+2. **Delete** the slice's design spec unless another open spec still
+   **Depends on** it — if unclear, ask.
+3. **Delete** the brainstorming **Canvas** when every slice it covers has
+   shipped and knowledge is updated; if other slices or dependencies are
+   unclear, ask before deleting.
+
+Do not leave playbook files as a second source of truth beside
+`docs/knowledge/` once documentation is clearly done.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add docs/
@@ -78,7 +94,7 @@ git commit -m "docs: update <feature> documentation"
 ```
 ````
 
-**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, and that route shards match reality — not that the docs match a list written before implementation.
+**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, that route shards match reality, and that playbook leftovers were deleted or an explicit unclear-dependency reason was recorded — not that the docs match a list written before implementation.
 
 ## Lite variant
 
@@ -89,6 +105,8 @@ Same job, no dispatch and no checkpoint. These are steps in the Lite plan's clos
 - [ ] Read each doc the audit flagged, then apply its actions per playbook:docdriven —
       update what became false, link rather than restate, append gap rows to
       `docs/agent/gaps.md`
+- [ ] Delete leftover playbook files when documentation is clearly done; ask only
+      if Depends-on / unfinished canvas slices make ownership unclear
 - [ ] Commit
 ````
 
