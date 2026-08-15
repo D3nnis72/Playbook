@@ -28,8 +28,7 @@ You MUST create a task for each of these items and complete them in order:
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **update the canvas** when answers change settled ideas
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction on the canvas
 5. **Present design** — in sections scaled to their complexity, get user approval after each section; keep the canvas the consistent summary of what you have agreed. UI/layout choices as Markdown mockups on the canvas, grounded in the project's existing components and design language — not arbitrary external mockups.
-6. **Produce Design Handoff** — from the canvas (one slice at a time if the canvas spans several deliveries); structured artifact mirroring the spec sections
-7. **Transition to spec authorship** — invoke write-spec; the canvas is the approved brainstorm summary the spec draws from
+6. **Transition to spec authorship** — mark the canvas approved and invoke write-spec; the canvas is the approved brainstorm summary the spec draws from (one slice at a time if it spans several deliveries)
 
 ## Process Flow
 
@@ -41,7 +40,6 @@ digraph brainstorming {
     "Propose 2-3 approaches\n(update canvas)" [shape=box];
     "Present design sections\n(update canvas)" [shape=box];
     "User approves design?" [shape=diamond];
-    "Produce Design Handoff\n(from canvas)" [shape=box];
     "Invoke write-spec skill" [shape=doublecircle];
 
     "Explore project context" -> "Start canvas (if useful)";
@@ -50,12 +48,11 @@ digraph brainstorming {
     "Propose 2-3 approaches\n(update canvas)" -> "Present design sections\n(update canvas)";
     "Present design sections\n(update canvas)" -> "User approves design?";
     "User approves design?" -> "Present design sections\n(update canvas)" [label="no, revise + update canvas"];
-    "User approves design?" -> "Produce Design Handoff\n(from canvas)" [label="yes"];
-    "Produce Design Handoff\n(from canvas)" -> "Invoke write-spec skill";
+    "User approves design?" -> "Invoke write-spec skill" [label="yes"];
 }
 ```
 
-**Terminal state is invoking write-spec** (or implementing directly for small approved changes). The canvas is the brainstorming source of truth during the conversation; the Design Handoff / spec is distilled from it — one slice at a time when the canvas is large.
+**Terminal state is invoking write-spec** (or implementing directly for small approved changes). The canvas is the brainstorming source of truth; the spec is distilled from it — one slice at a time when the canvas is large.
 
 ## The Process
 
@@ -108,7 +105,7 @@ digraph brainstorming {
 
 ## Brainstorming Canvas
 
-A **canvas** is the collaborative sketchpad for the brainstorm — started near the beginning of the conversation, updated as you go, and used as the summarized basis for the Design Handoff and write-spec. It replaces any separate visual-companion workflow: mockups and design choices live here in Markdown, in this project's vocabulary. It is a **temporary playbook artifact**, not canonical product documentation. Durable behavior lands in `docs/knowledge/` (via docdriven) after implementation; then clean up leftovers (see Lifecycle).
+A **canvas** is the collaborative sketchpad for the brainstorm — started near the beginning of the conversation, updated as you go, and used as the summarized basis for write-spec. It replaces any separate visual-companion workflow: mockups and design choices live here in Markdown, in this project's vocabulary. It is a **temporary playbook artifact**, not canonical product documentation. Durable behavior lands in `docs/knowledge/` (via docdriven) after implementation; then clean up leftovers (see Lifecycle).
 
 **Start a canvas early when** the user's idea needs a design conversation that could drift — a feature, flow, multi-step capability, or anything where keeping a written vision consistent matters. Skip for tiny pinned fixes ("rename X", "fix this typo") where you will implement directly after a short approval.
 
@@ -136,7 +133,7 @@ Write free-form sections that fit the conversation (promise, principles, journey
 
 1. Mark canvas status **Approved — basis for specs**.
 2. If the canvas covers several delivery slices, note a short delivery order (optional temporary roadmap under `docs/playbook/specs/`).
-3. Produce a Design Handoff from the canvas for the **current** slice; invoke write-spec. Link `**Canvas:** …` on the handoff.
+3. Invoke write-spec for the **current** slice. Pass `**Canvas:** …`. write-spec authors one slice distilled from that canvas, not the whole file as one mega-spec.
 4. Later slices distill from the same canvas + shipped knowledge — do not paste the whole canvas into every spec.
 
 **Lifecycle (playbook is temporary):**
@@ -144,79 +141,23 @@ Write free-form sections that fit the conversation (promise, principles, journey
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
 | Canvas | Living brainstorm summary → basis for specs | **Delete** when its slices are done and knowledge is clearly updated; **ask** only if other open slices or Depends-on links make ownership unclear |
-| Spec / plan / handoff | Working files for a slice | **Delete** when durable docs are clearly updated; **ask** only when another open spec still Depends on it or cleanup is ambiguous |
+| Spec / plan | Working files for a slice | **Delete** when durable docs are clearly updated; **ask** only when another open spec still Depends on it or cleanup is ambiguous |
 
 Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
 
 ## After the Design
 
-**Design Handoff** (before write-spec — skip for small local fixes; distill from the canvas when one exists):
+**The mechanism you reasoned through belongs on the canvas, not just in the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them onto the canvas — including what *kind* of thing each unit is and which area owns it. If you also agreed fields or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost.
 
-Before invoking write-spec, produce a structured handoff the spec author can verify against. Either:
+Do not invent file paths or code — the spec names components, and the plan names files.
 
-- A markdown block in the session (minimum), or
-- A scratch file: `docs/playbook/specs/.handoff/YYYY-MM-DD-<topic>.md` (preferred for long designs)
+**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
 
-Required fields mirror the spec sections write-spec will author:
+**Transition to write-spec** (substantive features only):
 
-```markdown
-# Design Handoff: <topic>
-
-**Size:** S / M / L      **Type:** frontend | backend | data | mixed      **Plan tier:** Direct | Lite | Full
-**Canvas:** — | `docs/playbook/canvases/...`
-
-## Approved sections
-- [x] Vision (including Target)
-- [x] Approach
-- [x] Scope
-- [x] Not now
-- [x] Verification
-
-## Vision
-Shared vision in human form — what you intend to build, why it matters, and
-what is wrong about today when something already exists. As long and as
-technical as the idea needs.
-
-### Target
-Free-text done state. No Today/Done tables. What exists when this is finished,
-how the important surfaces behave, what is gone.
-
-## Approach
-The rule; named units with kind + conceptual home + responsibility
-(UI step, durable record, shell mode, … — not file paths); mechanism and why.
-Field-level shapes only when the conversation already settled them.
-
-## Scope
-Areas and components involved (named, not file paths), what to reuse rather
-than rebuild, docs that constrain the work, guardrails.
-
-## Not now
-...
-
-## Verification
-Tier (Check / Component / Flow) and a short structured walkthrough of what
-you should be able to verify when this is done — user flow for UI, verify
-path for backend. Not a unit-test list.
-
-## Affected domains
-ui, generation
-
-## Open questions (if any)
-...
-```
-
-**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently.
-
-Sketch each section to the depth the conversation reached. Do not invent file paths or code — the spec names components, and the plan names files.
-
-**The mechanism you reasoned through is part of the handoff, not just the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them into `Approach` — including what *kind* of thing each unit is and which area owns it. If you also agreed fields or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost at the handoff.
-
-**Handoff to write-spec** (substantive features only):
-
-- Invoke write-spec — it writes the spec from the canvas / Design Handoff, runs review, and gets user approval of the written file
-- Do NOT invoke writing-plans directly; write-spec hands off after spec approval
+- Invoke write-spec — it writes the spec from the canvas, runs review, and gets user approval of the written file
+- Do NOT invoke writing-plans directly; write-spec continues after spec approval
 - For small approved changes, skip write-spec and implement directly
-- Pass `**Canvas:** …` when a canvas exists; write-spec authors **one slice** distilled from that canvas, not the whole file as one mega-spec
 
 ## Key Principles
 

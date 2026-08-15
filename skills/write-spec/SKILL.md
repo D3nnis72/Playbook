@@ -13,7 +13,7 @@ A spec is a **human-readable design note**: what you intend, what done looks lik
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
-**Inputs:** Design Handoff artifact from brainstorming (path or structured block).
+**Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/...`) when one exists; otherwise the approved design in this session.
 
 **Outputs:**
 1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md` — **temporary** working artifact, not durable product knowledge
@@ -25,8 +25,8 @@ A spec is a **human-readable design note**: what you intend, what done looks lik
 
 You MUST create a task for each item and complete them in order:
 
-1. **Read Design Handoff** — and the linked **Canvas** when present; the canvas is the brainstorm summary the handoff/spec distill from
-2. **Carry what the conversation already settled** — kind + home + any shapes from canvas/handoff into Approach
+1. **Read the Canvas** — the approved brainstorm summary this spec distills from; if there is no canvas, use the approved design in this session
+2. **Carry what the conversation already settled** — kind + home + any shapes from the canvas into Approach
 3. **Size the work** — S / M / L; **S exits this skill**
 4. **Write the spec** — at the detail level the size allows, save to `docs/playbook/specs/`
 5. **Review pass** — dispatch one reviewer, fix blockers yourself, no re-review
@@ -40,7 +40,7 @@ digraph write_spec {
     rankdir=TB;
     node [shape=box];
 
-    "Read Design Handoff" -> "Size the work (S/M/L)";
+    "Read Canvas" -> "Size the work (S/M/L)";
     "Size the work (S/M/L)" -> "Exit: implement, or writing-plans at Lite tier" [label="S"];
     "Size the work (S/M/L)" -> "Write spec at sized detail level" [label="M or L"];
     "Write spec at sized detail level" -> "Dispatch spec reviewer (./spec-reviewer-prompt.md)";
@@ -61,7 +61,7 @@ Do NOT invoke writing-plans until the review pass is clean (or its blockers are 
 
 ## Step 1: Carry what the conversation already settled
 
-After reading the handoff, pull into Approach anything concrete enough that a plan would otherwise re-invent it: **what kinds of things this slice creates** (UI step, durable record, shell mode, entry resolver, gate, …), **which area owns each**, and any **fields/shapes** the conversation already agreed. Skip inventing columns, enums, or schemas that were never discussed.
+After reading the canvas (or the approved design in session), pull into Approach anything concrete enough that a plan would otherwise re-invent it: **what kinds of things this slice creates** (UI step, durable record, shell mode, entry resolver, gate, …), **which area owns each**, and any **fields/shapes** the conversation already agreed. Skip inventing columns, enums, or schemas that were never discussed.
 
 ## Step 2: Size the work
 
@@ -77,7 +77,7 @@ Detail is proportional to size. Decide the size **before** writing anything, and
 
 **Multi-domain ≠ L.** A shared-package extraction, a cross-runtime contract move, or a change that lists several Affected domains is still M when it is one capability that stands or falls together. L is for scope that could be split into separate specs, or for a flow others will extend as a subsystem.
 
-Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming handed off but the work is clearly **S**, say so and move on — do not pad a small change into a full spec.
+Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming invoked this skill but the work is clearly **S**, say so and move on — do not pad a small change into a full spec.
 
 **Size travels downstream.** Put the expected plan tier in the header (`Direct` / `Lite` / `Full`). writing-plans owns the final call and the tier definitions, but it starts from this hint — do not leave it blank and let "several files" upgrade an M spec into a Full plan.
 
@@ -277,11 +277,11 @@ There is no doc-impact section. Documentation updates are discovered from the re
 
 Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_FILE_PATH]` — the saved spec
-- `[HANDOFF_PATH]` — Design Handoff scratch file, or "session block"
+- `[CANVAS_PATH]` — brainstorming canvas path, or "none"
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, handoff fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory), and scope discipline (no plan-level paths — kind and home are not leakage).
+**Scope:** placeholders, canvas fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory), and scope discipline (no plan-level paths — kind and home are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate
@@ -300,6 +300,6 @@ Wait for user approval.
 
 **On user changes:** edit the spec. Re-dispatch the reviewer only when the change alters what the spec claims about the project (new components, different current state, changed verification tier). Wording and scope trims do not need another pass.
 
-**Commit:** do not commit until the user approves, and only when the user requests a commit. Commit the spec plus the handoff scratch file when one exists.
+**Commit:** do not commit until the user approves, and only when the user requests a commit. Commit the spec (and the canvas if it is new or changed).
 
 **Terminal state:** invoke writing-plans — no other skill.

@@ -75,7 +75,7 @@ validation run, gaps recorded.
 `docs/playbook/**` is temporary. After durable knowledge is updated via
 docdriven:
 
-1. **Delete** this plan (and its `.handoff` scratch if any) when the audit
+1. **Delete** this plan when the audit
    clearly covered what this slice shipped.
 2. **Delete** the slice's design spec unless another open spec still
    **Depends on** it — if unclear, ask.

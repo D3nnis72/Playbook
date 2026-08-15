@@ -27,10 +27,10 @@ Subagent (review):
     introduces and say why load-bearing choices won — in Approach prose.
     Names and settled field lists at that level are Approach content, not
     leakage. Judge detail by whether it is a name/shape or a location, not by
-    how specific it feels. Do not demand a data model the handoff never had.
+    how specific it feels. Do not demand a data model the canvas never had.
 
     **Spec to review:** [SPEC_FILE_PATH]
-    **Design Handoff for reference:** [HANDOFF_PATH]
+    **Canvas for reference:** [CANVAS_PATH]
     **Declared size:** [SPEC_SIZE]
 
     Global constraints from the spec that bind implementation:
@@ -43,8 +43,8 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
-    | Handoff fidelity | Every approved Design Handoff section landed somewhere in the spec |
-    | Approach | The mechanism the handoff approved is present and named in prose — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.). Field lists only if the handoff settled them — do not demand a schema. A behavior-only Vision while the handoff settled a design is **missing detail** |
+    | Canvas fidelity | Settled canvas content for this slice (intent, mechanism, exclusions, verify path) landed somewhere in the spec. Do not demand spec-shaped section names on the canvas. If canvas is "none", check internal consistency only |
+    | Approach | The mechanism the canvas (or approved design) settled is present and named in prose — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.). Field lists only if the canvas settled them — do not demand a schema. A behavior-only Vision while the canvas settled a design is **missing detail** |
     | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding |
     | Target | Free-text done state under Vision. Required tables, empty Today grids, or Target missing entirely are findings |
     | Decisions | Settled trade-offs live in Approach next to what they decide. A standalone Decisions table is legacy — advisory to fold in, not a reason to demand one |
@@ -81,7 +81,7 @@ Subagent (review):
 
     ## Readonly
 
-    Your review is read-only. Do not edit the spec, handoff, docs, or any
+    Your review is read-only. Do not edit the spec, canvas, docs, or any
     project files.
 
     ## Calibration
@@ -89,7 +89,7 @@ Subagent (review):
     **Only flag issues that would cause misunderstanding, wrong scope, a
     failed plan, or a spec that lies about the project.** False claims about
     current state, nonexistent components named as if they exist, missing
-    handoff content, untestable verification, disproportionate detail, and
+    canvas content, untestable verification, disproportionate detail, and
     ambiguous requirements are blockers. Minor wording and stylistic
     preferences are advisory.
 
@@ -101,13 +101,13 @@ Subagent (review):
 
     **Status:** Approved | Issues Found
 
-    ### Handoff traceability
+    ### Canvas traceability
 
-    | Handoff section | Spec section | Status |
-    |-----------------|--------------|--------|
-    | [section] | [spec section] | Covered / Missing / Partial |
+    | Canvas idea | Spec section | Status |
+    |-------------|--------------|--------|
+    | [settled idea] | [spec section] | Covered / Missing / Partial |
 
-    Include every Design Handoff section. Mark Missing or Partial rows as blockers.
+    Cover the settled canvas content that belongs in this slice (intent, mechanism, exclusions, verify path). Mark Missing or Partial rows as blockers. If canvas is "none", write "no canvas — internal consistency only".
 
     ### Project alignment
 
@@ -130,7 +130,7 @@ Subagent (review):
     - [suggestions for clarity]
 ```
 
-**Reviewer returns:** Status, Handoff traceability, Project alignment, Proportionality, Blockers (if any), Advisory
+**Reviewer returns:** Status, Canvas traceability, Project alignment, Proportionality, Blockers (if any), Advisory
 
 **Main agent:** Fix blockers in the spec yourself, then proceed to the user review gate.
 **Do not re-dispatch this reviewer after self-fixes.** Re-dispatch only if the user
