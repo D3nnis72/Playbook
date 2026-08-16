@@ -19,7 +19,8 @@ Subagent (review):
 
     A spec is a human-readable design note: what we intend, what done looks
     like, how it works at name level, and what to respect. Prefer prose over
-    tables. It is NOT an implementation plan. Exact file paths, code blocks,
+    tables. Tighten: each fact lives in one section. Normal English, not
+    telegram. It is NOT an implementation plan. Exact file paths, code blocks,
     signatures, and step sequences belong in the plan — flag them here as scope
     leakage, not as missing detail.
 
@@ -44,9 +45,10 @@ Subagent (review):
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
     | Canvas fidelity | Settled canvas content for this slice (intent, mechanism, exclusions, verify path) landed somewhere in the spec. Do not demand spec-shaped section names on the canvas. If canvas is "none", check internal consistency only |
-    | Approach | The mechanism the canvas (or approved design) settled is present and named in prose — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.). Field lists only if the canvas settled them — do not demand a schema. A behavior-only Vision while the canvas settled a design is **missing detail** |
-    | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding |
-    | Target | Free-text done state under Vision. Required tables, empty Today grids, or Target missing entirely are findings |
+    | Approach | The mechanism the canvas (or approved design) settled is present and named — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.), in two to four sentences, not an essay wrapping the unit. Field lists only if the canvas settled them — do not demand a schema. A behavior-only Vision while the canvas settled a design is **missing detail** |
+    | Section ownership | The same rule, why, or full description must not appear in two of Vision, Target, Approach, and Verification. Repeating a name to walk through it is fine. Quote both passages when flagging. |
+    | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding. Telegram fragments or dropped articles that make a later reader decode are a finding. Do not demand caveman compression. |
+    | Target | Free-text done state under Vision. Named surfaces once. Required tables, empty Today grids, Target missing, or Target stuffed with mechanism are findings |
     | Decisions | Settled trade-offs live in Approach next to what they decide. A standalone Decisions table is legacy — advisory to fold in, not a reason to demand one |
     | Not now | Exclusions do not contradict what Vision promises |
     | Ambiguity | Requirements interpretable two ways |
@@ -72,12 +74,13 @@ Subagent (review):
     |----------|------------------|
     | Size fit | Declared size matches the actual work. An S-sized change should not have a spec at all; an epic should decompose. Multi-domain or multi-runtime touchpoints alone do not make L — one capability that stands or falls together is M. Plan tier in the header should match: M → Lite by default, L → Full |
     | Detail level | M-sized specs should not carry L-sized ceremony, and vice versa |
-    | Verification form | Prefer structured prose walkthrough over a bullet inventory. UI/mixed: expected user flow (screens, navigation). Backend/data: verify path (contracts, schemas, observable result). Do not demand a fake user journey for pure backend work |
+    | Verification form | Prefer a readable walkthrough over a bullet inventory or a policy recap. UI/mixed: expected user flow (screens, navigation). Backend/data: verify path (contracts, schemas, observable result). Do not demand a fake user journey for pure backend work |
     | Verification tier | Tier matches the deliverable. Check is the default for M. Do not demand Flow or a long scenario list for a contract/ownership move |
-    | Verification bulk | A QA checklist or unit-test-shaped case per Approach unit is over-testing — cut to the ship-decision path. Prefer existing suites over inventing new ones |
+    | Verification bulk | A QA checklist, unit-test-shaped case per Approach unit, or restated Approach policy is over-testing — cut to the ship-decision path. Prefer existing suites over inventing new ones |
     | Scenario quality | A reader can tell what to walk through when the slice is done. Formal Given/When/Then is optional |
     | Scope leakage | File paths, code blocks, signatures, SQL, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check, and listing the fields a brainstormed shape carries, is Approach content — do not flag it |
     | Design homelessness | Mechanism and why missing from Approach, or Target stuffed with call-shape/mechanism prose that belongs in Approach |
+    | Essay wrapping | A named unit buried in a long paragraph that restates Vision or Target. Advisory unless the rule itself is hard to find — then blocker |
 
     ## Readonly
 
@@ -89,9 +92,10 @@ Subagent (review):
     **Only flag issues that would cause misunderstanding, wrong scope, a
     failed plan, or a spec that lies about the project.** False claims about
     current state, nonexistent components named as if they exist, missing
-    canvas content, untestable verification, disproportionate detail, and
-    ambiguous requirements are blockers. Minor wording and stylistic
-    preferences are advisory.
+    canvas content, untestable verification, restated rules across sections,
+    disproportionate detail, and ambiguous requirements are blockers. Minor
+    wording and stylistic preferences are advisory. Do not demand telegram
+    fragments or dropped articles.
 
     Approve unless there are serious gaps.
 
@@ -117,7 +121,7 @@ Subagent (review):
 
     ### Proportionality
 
-    One line each on size fit, detail level, and verification tier.
+    One line each on size fit, detail level, verification tier, and section ownership.
 
     ### Blockers (if any)
 

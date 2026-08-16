@@ -9,7 +9,7 @@ description: Use when design is approved in brainstorming and you need to author
 
 Author and validate a design spec from an approved brainstorming outcome. Size the work, write the spec, run **one** review pass, get user approval, then invoke writing-plans.
 
-A spec is a **human-readable design note**: what you intend, what done looks like, how it works at name level, and what the implementer must respect. Prefer prose over tables. It is not an implementation plan. If a section could be pasted into a plan as-is — exact file paths, code blocks, step sequences — it belongs in writing-plans, not here.
+A spec is a **human-readable design note**: what you intend, what done looks like, how it works at name level, and what the implementer must respect. Prefer prose over tables. Tighten: each fact lives in one section. Normal English, not telegram. It is not an implementation plan. If a section could be pasted into a plan as-is — exact file paths, code blocks, step sequences — it belongs in writing-plans, not here.
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
@@ -87,13 +87,25 @@ Fixed section order. Section names are literal — use them verbatim.
 
 | Section | Answers | Content rules |
 |---------|---------|---------------|
-| **Vision** | What are we intending, and what does done look like? | Human-readable prose. As long and as technical as the idea needs. Ends with **`### Target`**: free-text done state — not a table. |
+| **Vision** | What are we intending, and why? | Prose: problem, intent, why it matters. Ends with **`### Target`**. Does not list screens or recap mechanism. |
 | **Approach** | How does it work, and why these choices? | Named units with kind + conceptual home; mechanisms and why. Field-level shapes only when brainstorm already settled them. |
 | **Scope** | Where does this live and what must be respected? | Short bullets: areas, reuse, docs to read, skills, guardrails. **No file paths, no code.** |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
-| **Verification** | What can you walk through when this is done? | Structured prose: the expected flow or verify path — screens/navigation for UI, contracts/behavior for backend. Not a unit-test inventory. |
+| **Verification** | What can you walk through when this is done? | One walkthrough: screens/navigation for UI, contracts/behavior for backend. Not a policy recap or unit-test inventory. |
 
-**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification default to paragraphs (Verification may use a light numbered walkthrough). A spec that is mostly tables fails the readability test.
+**Tighten, don't telegram.** Specs stay normal English — articles, full sentences, exact terms. Cut filler, hedging, and restatement. Do not drop articles or write fragments that a later reader has to decode.
+
+**Each fact lives in one section.** Repeating a name to walk through it is fine. Repeating the rule, the why, or the full description is not.
+
+| Section | Owns | Does not own |
+|---------|------|----------------|
+| **Vision** | Problem, intent, why. Short baseline if something exists today. | Screen inventory, mechanism, walkthrough |
+| **Target** | Done state: what exists, how surfaces behave, what is gone. Named surfaces once. | How it works, why a choice won |
+| **Approach** | Named units (kind + home + rule). Load-bearing why. Unchanged. | Repeating Target. File paths. |
+| **Scope** | Areas, reuse, docs, skills, guardrails | Design restated as bullets |
+| **Verification** | One walkthrough that would change a ship decision | Re-explaining Approach units or Target policy |
+
+**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification use tight sentences or short bullets — not essays, not telegram. Verification may be a light numbered walkthrough. A spec that is mostly tables, or that tells the same fact in Vision, Target, Approach, and Verification, fails review.
 
 **Header block** — every spec starts with it:
 
@@ -105,15 +117,15 @@ Fixed section order. Section names are literal — use them verbatim.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
-**Readability test:** after Vision (including Target), would a colleague who missed the brainstorm understand the intent and the done state in one sitting? If they would reach for a decoder ring, the spec fails review.
+**Readability test:** after Vision (including Target), would a colleague who missed the brainstorm understand the intent and the done state in one sitting? If they would reach for a decoder ring, the spec fails review. If they would notice the same rule or description three times, it also fails — tighten, don't add a fourth telling.
 
 ### Vision
 
 Write the shared vision of what you intend to do with this work — in human form, for a reader who was not in the brainstorm. Length follows the idea: a small capability may need a paragraph; a cross-domain redesign may need a page. Be as technical as the idea needs to be clear. File paths and step sequences still belong in the plan, not here.
 
-Cover what matters for shared understanding: the problem or opportunity in this project's context, what you intend to build, why it matters, and — when something already exists — what is wrong or incomplete about today. Do not pad, and do not truncate a real vision to hit a sentence count.
+Cover what matters for shared understanding: the problem or opportunity in this project's context, what you intend to build, why it matters, and — when something already exists — what is wrong or incomplete about today. Do not pad, and do not truncate a real vision to hit a sentence count. Do not preview Target's surface list or Approach's mechanism — those belong below.
 
-Every Vision ends with a **`### Target`** subsection — free text describing the done state. Write it as you would explain to a teammate: what exists when this is finished, how the important surfaces behave, what is gone. No Today/Done tables, no step grids unless a tiny comparison truly helps (and even then prefer two short paragraphs).
+Every Vision ends with a **`### Target`** subsection — free text describing the done state. Write it as you would explain to a teammate: what exists when this is finished, how the important surfaces behave, what is gone. Name surfaces once here. No Today/Done tables, no step grids unless a tiny comparison truly helps (and even then prefer two short paragraphs).
 
 By `Type`, make sure Target covers the right kind of done state:
 
@@ -126,7 +138,7 @@ By `Type`, make sure Target covers the right kind of done state:
 
 **Baseline is optional.** When something already exists, say what is wrong with today inside Vision or Target in a sentence or two. Greenfield needs no fake before-state.
 
-Approach owns how the design works; Target owns what done looks like. Do not turn Target into a mechanism dump.
+Approach owns how the design works; Target owns what done looks like. Do not turn Target into a mechanism dump, and do not recap Target inside Approach.
 
 **UI mockups:** Brainstorm already put Markdown mockups on the canvas, grounded in this project's components. During or after the spec, only promote those into a real in-app / route mock when that would clarify a still-open choice — do not redesign arbitrarily outside the project's design system.
 
@@ -134,10 +146,10 @@ Approach owns how the design works; Target owns what done looks like. Do not tur
 
 The design the brainstorm settled, at a level someone can hold in their head — and the reasons that matter. Without this section the mechanism has nowhere to live and gets forgotten between chat and plan.
 
-Write it as prose (short paragraphs or a few bullets), covering:
+Write tight sentences or short bullets — two to four sentences per named unit, not an essay wrapping it. Cover:
 
 - **The rule** — the one or two sentences that make the change coherent, plus any corollaries.
-- **Named units** — name each unit and say (1) **what kind of thing it is** (UI step, durable record, shell mode, entry use-case, gate, bootstrap hook, …), (2) **which area owns it** conceptually (onboarding domain, workspace shell, Career Profile, …), and (3) what it is responsible for. Enough that a reader knows whether this slice creates UI, durable state, both, or something else — not file paths or component inventories.
+- **Named units** — `**Name** — kind, conceptual home. Rule. Why, when the choice is load-bearing.` Say (1) **what kind of thing it is** (UI step, durable record, shell mode, entry use-case, gate, bootstrap hook, …), (2) **which area owns it** conceptually (onboarding domain, workspace shell, Career Profile, …), and (3) what it is responsible for. Enough that a reader knows whether this slice creates UI, durable state, both, or something else — not file paths or component inventories. Stop. Do not recap other units or Target.
 - **Settled shapes** *(only if the conversation already went there)* — fields, relationships, or payloads next to the unit they belong to. Omit when brainstorm stayed at intent; do not invent a model to look complete.
 - **Mechanism and why** — the load-bearing choices *and* why they won. Decisions live here, next to the thing they decide.
 - **Unchanged** — what this deliberately leaves alone, so the plan does not go looking.
@@ -177,9 +189,9 @@ The list should be short and specific: three or four documents an implementer mu
 
 ### Verification
 
-Describe **what someone should be able to walk through when this slice is done** — the expected delivered flow, not a test-case inventory.
+Describe **what someone should be able to walk through when this slice is done** — the expected delivered flow, not a test-case inventory and not a recap of Approach.
 
-Write it as structured prose (short paragraphs or a light numbered walkthrough). Prefer a readable path over a wall of bullets. Formal Given/When/Then is optional and usually worse here.
+Write it as a readable path (short paragraphs or a light numbered walkthrough). Name the surfaces as you walk them; do not re-explain their rules. Formal Given/When/Then is optional and usually worse here.
 
 **By type:**
 
@@ -199,7 +211,7 @@ State a tier so the plan knows how heavy to automate:
 | **Component** | One contained capability with real branches | The main happy path plus the branches that would change a ship decision |
 | **Flow** | A complete user or system journey | The end-to-end walkthrough (screens or call sequence) for this slice |
 
-Keep it short enough to read once. If it turns into a QA checklist, cut to the path that would change a ship decision.
+Keep it short enough to read once. If it turns into a QA checklist or restates Approach policy, cut to the path that would change a ship decision.
 
 This section is acceptance criteria for the plan. writing-plans turns it into verification steps; it must not invent a unit test for every named Approach unit unless the flow actually requires it.
 
@@ -216,20 +228,20 @@ Project-wide requirements that bind every task: version floors, dependency limit
 
 ## Vision
 
-<Prose: what you intend to build in this project's context, why it matters,
-and what is wrong or incomplete about today when something already exists.
-As long and as technical as the idea needs.>
+<Short prose: what you intend to build in this project's context, why it
+matters, and what is wrong or incomplete about today when something already
+exists. Do not list surfaces or recap mechanism.>
 
 ### Target
 
-<Free text: what done looks like. How the important surfaces behave. What is
-gone. No required tables.>
+<What done looks like. How the important surfaces behave. What is gone.
+Name surfaces once. No required tables.>
 
 ## Approach
 
-<Prose: the governing rule; each named unit as kind + conceptual home +
-responsibility; mechanism and why; what stays unchanged. Add field-level
-shapes only when brainstorm already settled them.>
+<The governing rule. Each named unit in two to four sentences: kind +
+conceptual home + rule; why when load-bearing; what stays unchanged.
+Shapes only when brainstorm already settled them. Do not recap Target.>
 
 ## Scope
 
@@ -260,9 +272,9 @@ shapes only when brainstorm already settled them.>
 
 **Tier:** Flow | Component | Check
 
-<Structured prose — the walkthrough someone should be able to do when this
-slice is done. For UI: screens, navigation, what you confirm. For backend:
-contracts, schemas, and the observable verify path. Not a unit-test bullet list.>
+<One walkthrough when this slice is done. For UI: screens, navigation, what
+you confirm. For backend: contracts, schemas, and the observable verify
+path. Name surfaces; do not re-explain their rules.>
 ````
 
 There is no doc-impact section. Documentation updates are discovered from the real diff and performed by the plan's final work unit.
@@ -281,7 +293,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, canvas fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory), and scope discipline (no plan-level paths — kind and home are not leakage).
+**Scope:** placeholders, canvas fidelity, approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), section ownership (no restated rules across Vision/Target/Approach/Verification), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory or policy recap), and scope discipline (no plan-level paths — kind and home are not leakage).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate
