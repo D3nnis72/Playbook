@@ -19,7 +19,7 @@ A spec is a **human-readable design note**: what you intend, what done looks lik
 1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md` — **temporary** working artifact, not durable product knowledge
 2. Optional companion — same directory, `YYYY-MM-DD-<topic>-<kind>.md` where `<kind>` is `roadmap` or `adr` (roadmap is temporary with the canvas; keep an ADR only when the team wants a durable decision record outside knowledge docs)
 
-**Not an output: documentation updates.** This skill never edits canonical docs and never guesses which docs will need editing. Canonical docs explain current truth, and the code does not exist yet. Every plan's final work unit discovers and performs the doc updates from the real diff — see writing-plans. After that, delete leftover playbook specs/plans/canvases when documentation is clearly done; ask only when dependencies or ownership are unclear.
+**Not an output: documentation updates.** This skill never edits canonical docs and never guesses which docs will need editing. Canonical docs explain current truth, and the code does not exist yet. Every plan's final work unit discovers and performs the doc updates from the real diff — see writing-plans. After that, leftover playbook files may only hold remaining work: delete or strip specs/plans/canvases; ask only when dependencies or ownership are unclear.
 
 ## Checklist
 

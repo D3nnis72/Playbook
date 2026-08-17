@@ -72,19 +72,18 @@ validation run, gaps recorded.
 
 - [ ] **Step 8: Clean up playbook leftovers**
 
-`docs/playbook/**` is temporary. After durable knowledge is updated via
-docdriven:
+`docs/playbook/**` is temporary. Knowledge docs own shipped truth. Specs and
+canvases may only hold remaining work — strip shipped content, do not
+annotate it as history. After durable knowledge is updated via docdriven:
 
-1. **Delete** this plan when the audit
-   clearly covered what this slice shipped.
-2. **Delete** the slice's design spec unless another open spec still
-   **Depends on** it — if unclear, ask.
-3. **Delete** the brainstorming **Canvas** when every slice it covers has
-   shipped and knowledge is updated; if other slices or dependencies are
-   unclear, ask before deleting.
-
-Do not leave playbook files as a second source of truth beside
-`docs/knowledge/` once documentation is clearly done.
+| If | Then |
+|----|------|
+| This plan | **Delete.** It is finished. |
+| Spec — every unit shipped, and no *open* spec still Depends on that file | **Delete.** |
+| Spec — some units or later slices still open | **Strip** shipped units from Target, Approach, Verification, and Not now. Remaining work only. |
+| Canvas — every slice it covers has shipped | **Delete.** |
+| Canvas — other slices still open | **Remove** the shipped slice. Remaining work only. |
+| Unclear Depends-on, ownership, or whether a slice is done | **Ask.** Do not leave a finished design sitting next to `docs/knowledge/`. |
 
 - [ ] **Step 9: Commit**
 
@@ -94,7 +93,7 @@ git commit -m "docs: update <feature> documentation"
 ```
 ````
 
-**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, that route shards match reality, and that playbook leftovers were deleted or an explicit unclear-dependency reason was recorded — not that the docs match a list written before implementation.
+**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, that route shards match reality, and that playbook leftovers were deleted, stripped to remaining work, or an explicit unclear-dependency reason was recorded — not that the docs match a list written before implementation.
 
 ## Lite variant
 
@@ -105,8 +104,11 @@ Same job, no dispatch and no checkpoint. These are steps in the Lite plan's clos
 - [ ] Read each doc the audit flagged, then apply its actions per playbook:docdriven —
       update what became false, link rather than restate, append gap rows to
       `docs/agent/gaps.md`
-- [ ] Delete leftover playbook files when documentation is clearly done; ask only
-      if Depends-on / unfinished canvas slices make ownership unclear
+- [ ] Delete leftover playbook files when documentation is clearly done: delete
+      this plan; delete or strip the spec; delete or strip the canvas. Knowledge
+      docs own shipped truth; specs and canvases may only hold remaining work.
+      Ask only if Depends-on / unfinished canvas slices make ownership unclear.
+      Do not add an implemented history.
 - [ ] Commit
 ````
 

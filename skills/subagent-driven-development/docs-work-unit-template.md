@@ -70,7 +70,17 @@ spec divergence.
 Per playbook:docdriven: docs read, routes used, code changed, docs updated,
 validation run, gaps recorded.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Clean up playbook leftovers**
+
+`docs/playbook/**` is temporary. Knowledge docs own shipped truth. Specs and
+canvases may only hold remaining work — strip shipped content, do not
+annotate it as history. After durable knowledge is updated via docdriven:
+delete this plan; delete the spec if this slice is complete and no open spec
+still Depends on that file, otherwise strip shipped units; delete the canvas
+if every slice on it has shipped, otherwise remove the shipped slice. Ask
+only when Depends-on or unfinished slices make ownership unclear.
+
+- [ ] **Step 9: Commit**
 
 ```bash
 git add docs/
@@ -78,4 +88,4 @@ git commit -m "docs: update <feature> documentation"
 ```
 ````
 
-**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, and that route shards match reality — not that the docs match a list written before implementation.
+**Review:** this work unit always carries a review checkpoint. The reviewer checks that every audit finding was resolved or explicitly deferred with a gap, that no doc restates content another doc owns, that route shards match reality, and that playbook leftovers were deleted, stripped to remaining work, or an explicit unclear-dependency reason was recorded — not that the docs match a list written before implementation.

@@ -69,8 +69,9 @@ bug goes straight to implementation after a short design check.
 3. **Plan** — size the plan, then break the work into tasks, and into work units
    with checkpoints when the tier calls for them.
 4. **Execute** — implement, review where the plan said to, update canonical
-   knowledge via docdriven, then **ask** whether leftover playbook files
-   (specs, plans, canvases) can be deleted.
+   knowledge via docdriven, then delete or strip leftover playbook files
+   (specs, plans, canvases) so they hold remaining work only. Ask only when
+   ownership is unclear.
 
 ```text
 skill check → design → spec → plan → implement + review → done
@@ -84,7 +85,7 @@ skill check → design → spec → plan → implement + review → done
 - Right-size the process. Every phase names its size and can exit early.
 - Ceremony is a cost. Padding small work up to a bigger shape is a failure, not caution.
 - Plans carry decisions, not transcriptions. A plan that pre-writes the code is the change written twice.
-- Specs, plans, and brainstorming canvases under `docs/playbook/` are temporary working files. Durable product truth lives in canonical knowledge docs after docdriven; delete leftovers when documentation is clearly done, and ask only when ownership is unclear.
+- Specs, plans, and brainstorming canvases under `docs/playbook/` are temporary working files. Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — delete or strip leftovers after docdriven; ask only when ownership is unclear.
 - Specs and plans earn their keep on multi-step work others will build on.
 - Rigid skills (discipline) are followed exactly. Flexible skills adapt.
 

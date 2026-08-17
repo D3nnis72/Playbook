@@ -21,7 +21,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Save plans to:** `docs/playbook/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
-- Playbook plans/specs/canvases are **temporary**. After implementation + docdriven, delete leftovers when documentation is clearly done; ask only when ownership is unclear — see the documentation work unit.
+- Playbook plans/specs/canvases are **temporary**. Knowledge docs own shipped truth. Specs and canvases may only hold remaining work. After implementation + docdriven, delete or strip leftovers per the documentation work unit — do not leave a finished design beside `docs/knowledge/`. Ask only when ownership is unclear.
 
 ## Checklist
 
@@ -148,13 +148,17 @@ One page. No Execution Schedule, no work unit table, no separate documentation w
 - [ ] Run `npm test` — expect PASS
 - [ ] Run playbook:docdriven-audit in change-scoped mode over `<base>..HEAD`;
       apply what it flags per playbook:docdriven
-- [ ] Clean up playbook leftovers for this slice: delete the plan (and unused
-      spec/canvas) when docdriven clearly covered them; ask only if Depends-on
-      links or unfinished slices make ownership unclear
+- [ ] Clean up playbook leftovers: Knowledge docs own shipped truth; specs and
+      canvases may only hold remaining work. Delete this plan. Delete the spec
+      if this slice is complete and no open spec still Depends on that file;
+      otherwise strip shipped units so only remaining work stays. Delete the
+      canvas if every slice on it has shipped; otherwise remove the shipped
+      slice. Ask only when Depends-on or unfinished slices make ownership
+      unclear. Do not add an implemented history.
 - [ ] Commit
 ````
 
-**The last task always closes out:** the full test command, the change-scoped documentation audit, cleaning up temporary playbook files when safe, and a commit. That is how a Lite plan keeps the docs-never-go-stale invariant without a dedicated work unit and checkpoint.
+**The last task always closes out:** the full test command, the change-scoped documentation audit, leftover cleanup (delete or strip — remaining work only), and a commit. That is how a Lite plan keeps the docs-never-go-stale invariant without a dedicated work unit and checkpoint.
 
 ### Full plan header
 
@@ -231,7 +235,20 @@ The work unit **discovers** what to document rather than following a pre-written
 
 Why discovery instead of a list: at spec time the code does not exist, so any list of docs to update is a guess that goes stale as soon as a plan task changes. At the end of implementation the evidence is real. This also means the docs describe what was **built** — where implementation diverged from the spec, the divergence gets documented and recorded in `gaps.md` instead of silently contradicting the docs.
 
-**Do not restate documentation rules in the plan.** The plan's docs task names the two skills and the diff range; those skills carry the procedure.
+**Do not restate documentation rules in the plan.** The plan's docs task names the two skills and the diff range; those skills carry the procedure. Leftover cleanup is the exception: copy the trim-or-delete steps from [docs-work-unit-template.md](docs-work-unit-template.md) so the implementer does not have to reload this skill.
+
+**Playbook leftover cleanup.** Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history.
+
+| If | Then |
+|----|------|
+| This plan | **Delete.** It is finished. |
+| Spec — every unit shipped, and no *open* spec still Depends on that file | **Delete.** |
+| Spec — some units or later slices still open | **Strip** shipped units from Target, Approach, Verification, and Not now. Remaining work only. |
+| Canvas — every slice it covers has shipped | **Delete.** |
+| Canvas — other slices still open | **Remove** the shipped slice. Remaining work only. |
+| Unclear Depends-on, ownership, or whether a slice is done | **Ask.** Do not leave a finished design sitting next to `docs/knowledge/`. |
+
+Direct implementation (no plan file) still runs this after docdriven if a spec or canvas exists.
 
 ### Full task structure
 
@@ -313,7 +330,7 @@ No reviewer dispatch. Read the plan once against four questions — all four ans
 - Is every file the change needs in the file map?
 - Does every task end with a command that proves it?
 - Does every step pin its decisions, leaving nothing for the implementer to invent?
-- Does the last task run the full test command, the change-scoped docs audit, and clean up (or correctly defer) leftover playbook files?
+- Does the last task run the full test command, the change-scoped docs audit, and trim-or-delete leftover playbook files (remaining work only)?
 
 Fix what fails and move to execution. If the plan keeps failing these because it has grown several deliverables, it was a Full plan — re-size it rather than patching.
 

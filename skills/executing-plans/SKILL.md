@@ -35,7 +35,7 @@ For each task:
 
 For long plans (8+ tasks), pause once at the halfway point and give your human partner a one-paragraph progress summary — not a subagent review, just a checkpoint.
 
-**The plan closes out by updating documentation** — never skip it. On a Full plan that is the final work unit; on a Lite plan it is the last steps of the closing task. Either way, run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Then delete leftover playbook files for this slice when documentation is clearly done; ask only when Depends-on links or unfinished canvas slices make ownership unclear. Work whose docs are stale is unfinished work.
+**The plan closes out by updating documentation** — never skip it. On a Full plan that is the final work unit; on a Lite plan it is the last steps of the closing task. Either way, run playbook:docdriven-audit in change-scoped mode over the diff you just produced to find which docs became false, then update them per playbook:docdriven. Then trim or delete playbook leftovers: knowledge docs own shipped truth; specs and canvases may only hold remaining work. Delete this plan. Delete the spec if this slice is complete and no open spec still Depends on that file; otherwise strip shipped units. Delete the canvas if every slice on it has shipped; otherwise remove the shipped slice. Ask only when Depends-on or unfinished slices make ownership unclear. Do not add an implemented history. Work whose docs are stale is unfinished work.
 
 ### Step 3: Complete Development
 

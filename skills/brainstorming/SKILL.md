@@ -121,8 +121,8 @@ A **canvas** is the collaborative sketchpad for the brainstorm — started near 
 >
 > Living summary of this brainstorm. Keep it updated when decisions change.
 > Specs and plans are distilled from this file. Not canonical product behavior —
-> after shipping, durable truth lives in knowledge docs; then delete leftovers
-> when documentation is clearly done.
+> after shipping, knowledge docs own shipped truth; leftovers hold remaining
+> work only, then delete when nothing remains.
 ```
 
 Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header — grow the document as you clarify; rewrite sections so they stay clean rather than appending contradictions. UI mockups name existing project components and patterns where possible.
@@ -140,10 +140,10 @@ Write free-form sections that fit the conversation (promise, principles, journey
 
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
-| Canvas | Living brainstorm summary → basis for specs | **Delete** when its slices are done and knowledge is clearly updated; **ask** only if other open slices or Depends-on links make ownership unclear |
-| Spec / plan | Working files for a slice | **Delete** when durable docs are clearly updated; **ask** only when another open spec still Depends on it or cleanup is ambiguous |
+| Canvas | Living brainstorm summary → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. **Ask** only if ownership is unclear. |
+| Spec / plan | Working files for a slice | **Delete** the plan. **Delete** the spec when the slice is complete and no open spec still Depends on that file; otherwise **strip** shipped units. **Ask** only when Depends-on or unfinished slices make ownership unclear. |
 
-Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
+Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history. Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
 
 ## After the Design
 
