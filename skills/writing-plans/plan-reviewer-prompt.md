@@ -23,9 +23,10 @@ Subagent (review):
     the spec. Do not expect the plan to list which docs need updating — the
     final work unit discovers that from the implemented diff.
 
-    The spec names components and areas, not files — the plan is where
-    file-level detail belongs. Do not flag the plan for being more specific
-    than the spec.
+    The spec keeps product names the canvas settled and names components
+    and areas. This plan adds source-file locations. Do not flag the plan
+    for being more specific than the spec. Do flag a plan that drops or
+    generalizes a name the spec already used.
 
     Plans specify decisions, not transcriptions. An implementation step may
     describe a function in prose when its signature, behavior, and test are

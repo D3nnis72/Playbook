@@ -127,7 +127,7 @@ A **canvas** is the collaborative sketchpad for the brainstorm — started near 
 
 Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header — grow the document as you clarify; rewrite sections so they stay clean rather than appending contradictions. UI mockups name existing project components and patterns where possible.
 
-**During brainstorming:** treat the canvas as the fixed vision. If chat strays or the user revises something, update the canvas before treating the new idea as settled. Prefer short, clear prose over dumping the whole transcript.
+**During brainstorming:** treat the canvas as the fixed vision. If chat strays or the user revises something, update the canvas before treating the new idea as settled. Prefer short, clear prose over dumping the whole transcript. Keep the nouns.
 
 **When design is approved:**
 
@@ -147,9 +147,9 @@ Knowledge docs own shipped truth. Specs and canvases may only hold remaining wor
 
 ## After the Design
 
-**The mechanism you reasoned through belongs on the canvas, not just in the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them onto the canvas — including what *kind* of thing each unit is and which area owns it. If you also agreed fields or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost.
+**The mechanism you reasoned through belongs on the canvas, not just in the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them onto the canvas, including what *kind* of thing each unit is and which area owns it. If you also agreed fields, types, asset names, or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost.
 
-Do not invent file paths or code — the spec names components, and the plan names files.
+Do not invent source paths or code. Keep product names the conversation settled (assets, types, screens, fields, commands). The spec keeps those names; the plan adds source locations.
 
 **Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
 

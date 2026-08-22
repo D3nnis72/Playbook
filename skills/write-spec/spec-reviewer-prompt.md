@@ -18,17 +18,21 @@ Subagent (review):
     together.
 
     A spec is a human-readable design note: what we intend, what done looks
-    like, how it works at name level, and what to respect. Prefer prose over
-    tables. Tighten: each fact lives in one section. Normal English, not
-    telegram. It is NOT an implementation plan. Exact file paths, code blocks,
-    signatures, and step sequences belong in the plan — flag them here as scope
-    leakage, not as missing detail.
+    like, and how it works, using the names the canvas already used. Prefer
+    prose over tables. Tighten: each fact lives in one section. Distill means
+    drop the essay, not the nouns. Normal English, not telegram. It is NOT an
+    implementation plan. Source paths (`src/...`), code blocks, signatures,
+    and step sequences belong in the plan. Product names the canvas settled
+    (assets, types, screens, commands, fields, routes) belong in the spec.
+    Flag their absence as missing detail, not their presence as leakage.
 
     The reverse is also a finding. A spec must name the things its design
-    introduces and say why load-bearing choices won — in Approach prose.
+    introduces and say why load-bearing choices won, in Approach prose.
     Names and settled field lists at that level are Approach content, not
-    leakage. Judge detail by whether it is a name/shape or a location, not by
-    how specific it feels. Do not demand a data model the canvas never had.
+    leakage. Judge detail by whether it is a product name/shape or a source
+    location, not by how specific it feels. Do not demand a data model the
+    canvas never had. Do not accept a category paraphrase of a name the
+    canvas did have.
 
     **Spec to review:** [SPEC_FILE_PATH]
     **Canvas for reference:** [CANVAS_PATH]
@@ -44,11 +48,11 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Placeholders | TBD, TODO, incomplete sections, vague requirements (allowed only in gaps.md rows) |
-    | Canvas fidelity | Settled canvas content for this slice (intent, mechanism, exclusions, verify path) landed somewhere in the spec. Do not demand spec-shaped section names on the canvas. If canvas is "none", check internal consistency only |
+    | Canvas fidelity | Settled canvas content for this slice (intent, mechanism, exclusions, verify path, named artifacts/types/fields) landed in the spec with the same nouns, in the section that owns them. A synonym or category paraphrase (`hero-dashboard-{locale}@2x.png` → `retina asset pair`) is Partial. Do not demand spec-shaped section names on the canvas. If canvas is "none", check internal consistency only |
     | Approach | The mechanism the canvas (or approved design) settled is present and named — rule, named units, choices and why. Named units should make clear what *kind* of thing they are and which area owns them (UI vs durable state vs shell mode, etc.), in two to four sentences, not an essay wrapping the unit. Field lists only if the canvas settled them — do not demand a schema. A behavior-only Vision while the canvas settled a design is **missing detail** |
     | Section ownership | The same rule, why, or full description must not appear in two of Vision, Target, Approach, and Verification. Repeating a name to walk through it is fine. Quote both passages when flagging. |
-    | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state. A mostly-tabular spec is a finding. Telegram fragments or dropped articles that make a later reader decode are a finding. Do not demand caveman compression. |
-    | Target | Free-text done state under Vision. Named surfaces once. Required tables, empty Today grids, Target missing, or Target stuffed with mechanism are findings |
+    | Readability | After Vision (including Target), a colleague who missed the brainstorm could understand intent and done state, including the actual file, type, screen, or command names the canvas used. A mostly-tabular spec is a finding. Telegram fragments or dropped articles that make a later reader decode are a finding. Do not demand caveman compression. |
+    | Target | Free-text done state under Vision. A human can point at the deliverables. Settled canvas names for artifacts, screens, types, or commands appear here (or in Approach if they are mechanism). Required tables, empty Today grids, Target missing, Target stuffed with mechanism, or a category in place of a settled name are findings |
     | Decisions | Settled trade-offs live in Approach next to what they decide. A standalone Decisions table is legacy — advisory to fold in, not a reason to demand one |
     | Not now | Exclusions do not contradict what Vision promises |
     | Ambiguity | Requirements interpretable two ways |
@@ -78,7 +82,7 @@ Subagent (review):
     | Verification tier | Tier matches the deliverable. Check is the default for M. Do not demand Flow or a long scenario list for a contract/ownership move |
     | Verification bulk | A QA checklist, unit-test-shaped case per Approach unit, or restated Approach policy is over-testing — cut to the ship-decision path. Prefer existing suites over inventing new ones |
     | Scenario quality | A reader can tell what to walk through when the slice is done. Formal Given/When/Then is optional |
-    | Scope leakage | File paths, code blocks, signatures, SQL, or step-by-step instructions that belong in the plan. Naming a projection, view, module, or check, and listing the fields a brainstormed shape carries, is Approach content — do not flag it |
+    | Scope leakage | Source paths (`src/...`), code blocks, signatures, SQL, or step-by-step instructions that belong in the plan. Product names the canvas settled (asset contracts, type names, route query values, field lists) are not leakage. Replacing a settled name with a category is missing detail. Do not flag the name |
     | Design homelessness | Mechanism and why missing from Approach, or Target stuffed with call-shape/mechanism prose that belongs in Approach |
     | Essay wrapping | A named unit buried in a long paragraph that restates Vision or Target. Advisory unless the rule itself is hard to find — then blocker |
 
@@ -92,7 +96,7 @@ Subagent (review):
     **Only flag issues that would cause misunderstanding, wrong scope, a
     failed plan, or a spec that lies about the project.** False claims about
     current state, nonexistent components named as if they exist, missing
-    canvas content, untestable verification, restated rules across sections,
+    canvas nouns, untestable verification, restated rules across sections,
     disproportionate detail, and ambiguous requirements are blockers. Minor
     wording and stylistic preferences are advisory. Do not demand telegram
     fragments or dropped articles.
@@ -111,7 +115,7 @@ Subagent (review):
     |-------------|--------------|--------|
     | [settled idea] | [spec section] | Covered / Missing / Partial |
 
-    Cover the settled canvas content that belongs in this slice (intent, mechanism, exclusions, verify path). Mark Missing or Partial rows as blockers. If canvas is "none", write "no canvas — internal consistency only".
+    Cover the settled canvas content that belongs in this slice (intent, mechanism, exclusions, verify path, named artifacts/types/fields). Mark Missing or Partial rows as blockers. A paraphrase that drops the noun is Partial. If canvas is "none", write "no canvas — internal consistency only".
 
     ### Project alignment
 
