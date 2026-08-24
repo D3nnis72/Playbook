@@ -24,9 +24,9 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, design system, existing components, recent commits
-2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living sketchpad under `docs/playbook/`; keep it updated as you go. Skip for obvious one-file fixes. See Brainstorming Canvas below.
-3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **update the canvas** when answers change settled ideas
-4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction on the canvas
+2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living map under `docs/playbook/`; rewrite it as the direction moves. Skip for obvious one-file fixes. See Brainstorming Canvas below.
+3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **rewrite the canvas** when answers change the map
+4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction by collapsing candidates on the canvas
 5. **Present design** — in sections scaled to their complexity, get user approval after each section; keep the canvas the consistent summary of what you have agreed. UI/layout choices as Markdown mockups on the canvas, grounded in the project's existing components and design language — not arbitrary external mockups.
 6. **Transition to spec authorship** — mark the canvas approved and invoke write-spec; the canvas is the approved brainstorm summary the spec draws from (one slice at a time if it spans several deliveries)
 
@@ -36,18 +36,18 @@ You MUST create a task for each of these items and complete them in order:
 digraph brainstorming {
     "Explore project context" [shape=box];
     "Start canvas (if useful)" [shape=box];
-    "Ask clarifying questions\n(update canvas)" [shape=box];
-    "Propose 2-3 approaches\n(update canvas)" [shape=box];
-    "Present design sections\n(update canvas)" [shape=box];
+    "Ask clarifying questions\n(rewrite canvas)" [shape=box];
+    "Propose 2-3 approaches\n(rewrite canvas)" [shape=box];
+    "Present design sections\n(rewrite canvas)" [shape=box];
     "User approves design?" [shape=diamond];
     "Invoke write-spec skill" [shape=doublecircle];
 
     "Explore project context" -> "Start canvas (if useful)";
-    "Start canvas (if useful)" -> "Ask clarifying questions\n(update canvas)";
-    "Ask clarifying questions\n(update canvas)" -> "Propose 2-3 approaches\n(update canvas)";
-    "Propose 2-3 approaches\n(update canvas)" -> "Present design sections\n(update canvas)";
-    "Present design sections\n(update canvas)" -> "User approves design?";
-    "User approves design?" -> "Present design sections\n(update canvas)" [label="no, revise + update canvas"];
+    "Start canvas (if useful)" -> "Ask clarifying questions\n(rewrite canvas)";
+    "Ask clarifying questions\n(rewrite canvas)" -> "Propose 2-3 approaches\n(rewrite canvas)";
+    "Propose 2-3 approaches\n(rewrite canvas)" -> "Present design sections\n(rewrite canvas)";
+    "Present design sections\n(rewrite canvas)" -> "User approves design?";
+    "User approves design?" -> "Present design sections\n(rewrite canvas)" [label="no, revise + rewrite canvas"];
     "User approves design?" -> "Invoke write-spec skill" [label="yes"];
 }
 ```
@@ -60,19 +60,19 @@ digraph brainstorming {
 
 - Check out the current project state first (files, docs, recent commits)
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
-- When the idea is worth a real design conversation (not a typo/rename), **start a Brainstorming Canvas early** — see below. Use it as the collaborative sketchpad so the vision stays consistent while you explore.
+- When the idea is worth a real design conversation (not a typo/rename), **start a Brainstorming Canvas early** — see below. Use it as the collaborative map so the current direction stays visible while you explore.
 - For appropriately-scoped projects, ask questions one at a time to refine the idea
 - Prefer multiple choice questions when possible, but open-ended is fine too
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
-- When the conversation settles or revises something, **update the canvas** in the same turn so chat drift does not outrun the written vision
+- When the conversation settles or revises something, **rewrite the canvas** in the same turn so chat drift does not outrun the map
 
 **Exploring approaches:**
 
 - Propose 2-3 different approaches with trade-offs
 - Present options conversationally with your recommendation and reasoning
 - Lead with your recommended option and explain why
-- Record the chosen approach (and rejected alternatives briefly) on the canvas
+- Record the chosen approach on the canvas and collapse the candidate list. Rejected alternatives stay as one line each — do not leave the old list sitting next to a preferred direction
 
 **Presenting the design:**
 
@@ -81,7 +81,7 @@ digraph brainstorming {
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
 - Be ready to go back and clarify if something doesn't make sense
-- The canvas should already reflect approved sections; treat mismatches as a signal to update the canvas before moving on
+- The canvas should already reflect approved sections; treat mismatches as a signal to rewrite the canvas before moving on
 
 **UI and visual choices — project context, not arbitrary design:**
 
@@ -105,7 +105,7 @@ digraph brainstorming {
 
 ## Brainstorming Canvas
 
-A **canvas** is the collaborative sketchpad for the brainstorm — started near the beginning of the conversation, updated as you go, and used as the summarized basis for write-spec. It replaces any separate visual-companion workflow: mockups and design choices live here in Markdown, in this project's vocabulary. It is a **temporary playbook artifact**, not canonical product documentation. Durable behavior lands in `docs/knowledge/` (via docdriven) after implementation; then clean up leftovers (see Lifecycle).
+A **canvas** is the collaborative map of the brainstorm — started near the beginning of the conversation, rewritten as you go, and used as the summarized basis for write-spec. It shows what you are forming together: the current direction, what is still open, and briefly what you set aside. It replaces any separate visual-companion workflow: mockups and design choices live here in Markdown, in this project's vocabulary. It is a **temporary playbook artifact**, not canonical product documentation. Durable behavior lands in `docs/knowledge/` (via docdriven) after implementation; then clean up leftovers (see Lifecycle).
 
 **Start a canvas early when** the user's idea needs a design conversation that could drift — a feature, flow, multi-step capability, or anything where keeping a written vision consistent matters. Skip for tiny pinned fixes ("rename X", "fix this typo") where you will implement directly after a short approval.
 
@@ -119,17 +119,25 @@ A **canvas** is the collaborative sketchpad for the brainstorm — started near 
 
 > **Status:** Brainstorming | Approved — basis for specs | Implementing | Leftover — ready to delete
 >
-> Living summary of this brainstorm. Keep it updated when decisions change.
+> Living map of this brainstorm. Rewrite it when the direction changes.
 > Specs and plans are distilled from this file. Not canonical product behavior —
 > after shipping, knowledge docs own shipped truth; leftovers hold remaining
 > work only, then delete when nothing remains.
 ```
 
-Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header — grow the document as you clarify; rewrite sections so they stay clean rather than appending contradictions. UI mockups name existing project components and patterns where possible.
+Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header. Add ideas freely, then **fold them in**. Reshape the document as you clarify; rewrite so it stays a current map rather than a log of every conversational beat. UI mockups name existing project components and patterns where possible.
 
-**During brainstorming:** treat the canvas as the fixed vision. If chat strays or the user revises something, update the canvas before treating the new idea as settled. Prefer short, clear prose over dumping the whole transcript. Keep the nouns.
+**During brainstorming:** the canvas is a living map, not a transcript and not yet the fixed vision. If chat strays or the user revises something, rewrite the canvas in the same turn before treating the new idea as settled. A reader should see the current direction, what is still open, and (briefly) what you set aside.
 
-**When design is approved:**
+When the conversation moves:
+- A chosen direction **replaces** the candidate list. Rejected alternatives stay as one line each.
+- An answered question **leaves** Open questions.
+- A new framing **rewrites** the old problem statement. Do not leave both.
+- Unresolved conflicts stay visible as tensions or open questions. That is useful. Two competing essays are not.
+
+Structure when a direction starts to form: lead with the current vision, then open questions, then not-now. Early on, loose notes are fine. Prefer short, clear prose. Keep the nouns.
+
+**When design is approved:** the map is now the basis for specs. Stop exploring on it; rewrite only to keep remaining work accurate.
 
 1. Mark canvas status **Approved — basis for specs**.
 2. If the canvas covers several delivery slices, note a short delivery order (optional temporary roadmap under `docs/playbook/specs/`).
@@ -140,14 +148,14 @@ Write free-form sections that fit the conversation (promise, principles, journey
 
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
-| Canvas | Living brainstorm summary → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. Same when there was no spec or plan. **Ask** only if ownership is unclear. |
+| Canvas | Living map → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. Same when there was no spec or plan. **Ask** only if ownership is unclear. |
 | Spec / plan | Working files for a slice | **Delete** the plan. **Delete** the spec when the slice is complete and no open spec still Depends on that file; otherwise **strip** shipped units. **Ask** only when Depends-on or unfinished slices make ownership unclear. |
 
 Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history. Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
 
 ## After the Design
 
-**The mechanism you reasoned through belongs on the canvas, not just in the transcript.** When the conversation settled on a rule, named units, or a mechanism, write them onto the canvas, including what *kind* of thing each unit is and which area owns it. If you also agreed fields, types, asset names, or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost.
+**The mechanism you reasoned through belongs on the canvas, not just in the transcript.** When the conversation settled on a rule, named units, or a mechanism, fold them into the current direction on the canvas, including what *kind* of thing each unit is and which area owns it. If you also agreed fields, types, asset names, or relationships, include those; if not, leave them out. Anything that exists only in the chat is lost.
 
 Do not invent source paths or code. Keep product names the conversation settled (assets, types, screens, fields, commands). The spec keeps those names; the plan adds source locations.
 
@@ -161,6 +169,7 @@ Do not invent source paths or code. Keep product names the conversation settled 
 
 ## Key Principles
 
+- **Canvas is a map, not a log** - Rewrite the current direction; do not append a section per beat
 - **One question at a time** - Don't overwhelm with multiple questions
 - **Multiple choice preferred** - Easier to answer than open-ended when possible
 - **YAGNI ruthlessly** - Remove unnecessary features from all designs
