@@ -140,7 +140,7 @@ Write free-form sections that fit the conversation (promise, principles, journey
 
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
-| Canvas | Living brainstorm summary → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. **Ask** only if ownership is unclear. |
+| Canvas | Living brainstorm summary → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. Same when there was no spec or plan. **Ask** only if ownership is unclear. |
 | Spec / plan | Working files for a slice | **Delete** the plan. **Delete** the spec when the slice is complete and no open spec still Depends on that file; otherwise **strip** shipped units. **Ask** only when Depends-on or unfinished slices make ownership unclear. |
 
 Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history. Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
@@ -151,13 +151,13 @@ Knowledge docs own shipped truth. Specs and canvases may only hold remaining wor
 
 Do not invent source paths or code. Keep product names the conversation settled (assets, types, screens, fields, commands). The spec keeps those names; the plan adds source locations.
 
-**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
+**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. After implementing, **delete** the canvas if nothing remains open; if remaining work is still on it, **remove** what you just shipped. Do this even when there was no spec or plan — a fully implemented canvas is leftover. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
 
 **Transition to write-spec** (substantive features only):
 
 - Invoke write-spec — it writes the spec from the canvas, runs review, and gets user approval of the written file
 - Do NOT invoke writing-plans directly; write-spec continues after spec approval
-- For small approved changes, skip write-spec and implement directly
+- For small approved changes, skip write-spec and implement directly. Then **delete** the canvas if nothing remains open; if it still holds remaining work, **remove** what you just shipped.
 
 ## Key Principles
 
