@@ -91,7 +91,7 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Coverage | Every plan task appears in exactly one work unit |
-    | Sizing | Work units are neither trivial nor oversized for one subagent dispatch. Tasks or scope added to fill out a work unit are a finding — the 45-minute figure is a ceiling, not a quota |
+    | Sizing | Work units are neither trivial nor oversized for one subagent dispatch. Tasks or scope added to fill out a work unit are a finding |
     | Tier fit | A Full plan whose work all stands or falls together — one deliverable, even across several files, runtimes, or check commands — should have been a Lite plan. Say so as a blocker. Several test commands for the same contract are not independently reviewable packages |
     | Dependencies | Depends-on column matches task Interfaces — no circular deps |
     | Parallel safety | Work units in the same wave do not write the same files |

@@ -362,7 +362,7 @@ Done! (2 reviews for 4 work units)
 - Review checkpoints come from the plan, not from ceremony
 
 **Efficiency gains:**
-- Work units sized for subagent economics — not one dispatch per 5-minute step
+- Work units sized for subagent economics — not one dispatch per TDD step
 - Reviews at package boundaries — a handful of gates instead of one per work unit
 - Parallel waves when the plan allows
 - Bulk artifacts move as files, not pasted text

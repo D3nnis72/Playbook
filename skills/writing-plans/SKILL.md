@@ -96,13 +96,13 @@ Plans use two levels of decomposition:
 | **Task** | Planning fidelity — files, interfaces, TDD steps | Smallest independently testable chunk |
 | **Work unit (WU)** | Execution dispatch — one subagent, reviewed at the next checkpoint | One cohesive deliverable; often spans several tasks |
 
-**Steps** (2–5 min TDD actions) live inside tasks. **Tasks** define what to build. **Work units** define how execution dispatches the work. A detailed Full plan may have 12 tasks and 4 work units. A Lite plan has one work unit and does not name it.
+**Steps** (TDD actions) live inside tasks. **Tasks** define what to build. **Work units** define how execution dispatches the work. A detailed Full plan may have 12 tasks and 4 work units. A Lite plan has one work unit and does not name it.
 
 ### Task right-sizing
 
 A task is the smallest unit that carries its own test cycle. Fold setup, configuration, scaffolding, and documentation steps into the task whose deliverable needs them; split only where the deliverable or test surface is genuinely separate. Each task ends with an independently testable deliverable.
 
-Task boundaries optimize for **planning clarity**, not dispatch. Each step inside a task is one action of 2–5 minutes: write the failing test, run it and watch it fail, write the minimal implementation, run the tests, commit.
+Task boundaries optimize for **planning clarity**, not dispatch. Each step inside a task is one TDD action: write the failing test, run it and watch it fail, write the minimal implementation, run the tests, commit.
 
 ### Work unit sizing (Full only)
 
@@ -110,7 +110,7 @@ A work unit is **one cohesive deliverable a reviewer could accept or reject on i
 
 - **Merge** tasks when they share files, when one is pure scaffolding for the next, or when dispatch overhead would dominate the work
 - **Split** when tasks cross test surfaces or subsystems, or when a reviewer could reject one while approving its neighbor
-- **Ceiling:** roughly 45 minutes of implementer time and about 5 commits. This is where a work unit becomes too big to review as one thing — **it is not a quota to fill.** Never add scope, tasks, or abstraction to reach it. A twenty-minute change is one work unit, and a Lite plan besides.
+- Never add scope, tasks, or abstraction to fill out a work unit. Size by reviewability, not volume.
 
 ## Step 4: Write the plan
 
@@ -381,7 +381,7 @@ The tier decides the execution path — do not offer a menu the tier already set
 | "This Lite plan needs an Execution Schedule too" | Then it is a Full plan, or it is padded. Re-read Step 1. |
 | "It touches three runtimes / five check commands, so Full" | One deliverable that stands or falls together is Lite. Independently reviewable packages make Full. |
 | "Others will import this package, so Full" | Reuse later is not sequencing risk during this plan. Lite extractions are allowed. |
-| "Let me add a task so the work unit hits 45 minutes" | The ceiling is a limit, never a quota. Ship the small work unit. |
+| "This work unit looks too small, I should add a task" | Do not pad. Size by reviewability, not volume. |
 | "I should spell out every function body" | Spell out decisions. A body the test already pins is transcription. |
 | "One more reviewer pass will help" | One pass, then you fix. Loops that don't change the outcome are waste. |
 | "The user asked for a plan, so it needs the whole shape" | Ask which tier they want, or size it yourself and say so. |
