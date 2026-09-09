@@ -7,9 +7,9 @@ description: Use when design is approved in brainstorming and you need to author
 
 ## Overview
 
-Author and validate a design spec from an approved brainstorming outcome. Size the work, write the spec, run **one** review pass, get user approval, then invoke writing-plans.
+Author and validate a design spec from an approved canvas. Size the work, write the spec, run **one** review pass, then invoke writing-plans. Do not wait for the user to approve the spec.
 
-A spec is a **human-readable design note**: what you intend, what done looks like, and how it works, using the names the canvas already used. Prefer prose over tables. Tighten: each fact lives in one section. Distill means drop the essay, not the nouns. Normal English, not telegram. It is not an implementation plan. Source paths (`src/...`), code blocks, and step sequences belong in writing-plans. Product names the canvas settled (assets, types, screens, commands, fields, routes) belong in the spec. A later planner who did not see the chat must be able to carry them out.
+A spec is the **contract between the canvas and the planning agent**. The canvas is the thinking document the user approved. The spec formalizes what to build and already did the project homework so the planner does not have to rediscover the system. It is not an implementation plan. Source file paths (`src/...:134`), code blocks, and step sequences belong in writing-plans. Product names the canvas settled belong in the spec.
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
@@ -25,13 +25,13 @@ A spec is a **human-readable design note**: what you intend, what done looks lik
 
 You MUST create a task for each item and complete them in order:
 
-1. **Read the Canvas** — the approved brainstorm summary this spec distills from; if there is no canvas, use the approved design in this session
-2. **Carry what the conversation already settled** — inventory into Target, mechanism and shapes into Approach, exclusions into Not now; keep the canvas nouns
-3. **Size the work** — S / M / L; **S exits this skill**
-4. **Write the spec** — at the detail level the size allows, save to `docs/playbook/specs/`
-5. **Review pass** — dispatch one reviewer, fix blockers yourself, no re-review
-6. **User review gate** — user approves the written spec
-7. **Transition to planning** — invoke writing-plans
+1. **Read the Canvas** — the approved brainstorm this spec covers; if there is no canvas, use the approved design in this session
+2. **Recon the project** — look at the real system for where this lives, what already exists, and which docs bind it
+3. **Carry what the conversation already settled** — summary into Target, mechanism into Approach when needed, exclusions into Not now; keep the canvas nouns
+4. **Size the work** — S / M / L; **S exits this skill**
+5. **Write the spec** — at the detail level the size allows, save to `docs/playbook/specs/`
+6. **Review pass** — dispatch one reviewer, fix blockers yourself, no re-review
+7. **Conflict ping or continue** — ping the user only if Scope contradicts the canvas; otherwise invoke writing-plans
 
 ## Process Flow
 
@@ -40,42 +40,48 @@ digraph write_spec {
     rankdir=TB;
     node [shape=box];
 
-    "Read Canvas" -> "Size the work (S/M/L)";
+    "Read Canvas + recon project" -> "Size the work (S/M/L)";
     "Size the work (S/M/L)" -> "Exit: implement, or writing-plans at Lite tier" [label="S"];
     "Size the work (S/M/L)" -> "Write spec at sized detail level" [label="M or L"];
     "Write spec at sized detail level" -> "Dispatch spec reviewer (./spec-reviewer-prompt.md)";
     "Dispatch spec reviewer (./spec-reviewer-prompt.md)" -> "Approved?";
     "Approved?" -> "Fix blockers in spec" [label="no"];
-    "Fix blockers in spec" -> "User review gate" [label="self-fix, no re-review"];
-    "Approved?" -> "User review gate" [label="yes"];
-    "User review gate" -> "Write spec at sized detail level" [label="changes"];
-    "User review gate" -> "Invoke writing-plans skill" [label="approved"];
+    "Fix blockers in spec" -> "Scope contradict canvas?" [label="self-fix, no re-review"];
+    "Approved?" -> "Scope contradict canvas?";
+    "Scope contradict canvas?" -> "Ping user, then writing-plans" [label="yes"];
+    "Scope contradict canvas?" -> "Invoke writing-plans skill" [label="no"];
 }
 ```
 
 **The terminal state is invoking writing-plans.** Do NOT write implementation plans, code, or invoke subagent-driven-development here.
 
 <HARD-GATE>
-Do NOT invoke writing-plans until the review pass is clean (or its blockers are fixed) AND the user approves the written spec. Do NOT edit canonical documentation in this skill. Do NOT commit until the user approves — and only when the user requests a commit.
+Do NOT invoke writing-plans until the review pass is clean (or its blockers are fixed). Do NOT wait for the user to approve the spec. Ping them only when Scope contradicts the canvas. Do NOT edit canonical documentation in this skill. Do NOT commit unless the user requests a commit.
 </HARD-GATE>
+
+The user already approved the canvas. A spec approval pause is not a gate. Do not ask them to read the spec before planning.
 
 ## Step 1: Carry what the conversation already settled
 
-After reading the canvas (or the approved design in session), put settled content in the section that owns it. Distill means drop the essay, not the nouns. Abstract only what was still abstract.
+After reading the canvas (or the approved design in session), **look at the project**. Scope is not inferred from the chat. Find where this lives, what already exists, and which docs constrain it.
 
-- **Target** gets the inventory of done: artifacts, screens, records, commands, named outputs, types. If the canvas or chat named `hero-dashboard-{locale}@2x.png`, Target says that, not "a retina asset pair".
-- **Approach** gets kinds, conceptual homes, mechanisms, and any fields/shapes already agreed.
+Then put settled content in the section that owns it. Target is a readable summary of what we are building, not a packed inventory. Point at the canvas for copy and long detail. Keep the nouns.
+
+- **Vision** gets intent and why.
+- **Target** gets the written-out summary of what we are building from the canvas. If the canvas named `hero-dashboard-{locale}@2x.png`, Target says that, not "a retina asset pair".
+- **Approach** gets kinds, conceptual homes, and mechanisms **only when Target plus Scope would not already tell the planner what to do**.
+- **Scope** gets the project map from the recon.
 - **Not now** gets exclusions.
 
 Skip inventing columns, enums, schemas, or file names that were never discussed. Do not replace a settled name with a category to look less like a plan.
 
 ## Step 2: Size the work
 
-Detail is proportional to size. Decide the size **before** writing anything, and state it in the spec header.
+Detail is proportional to size. Decide the size **before writing anything**, and state it in the spec header.
 
 | Size | Looks like | What to write |
 |------|------------|---------------|
-| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, then **delete** the canvas if nothing remains open or **remove** the shipped slice if remaining work is still on it. Write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
+| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, then **delete** the canvas if nothing remains open or **remove** the shipped work if remaining work is still on it. Write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
 | **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually a short Check walkthrough | `Vision` (with `Target`), `Scope`, short `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Not now` when there is nothing to exclude. **Usual plan tier: Lite.** |
 | **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with Flow-level verification. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
 
@@ -93,25 +99,26 @@ Fixed section order. Section names are literal — use them verbatim.
 
 | Section | Answers | Content rules |
 |---------|---------|---------------|
-| **Vision** | What are we intending, and why? | Prose: problem, intent, why it matters. Ends with **`### Target`**. Does not recap Approach's mechanism. |
-| **Approach** | How does it work, and why these choices? | Named units with kind + conceptual home; mechanisms and why. Field-level shapes only when brainstorm already settled them. |
-| **Scope** | Where does this live and what must be respected? | Short bullets: areas, reuse, docs to read, skills, guardrails. **No source paths, no code.** Product names are fine. |
+| **Vision** | What are we doing, and why? | Short prose: problem, intent, why it matters. Canvas link lives in the header. Ends with **`### Target`**. Does not recap Approach. |
+| **Target** | What are we building? | Readable summary of the canvas outcomes. Keep settled names. Point at the canvas for copy and long detail. Not a packed noun dump. |
+| **Approach** | How does it work, when that is not already obvious? | Named units with kind + conceptual home; mechanisms and why. Skip when Target plus Scope already tell the planner what to do. |
+| **Scope** | Where does this live in our project, and what must be respected? | Project map: where to work, what is already there and where to find it, areas, docs to read, skills, guardrails. The author reconned this. |
 | **Not now** | What are we not building? | Explicit exclusions, one per line. |
-| **Verification** | What can you walk through when this is done? | One walkthrough: screens/navigation for UI, contracts/behavior for backend. Not a policy recap or unit-test inventory. |
+| **Verification** | What can you walk through when this is done? | One walkthrough, plus evidence (screenshots for UI). Not a policy recap or unit-test inventory. |
 
-**Tighten, don't telegram.** Specs stay normal English — articles, full sentences, exact terms. Cut filler, hedging, and restatement. Do not drop articles or write fragments that a later reader has to decode.
+**Target is a summary, not an inventory.** Write it so a planner knows the outcome in one sitting. Packed paragraphs that list every heading, ban, component, and button in one block fail. Keep the canvas nouns; do not encode the whole canvas as telegram.
 
 **Each fact lives in one section.** Repeating a name to walk through it is fine. Repeating the rule, the why, or the full description is not.
 
 | Section | Owns | Does not own |
 |---------|------|----------------|
-| **Vision** | Problem, intent, why. Short baseline if something exists today. | Mechanism, walkthrough |
-| **Target** | Done state a human can point at. Settled artifact names, screens, types, records, commands. Named once. | How it works, why a choice won |
-| **Approach** | Named units (kind + home + rule). Load-bearing why. Unchanged. | Repeating Target. Source paths (`src/...`). |
-| **Scope** | Areas, reuse, docs, skills, guardrails | Design restated as bullets |
+| **Vision** | Problem, intent, why. Short baseline if something exists today. | Mechanism, walkthrough, project map |
+| **Target** | What we are building, written out from the canvas. | How it works, where it lives in the repo, why a choice won |
+| **Approach** | Named units (kind + home + rule). Load-bearing why. Unchanged. | Repeating Target. `src/...` file paths. |
+| **Scope** | Where to work, what already exists and where to find it, docs, skills, guardrails | Canvas restated as bullets |
 | **Verification** | One walkthrough that would change a ship decision | Re-explaining Approach units or Target policy |
 
-**Prefer prose over tables.** Specs are design notes people read. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification use tight sentences or short bullets — not essays, not telegram. Verification may be a light numbered walkthrough. A spec that is mostly tables, or that tells the same fact in Vision, Target, Approach, and Verification, fails review.
+**Prefer prose over tables.** Specs are contracts a planner reads. Tables are allowed only when a comparison is genuinely clearer as a grid (rare). Target, Approach, and Verification use tight sentences or short bullets — not essays, not telegram. Verification may be a light numbered walkthrough. A spec that is mostly tables, or that tells the same fact in Vision, Target, Approach, and Verification, fails review.
 
 **Header block** — every spec starts with it:
 
@@ -123,19 +130,17 @@ Fixed section order. Section names are literal — use them verbatim.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
-**Readability test:** after Vision (including Target), would a colleague who missed the brainstorm understand the intent and the done state in one sitting? If they would not know the actual file, type, screen, or command names the canvas used, the spec fails. If they would notice the same rule or description three times, it also fails. Tighten, don't add a fourth telling.
+**Readability test:** after Vision (including Target), would a planner who missed the brainstorm know what we are building and the names the canvas used? If Target is a packed inventory they have to decode, it fails. If they would notice the same rule or description three times, it also fails.
 
 ### Vision
 
-Write the shared vision of what you intend to do with this work, in human form, for a reader who was not in the brainstorm. Length follows the idea: a small capability may need a paragraph; a cross-domain redesign may need a page. Be as technical as the idea needs to be clear. Source paths and step sequences still belong in the plan, not here.
+Write what you intend to do with this work, for a planner who was not in the brainstorm. Length follows the idea: a small capability may need a paragraph; a cross-domain redesign may need more. Be as technical as the idea needs to be clear. Source paths and step sequences still belong in the plan, not here.
 
-Cover what matters for shared understanding: the problem or opportunity in this project's context, what you intend to build, why it matters, and, when something already exists, what is wrong or incomplete about today. Do not pad, and do not truncate a real vision to hit a sentence count. Do not recap Approach's mechanism here. Target, immediately below, names what exists when this is done.
+Cover the problem or opportunity in this project's context, what you intend to build, why it matters, and, when something already exists, what is wrong or incomplete about today. Do not pad. Do not recap Approach here. Target, immediately below, names what we are building.
 
-Every Vision ends with a **`### Target`** subsection. Write the done state a teammate can point at: what exists when this is finished, how the important surfaces behave, what is gone. If the canvas named files, types, fields, screens, commands, or assets, use those names. Do not replace a name with a category. Source paths (`src/...`) stay in the plan.
+Every Vision ends with a **`### Target`** subsection. Write the done state as a summary a planner can hold: what exists when this is finished, how the important surfaces behave, what is gone. If the canvas named files, types, fields, screens, commands, or assets, use those names. Do not replace a name with a category. Point at the canvas for long copy. Source paths (`src/...`) stay in the plan.
 
-**Example.** The canvas named `hero-dashboard-{locale}@2x.png` and `@4x.png` for every published locale. Target keeps those names. "A retina asset pair per locale" is a failed Target.
-
-Name each deliverable once. No Today/Done tables, no step grids unless a tiny comparison truly helps.
+**Example.** The canvas named `hero-dashboard-{locale}@2x.png` and `@4x.png` for every published locale. Target keeps those names. "A retina asset pair per locale" is a failed Target. A single paragraph that also lists every ban, button, and illustration mapping is also a failed Target. Split: Target states the outcome; Scope states where those pieces live.
 
 By `Type`, make sure Target covers the right kind of done state:
 
@@ -148,37 +153,38 @@ By `Type`, make sure Target covers the right kind of done state:
 
 **Baseline is optional.** When something already exists, say what is wrong with today inside Vision or Target in a sentence or two. Greenfield needs no fake before-state.
 
-Approach owns how the design works; Target owns what done looks like. Do not turn Target into a mechanism dump, and do not recap Target inside Approach.
+Approach owns how the design works; Target owns what we are building; Scope owns where it sits in this project. Do not turn Target into a mechanism dump or a project map.
 
 **UI mockups:** Brainstorm already put Markdown mockups on the canvas, grounded in this project's components. During or after the spec, only promote those into a real in-app / route mock when that would clarify a still-open choice — do not redesign arbitrarily outside the project's design system.
 
 ### Approach
 
-The design the brainstorm settled, at a level someone can hold in their head — and the reasons that matter. Without this section the mechanism has nowhere to live and gets forgotten between chat and plan.
+The design the brainstorm settled, at a level someone can hold in their head, **when that how is not already obvious from Target plus Scope**. Skip this section when the change is "write a record in the usual shape" or other work with an obvious implementation. L always includes it. M includes it when the design introduces named units or picks a mechanism.
 
 Write tight sentences or short bullets — two to four sentences per named unit, not an essay wrapping it. Cover:
 
 - **The rule** — the one or two sentences that make the change coherent, plus any corollaries.
-- **Named units** — `**Name** — kind, conceptual home. Rule. Why, when the choice is load-bearing.` Say (1) **what kind of thing it is** (UI step, durable record, shell mode, entry use-case, gate, bootstrap hook, …), (2) **which area owns it** conceptually (onboarding domain, workspace shell, Career Profile, …), and (3) what it is responsible for. Enough that a reader knows whether this slice creates UI, durable state, both, or something else. Source paths (`src/...`) stay in the plan. Product names the canvas used stay here. Do not recap other units or Target.
+- **Named units** — `**Name** — kind, conceptual home. Rule. Why, when the choice is load-bearing.` Say (1) **what kind of thing it is** (UI step, durable record, shell mode, entry use-case, gate, bootstrap hook, …), (2) **which area owns it** conceptually (onboarding domain, workspace shell, Career Profile, …), and (3) what it is responsible for. Source paths (`src/...`) stay in the plan. Product names the canvas used stay here. Do not recap other units or Target.
 - **Settled shapes** *(only if the conversation already went there)* — fields, relationships, or payloads next to the unit they belong to. Omit when brainstorm stayed at intent; do not invent a model to look complete.
 - **Mechanism and why** — the load-bearing choices *and* why they won. Decisions live here, next to the thing they decide.
 - **Unchanged** — what this deliberately leaves alone, so the plan does not go looking.
 
 **Level test — kind and home, not source locations.** “A durable onboarding workflow record owned by the onboarding domain” belongs here. `src/onboarding/...` and SQL belong in the plan. Asset contracts, type names, routes, and field lists the canvas already used also belong here or in Target, depending on which section owns them. Field lists belong here only when already agreed.
 
-**By size:** L always. M when the design introduces named units or picks a mechanism — skip it when the change is behavior with an obvious implementation. S has no spec at all.
-
 **No separate Decisions section.** A standalone Decisions table is legacy. If you find yourself building one, fold each row into the Approach paragraph it belongs to.
 
 ### Scope
 
-This is the section that orients the implementer without doing the plan's job. Cover, in short bullets:
+This is the project half of the contract. The author looked at the real system. The planner should already know where to work and where to find things.
 
-- **Areas and components involved** — named at component level: "the export dialog and the billing store", not `src/features/export/ExportDialog.tsx`
-- **Reuse pointers** — what already exists that must be used instead of rebuilt: "a date-range picker already exists — extend it, do not add another"
+Cover, in short bullets:
+
+- **Where this lives** — where the agent should work: the area, shell, folder family, catalog, or knowledge location. "The experiment backlog and the campaign-link catalog", not `src/features/export/ExportDialog.tsx:134`.
+- **What is already there** — existing pages, records, components, or docs, and where to find them. Use, change, or leave. This is the architecture check.
+- **Areas involved** — named at component or area level
 - **Docs to read** — the canonical docs that *constrain* this work (see below)
 - **Skills to use** — the domain skills that govern this work
-- **Guardrails** — what the implementer must not violate: patterns to follow, boundaries not to cross, performance or accessibility floors that apply
+- **Guardrails** — what the implementer must not violate, including that knowledge files stay in the existing readable shape when this work produces docs. Do not paste the canvas into canonical docs.
 - **Affected domains** — DocDriven domain IDs from `docs/agent/manifest.json`, when the project uses them. The plan's documentation work unit uses these to load route shards.
 
 **Docs to read** is not a generic pointer at the docs folder — name the specific documents this work must obey, chosen by what is being built. Read the project's `docs/agent/manifest.json` route shards for the affected domains and take their `readFirst` entries as the starting point, then add anything the work type demands:
@@ -195,11 +201,13 @@ The list should be short and specific: three or four documents an implementer mu
 
 **Skills to use** names the domain skills the implementer should invoke — the Supabase skill for edge functions and Postgres, the frontend design skill for new interface surfaces, the shadcn skill for component work, and so on. The plan repeats them per task; the spec establishes which apply at all.
 
-**Docs to read are not docs to update.** Which docs need *updating* is discovered after the code exists — the plan's final work unit runs a change-scoped docdriven audit against the real diff. Do not try to predict that list here.
+**Docs to read are not docs to update.** Which docs need *updating* is discovered after the code exists — the plan's final work unit runs a change-scoped docdriven audit against the real diff. Do not try to predict that list here. When the work *is* knowledge records, Target names those records; the plan still discovers leftover index updates from the diff.
+
+If this recon finds that the canvas cannot land as approved — missing primitive, a doc that contradicts the locked design, work that would rewrite something the canvas left alone — **stop and ping the user** before writing the plan. That is the only spec-time user gate.
 
 ### Verification
 
-Describe **what someone should be able to walk through when this slice is done** — the expected delivered flow, not a test-case inventory and not a recap of Approach.
+Describe **what someone should be able to walk through when this work is done** — the expected delivered flow, not a test-case inventory and not a recap of Approach.
 
 Write it as a readable path (short paragraphs or a light numbered walkthrough). Name the surfaces as you walk them; do not re-explain their rules. Formal Given/When/Then is optional and usually worse here.
 
@@ -207,9 +215,10 @@ Write it as a readable path (short paragraphs or a light numbered walkthrough). 
 
 | Type | Verification reads like |
 |------|-------------------------|
-| **frontend** / **mixed with UI** | A **user flow**: which screens or steps exist, how you enter them, where you can go next (continue / back / exit), what you confirm along the way, and what “done for this slice” looks like. Name the path, not every assertion. |
+| **frontend** / **mixed with UI** | A **user flow**: which screens or steps exist, how you enter them, where you can go next (continue / back / exit), what you confirm along the way, and what done looks like. Name the path, not every assertion. **Evidence:** screenshots of the finished routes or states. |
 | **backend** / **data** | A **verify path**: which functions or contracts exist, which schemas or records are in place, who can call what, and what observable result proves it (command, response shape, persisted row). No fake user journey. |
 | **mixed** | One cross-boundary walkthrough when the UI and backend meet; do not split into two mini-test plans. |
+| **docs / records** | The files exist, indexes link, the record is complete for its phase. |
 
 **Default lean.** Prefer extending or running checks that already exist over inventing a new unit-test suite in the spec. Over-specifying tests is a review failure: a bullet list that mirrors every Approach unit usually means the spec is doing the plan's job.
 
@@ -219,7 +228,7 @@ State a tier so the plan knows how heavy to automate:
 |------|------|------------------------|
 | **Check** | Most M work; refactors; ownership moves | A short verify path — one or two things you can observe or run |
 | **Component** | One contained capability with real branches | The main happy path plus the branches that would change a ship decision |
-| **Flow** | A complete user or system journey | The end-to-end walkthrough (screens or call sequence) for this slice |
+| **Flow** | A complete user or system journey | The end-to-end walkthrough (screens or call sequence) for this work |
 
 Keep it short enough to read once. If it turns into a QA checklist or restates Approach policy, cut to the path that would change a ship decision.
 
@@ -238,28 +247,31 @@ Project-wide requirements that bind every task: version floors, dependency limit
 
 ## Vision
 
-<Short prose: what you intend to build in this project's context, why it
+<Short prose: what you are doing in this project's context, why it
 matters, and what is wrong or incomplete about today when something already
-exists. Do not recap Approach's mechanism.>
+exists. Do not recap Approach.>
 
 ### Target
 
-<What exists when this is finished. Use the names the canvas already
-used: files, types, screens, commands, assets. Do not replace a name
-with a category. Source paths stay in the plan.>
+<Readable summary of what we are building, using the names the canvas
+already used. Point at the canvas for long copy. Not a packed inventory.
+Source paths stay in the plan.>
 
 ## Approach
 
-<The governing rule. Each named unit in two to four sentences: kind +
-conceptual home + rule; why when load-bearing; what stays unchanged.
-Shapes only when brainstorm already settled them. Do not recap Target.>
+<Optional. The governing rule and named units when Target plus Scope would
+not already tell the planner what to do. Skip when the implementation
+shape is obvious.>
 
 ## Scope
 
-**Areas involved**
+**Where this lives**
 - ...
 
-**Reuse**
+**What is already there**
+- ... — where to find it
+
+**Areas involved**
 - ...
 
 **Docs to read**
@@ -283,9 +295,9 @@ Shapes only when brainstorm already settled them. Do not recap Target.>
 
 **Tier:** Flow | Component | Check
 
-<One walkthrough when this slice is done. For UI: screens, navigation, what
-you confirm. For backend: contracts, schemas, and the observable verify
-path. Name surfaces; do not re-explain their rules.>
+<One walkthrough when this work is done. For UI: screens, navigation, what
+you confirm, plus screenshots. For backend: contracts, schemas, and the
+observable verify path. Name surfaces; do not re-explain their rules.>
 ````
 
 There is no doc-impact section. Documentation updates are discovered from the real diff and performed by the plan's final work unit.
@@ -304,7 +316,7 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - `[SPEC_SIZE]` — S / M / L from the header
 - `[GLOBAL_CONSTRAINTS]` — the spec's Global constraints section, or "none"
 
-**Scope:** placeholders, canvas fidelity (same nouns, not a category paraphrase), approach fidelity (named units with kind + home when Approach is present; mechanism-with-why; shapes only if settled), section ownership (no restated rules across Vision/Target/Approach/Verification), human readability, project alignment, verification as a walkthrough (user flow or backend verify path — not a unit-test inventory or a policy recap), and scope discipline (source paths are leakage; product names the canvas settled are not).
+**Scope:** placeholders, canvas fidelity (same nouns, not a category paraphrase), Target as a readable summary (packed inventory is a finding), Approach only when a mechanism is needed, Scope as a project map (where to work, what already exists and where to find it, docs, skills), section ownership, project alignment, verification as a walkthrough with evidence, and path discipline (`src/...:line` is leakage; docs paths and area homes in Scope are not).
 
 **Dispatch rules:**
 - Do not pre-judge findings — the reviewer raises, you adjudicate
@@ -313,16 +325,14 @@ Dispatch using [spec-reviewer-prompt.md](spec-reviewer-prompt.md), filling in:
 - Fix blockers yourself and proceed — do not re-dispatch the reviewer
 - When the runtime supports model selection for subagents, prefer a different model family from the authoring agent. Do not hard-code model slugs.
 
-## Step 5: User Review Gate
+## Step 5: Continue to the plan
 
-After the review pass:
+After the review pass, do **not** ask the user to approve the spec.
 
-> "Spec written and reviewed at `<path>`. Please review and approve before we write the implementation plan."
+If Scope contradicts the canvas (missing primitive, a binding doc that conflicts with the locked design, work that would rewrite something the canvas left alone), ping the user, then invoke writing-plans once they answer.
 
-Wait for user approval.
+Otherwise invoke writing-plans immediately. The plan is written from Target plus Scope (and Approach when present).
 
-**On user changes:** edit the spec. Re-dispatch the reviewer only when the change alters what the spec claims about the project (new components, different current state, changed verification tier). Wording and scope trims do not need another pass.
-
-**Commit:** do not commit until the user approves, and only when the user requests a commit. Commit the spec (and the canvas if it is new or changed).
+**Commit:** only when the user requests a commit. Commit the spec (and the canvas if it is new or changed).
 
 **Terminal state:** invoke writing-plans — no other skill.

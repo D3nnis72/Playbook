@@ -28,7 +28,7 @@ You MUST create a task for each of these items and complete them in order:
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **rewrite the canvas** when answers change the map
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction by collapsing candidates on the canvas
 5. **Present design** — in sections scaled to their complexity, get user approval after each section; keep the canvas the consistent summary of what you have agreed. UI/layout choices as Markdown mockups on the canvas, grounded in the project's existing components and design language — not arbitrary external mockups.
-6. **Transition to spec authorship** — mark the canvas approved and invoke write-spec; the canvas is the approved brainstorm summary the spec draws from (one slice at a time if it spans several deliveries)
+6. **Transition to spec authorship** — mark the canvas approved and invoke write-spec; the canvas is the approved brainstorm summary the spec draws from (one spec at a time if the canvas spans several deliveries)
 
 ## Process Flow
 
@@ -52,7 +52,7 @@ digraph brainstorming {
 }
 ```
 
-**Terminal state is invoking write-spec** (or implementing directly for small approved changes). The canvas is the brainstorming source of truth; the spec is distilled from it — one slice at a time when the canvas is large.
+**Terminal state is invoking write-spec** (or implementing directly for small approved changes). The canvas is the thinking document the user approved; the spec is the contract for the planning agent, distilled from the canvas — one spec at a time when the canvas is large.
 
 ## The Process
 
@@ -140,9 +140,9 @@ Structure when a direction starts to form: lead with the current vision, then op
 **When design is approved:** the map is now the basis for specs. Stop exploring on it; rewrite only to keep remaining work accurate.
 
 1. Mark canvas status **Approved — basis for specs**.
-2. If the canvas covers several delivery slices, note a short delivery order (optional temporary roadmap under `docs/playbook/specs/`).
-3. Invoke write-spec for the **current** slice. Pass `**Canvas:** …`. write-spec authors one slice distilled from that canvas, not the whole file as one mega-spec.
-4. Later slices distill from the same canvas + shipped knowledge — do not paste the whole canvas into every spec.
+2. If the canvas covers several deliveries, note a short delivery order (optional temporary roadmap under `docs/playbook/specs/`).
+3. Invoke write-spec for the **current** work. Pass `**Canvas:** …`. write-spec authors one spec distilled from that canvas, not the whole file as one mega-spec.
+4. Later work distills from the same canvas + shipped knowledge — do not paste the whole canvas into every spec.
 
 **Lifecycle (playbook is temporary):**
 
@@ -163,8 +163,8 @@ Do not invent source paths or code. Keep product names the conversation settled 
 
 **Transition to write-spec** (substantive features only):
 
-- Invoke write-spec — it writes the spec from the canvas, runs review, and gets user approval of the written file
-- Do NOT invoke writing-plans directly; write-spec continues after spec approval
+- Invoke write-spec — it writes the spec from the canvas, runs review, and continues to writing-plans. Canvas approval is the user gate. Do not wait for the user to approve the spec.
+- Do NOT invoke writing-plans directly; write-spec continues into it after the spec review pass
 - For small approved changes, skip write-spec and implement directly. Then **delete** the canvas if nothing remains open; if it still holds remaining work, **remove** what you just shipped.
 
 ## Key Principles

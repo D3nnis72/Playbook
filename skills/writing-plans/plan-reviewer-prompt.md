@@ -47,7 +47,7 @@ Subagent (review):
     | Category | What to Look For |
     |----------|------------------|
     | Coverage | Every spec requirement maps to at least one plan task/step |
-    | Named units | Every unit named in the spec's Approach section — projections, modules, views, checks — appears in the plan under the same name, with a file and a task. A missing or silently renamed unit is a blocker |
+    | Named units | If Approach is present, every unit named there appears in the plan under the same name, with a file and a task. If Approach is absent, every Target outcome maps to at least one task using the Scope homes. A missing or silently renamed unit is a blocker |
     | Settled shapes | If the spec's Approach or `### Shapes` lists fields, relationships, or payloads, the plan implements those — not a different model. Absence of Shapes in the spec is not a gap |
     | Scope | No major scope creep — tasks not anchored in the spec |
     | Correctness | Plan implements what the spec describes, not a different feature |
@@ -70,9 +70,9 @@ Subagent (review):
     ### Parsimony
 
     The plan should build the least new surface that satisfies the spec. Read
-    the spec's Approach section for the units the design sanctions and its Scope
-    section for reuse pointers, then verify the plan honors both. New surface the
-    Approach section does not sanction is the first thing to question.
+    Target for what to build, Scope for where it lives and what already exists,
+    and Approach when present for named units. New surface Scope said to reuse
+    is the first thing to question.
 
     | Category | What to Look For |
     |----------|------------------|
