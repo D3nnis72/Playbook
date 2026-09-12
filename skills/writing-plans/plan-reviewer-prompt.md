@@ -140,5 +140,5 @@ Subagent (review):
 **Reviewer returns:** Status, Spec traceability table, Blockers (if any), Advisory
 
 **Main agent:** Fix blockers in the plan yourself. Do not re-dispatch the reviewer
-after self-fixes — proceed to execution handoff when blockers are resolved.
+after self-fixes — go to writing-plans Step 6 when blockers are resolved.
 Re-dispatch only if the user edits the plan or you changed scope (added/removed tasks).

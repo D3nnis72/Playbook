@@ -37,15 +37,18 @@ skill and follow it.
 Substantive features follow a process chain:
 
 ```text
-brainstorming → write-spec → writing-plans → subagent-driven-development
-                                            (or executing-plans)
+brainstorming → write-spec → writing-plans → wait (execute prompt)
+                                            → executing-plans / subagent-driven-development
+                                              only with explicit execute intent
 ```
 
 **The chain is a maximum, not a minimum.** Every phase sizes its own output and
 can exit early: `write-spec` sizes the spec S / M / L, and `writing-plans` sizes
 the plan Direct (no plan, just implement), Lite (one page, one work unit), or
 Full (work units, waves, checkpoint reviews). A typo, a one-file fix, or a known
-bug goes straight to implementation after a short design check.
+bug goes straight to implementation after a short design check. A written Lite
+or Full plan waits: the planning agent emits a pasteable execute prompt unless
+the opening request asked to execute after planning, or the user later says go.
 
 ## What's Inside
 
@@ -56,7 +59,7 @@ bug goes straight to implementation after a short design check.
 | `using-playbook` | Entry point — find and invoke skills before acting |
 | `brainstorming` | Explore intent on a living canvas; design approval before building |
 | `write-spec` | Author a temporary design spec after brainstorming |
-| `writing-plans` | Size the plan, then turn a spec into bite-sized tasks |
+| `writing-plans` | Size the plan, turn a spec into tasks, then wait with an execute prompt |
 | `subagent-driven-development` | Execute a Full plan with work units and checkpoint reviews |
 | `executing-plans` | Execute a Lite plan, or a Full plan in a separate session |
 | `writing-skills` | Create or improve skills with a TDD-style process |
@@ -67,14 +70,15 @@ bug goes straight to implementation after a short design check.
 2. **Spec** — size the work, then write a temporary design spec distilled from
    the brainstorming canvas (not durable product docs).
 3. **Plan** — size the plan, then break the work into tasks, and into work units
-   with checkpoints when the tier calls for them.
-4. **Execute** — implement, review where the plan said to, update canonical
-   knowledge via docdriven, then delete or strip leftover playbook files
-   (specs, plans, canvases) so they hold remaining work only. Ask only when
-   ownership is unclear.
+   with checkpoints when the tier calls for them. Stop here by default.
+4. **Execute** — only when the user asked to execute, or pastes the handoff
+   prompt into a fresh agent. Implement, review where the plan said to, update
+   canonical knowledge via docdriven, then delete or strip leftover playbook
+   files (specs, plans, canvases) so they hold remaining work only. Ask only
+   when ownership is unclear.
 
 ```text
-skill check → design → spec → plan → implement + review → done
+skill check → design → spec → plan → wait → implement + review → done
 ```
 
 ## Philosophy

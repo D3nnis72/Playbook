@@ -38,7 +38,7 @@ digraph when_to_use {
 }
 ```
 
-**This skill executes Full-tier plans.** writing-plans sizes every plan Direct, Lite, or Full and owns those definitions; only Full plans carry the Execution Schedule, waves, and declared checkpoints this skill dispatches against.
+**This skill executes Full-tier plans.** writing-plans sizes every plan Direct, Lite, or Full and owns those definitions; only Full plans carry the Execution Schedule, waves, and declared checkpoints this skill dispatches against. writing-plans invokes this skill only when the user asked to execute. Landing here *is* that execute signal: do not wait for another confirmation.
 
 If a **Lite** plan lands here — one work unit, no schedule, docs folded into its closing task — hand it to **playbook:executing-plans** instead. Do not send it back to writing-plans to grow a schedule: the tier already decided that dispatch overhead would cost more than the change.
 

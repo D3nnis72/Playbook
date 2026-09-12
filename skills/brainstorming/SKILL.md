@@ -17,7 +17,7 @@ Do NOT invoke any implementation skill, write any code, scaffold any project, or
 
 Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
 
-**Pipeline vs. local fix:** A short design conversation still applies here. The **write-spec → writing-plans → subagent** chain is for work large enough to need a written spec and plan — not for every approved design. When the user asked for a small, pinned change ("fix this error", "rename X", "update this copy"), stop at design approval and implement; do not invoke write-spec unless they want a spec artifact.
+**Pipeline vs. local fix:** A short design conversation still applies here. The **write-spec → writing-plans** chain is for work large enough to need a written spec and plan — not for every approved design. writing-plans waits after a Lite or Full plan unless the user asked to execute. When the user asked for a small, pinned change ("fix this error", "rename X", "update this copy"), stop at design approval and implement; do not invoke write-spec unless they want a spec artifact.
 
 ## Checklist
 
@@ -163,7 +163,7 @@ Do not invent source paths or code. Keep product names the conversation settled 
 
 **Transition to write-spec** (substantive features only):
 
-- Invoke write-spec — it writes the spec from the canvas, runs review, and continues to writing-plans. Canvas approval is the user gate. Do not wait for the user to approve the spec.
+- Invoke write-spec — it writes the spec from the canvas, runs review, and continues to writing-plans. Canvas approval is the user gate. Do not wait for the user to approve the spec. writing-plans then waits with an execute prompt unless they asked to execute after the plan.
 - Do NOT invoke writing-plans directly; write-spec continues into it after the spec review pass
 - For small approved changes, skip write-spec and implement directly. Then **delete** the canvas if nothing remains open; if it still holds remaining work, **remove** what you just shipped.
 

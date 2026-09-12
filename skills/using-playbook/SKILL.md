@@ -107,13 +107,13 @@ When multiple skills could apply, use this order:
 1. **Process skills first** (brainstorming, write-spec, writing-plans, systematic-debugging) - these determine HOW to approach the task
 2. **Implementation skills second** (frontend-design, mcp-builder) - these guide execution
 
-"Let's build X" → brainstorming → write-spec → writing-plans → implementation skills — **when the work is substantial enough to need a plan** (see Right-sizing below).
+"Let's build X" → brainstorming → write-spec → writing-plans → **stop with an execute prompt** unless they asked to execute after the plan — **when the work is substantial enough to need a plan** (see Right-sizing below).
 "Fix this bug" → systematic-debugging first, then domain-specific skills.
 "Quick change" with pinned scope → implement directly; skip the planning pipeline unless the user asks for it.
 
 ## Right-sizing the process
 
-The full pipeline (brainstorming → write-spec → writing-plans → subagent execution) earns its overhead on **multi-step work** — new behavior, several files, trade-offs, or outcomes others will build on.
+The full pipeline (brainstorming → write-spec → writing-plans, then execute only if asked) earns its overhead on **multi-step work** — new behavior, several files, trade-offs, or outcomes others will build on.
 
 For **small, already-scoped changes** — a typo, a one-file fix, a rename, a config tweak, a bug with a known root cause — skip write-spec, writing-plans, and subagent-driven-development. Confirm scope in a sentence if needed, then implement.
 
@@ -132,18 +132,20 @@ digraph process_chain {
     rankdir=TB;
     node [shape=box];
     "Implement directly\n(docs updated with the change)" [shape=doublecircle];
+    "Stop: paste execute prompt" [shape=doublecircle];
 
     "brainstorming\n(canvas early + design approval)" -> "write-spec\n(sizes the spec S/M/L)";
     "brainstorming\n(canvas early + design approval)" -> "Implement directly\n(docs updated with the change)" [label="small pinned change"];
     "write-spec\n(sizes the spec S/M/L)" -> "writing-plans\n(sizes the plan Direct/Lite/Full)";
     "write-spec\n(sizes the spec S/M/L)" -> "Implement directly\n(docs updated with the change)" [label="size S"];
     "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "Implement directly\n(docs updated with the change)" [label="Direct"];
-    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "executing-plans\n(Lite plans, straight execution)" [label="Lite"];
-    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "subagent-driven-development\nor executing-plans\n(waves + declared checkpoints)" [label="Full"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "Stop: paste execute prompt" [label="Lite/Full default"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "executing-plans\n(Lite, explicit execute)" [label="Lite + execute intent"];
+    "writing-plans\n(sizes the plan Direct/Lite/Full)" -> "subagent-driven-development\n(Full, explicit execute)" [label="Full + execute intent"];
 }
 ```
 
-Each phase can exit to direct implementation. The chain is a maximum, not a minimum.
+Each phase can exit to direct implementation. The chain is a maximum, not a minimum. A written Lite or Full plan does not start execution unless the user asked to execute after planning, or later says go. writing-plans owns that gate.
 
 ## Skill Types
 

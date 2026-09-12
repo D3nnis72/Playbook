@@ -15,6 +15,8 @@ Load plan, review critically, execute all tasks, report when complete.
 
 **This is the default path for Lite plans.** writing-plans sizes plans Direct, Lite, or Full. A Lite plan is one work unit with its documentation audit folded into the closing task — execute it here, or inline when it is only a task or two. Do not route it through subagent-driven-development, and do not grow it a schedule to qualify.
 
+writing-plans invokes this skill only when the user asked to execute. If they did not, it stops and emits a pasteable handoff prompt for a fresh session instead. Landing here *is* that execute signal: do not wait for another confirmation.
+
 **Note:** For Full plans with parallel dispatch, playbook:subagent-driven-development is usually faster — but it adds review gates at the plan's declared checkpoints. If subagents are available and you want maximum throughput with lighter ceremony, stay on executing-plans. If you want isolated implementer context per work unit, use subagent-driven-development instead.
 
 ## The Process

@@ -11,7 +11,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Plans carry decisions, not volume.** Size the plan before writing it. Most changes need far less than the full template, and ceremony spent on a small change is not recoverable. DRY. YAGNI. TDD. Frequent commits.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan — [tier] tier, because [reason]."
+**Announce at start:** "I'm using the writing-plans skill to create the implementation plan — [tier] tier, because [reason]. Execution: wait (default) / same-session after the plan."
 
 **Upstream:** The spec, when there is one, has passed write-spec's review pass. The user already approved the canvas; write-spec does not wait for spec approval. Plan review verifies traceability, buildability, parsimony, and execution topology — it does not re-audit whether the design is doable, which write-spec settled.
 
@@ -32,7 +32,7 @@ You MUST create a task for each item and complete them in order:
 3. **Decompose** — tasks, then work units (Full only)
 4. **Write the plan** — at the tier's shape, saved to `docs/playbook/plans/`
 5. **Check the plan** — self-check (Lite) or one reviewer pass (Full)
-6. **Hand off to execution** — at the tier's execution path
+6. **Hand off** — wait by default with a pasteable execute prompt; same-session execute only on explicit intent
 
 ## Step 1: Size the plan
 
@@ -74,7 +74,7 @@ Decide the tier **before writing anything** and state it in the plan header.
 | Documentation update | fold into the change | final task of the plan | own work unit + checkpoint |
 | Execution path | implement inline | playbook:executing-plans, or inline | playbook:subagent-driven-development |
 
-This table is the contract downstream skills read. Do not invent a fourth shape.
+This table is the contract downstream skills read. Do not invent a fourth shape. The Lite/Full execution path names the skill to load **when execution starts**. It does not mean this skill starts coding. Direct still implements immediately because there is no plan file.
 
 ## Step 2: Map the files
 
@@ -332,7 +332,7 @@ No reviewer dispatch. Read the plan once against four questions — all four ans
 - Does every step pin its decisions, leaving nothing for the implementer to invent?
 - Does the last task run the full test command, the change-scoped docs audit, and trim-or-delete leftover playbook files (remaining work only)?
 
-Fix what fails and move to execution. If the plan keeps failing these because it has grown several deliverables, it was a Full plan — re-size it rather than patching.
+Fix what fails and go to Step 6. If the plan keeps failing these because it has grown several deliverables, it was a Full plan — re-size it rather than patching.
 
 ### Full: one reviewer pass
 
@@ -340,7 +340,7 @@ Fix what fails and move to execution. If the plan keeps failing these because it
 
 After writing and saving the complete plan including its Execution Schedule, dispatch **one** readonly plan reviewer using [plan-reviewer-prompt.md](plan-reviewer-prompt.md). Fill in `[PLAN_FILE_PATH]`, `[SPEC_FILE_PATH]`, and `[GLOBAL_CONSTRAINTS]` copied verbatim from the plan.
 
-Fix blockers yourself, then proceed to execution. Do not re-dispatch the reviewer after self-fixes — only when the user edits the plan or you changed scope by adding or removing tasks.
+Fix blockers yourself, then go to Step 6. Do not re-dispatch the reviewer after self-fixes — only when the user edits the plan or you changed scope by adding or removing tasks.
 
 **Scope:** spec traceability, buildability, **parsimony** (no unnecessary new components, types, or files where something existing should be extended; fixtures and helpers reused), and Execution Schedule topology — including the documentation work unit and sane checkpoints. It does not re-audit whether the design is doable.
 
@@ -350,28 +350,32 @@ Fix blockers yourself, then proceed to execution. Do not re-dispatch the reviewe
 - Advisory items do not block approval; fix blockers only unless you choose to act on advisory suggestions
 - If a finding conflicts with an intentional spec decision, present both to the user and ask which governs
 
-## Step 6: Hand off to execution
+## Step 6: Hand off
 
-The tier decides the execution path — do not offer a menu the tier already settled.
+A saved plan is not permission to start coding. Lock execution intent before this step, announce it, and do not revisit it.
 
-**Lite:**
+**Same-session execute** only when the user explicitly asked to implement after the plan, *before* this step. Valid signals: `und direkt umsetzen`, `dann ausführen`, `setz danach um`, `plan and implement`, `execute after`, `go after planning`. Design approval, spec approval, and `bau X` / `build X` / `implement X` are **not** execute intent once a plan file exists. Direct (no plan file) still implements immediately.
 
-> "Plan saved to `docs/playbook/plans/<filename>.md` — one work unit. I'll execute it directly with playbook:executing-plans unless you want subagent dispatch."
+**Later in this session:** `go`, `setz um`, `ausführen`, `execute it` starts execution then. Use the tier's skill. Do not ask which approach.
 
-**REQUIRED SUB-SKILL:** playbook:executing-plans, or implement inline for the shortest plans.
+### Wait (default)
 
-**Full:**
+Fill [execute-handoff-prompt.md](execute-handoff-prompt.md). Reply with:
 
-> "Plan complete and saved to `docs/playbook/plans/<filename>.md`. Two execution options:
->
-> **1. Subagent-Driven (recommended)** — I dispatch a fresh subagent per work unit, parallel within waves, review at the plan's checkpoints
->
-> **2. Inline Execution** — I execute work units in this session using executing-plans, batch execution with checkpoints
->
-> Which approach?"
+1. The plan path
+2. The execute skill for this tier (Lite: `playbook:executing-plans`; Full: `playbook:subagent-driven-development`)
+3. The filled prompt in a fenced code block, ready to paste into a fresh agent
+4. One line: say `go` to execute here instead
 
-- Subagent-Driven → **REQUIRED SUB-SKILL:** playbook:subagent-driven-development
-- Inline → **REQUIRED SUB-SKILL:** playbook:executing-plans
+Then **stop**. Do not invoke executing-plans or subagent-driven-development. Do not offer an execution-approach menu.
+
+### Same-session execute
+
+The tier already chose the skill. Invoke it now. Do not ask which approach.
+
+**Lite:** **REQUIRED SUB-SKILL:** playbook:executing-plans, or implement inline for the shortest plans.
+
+**Full:** **REQUIRED SUB-SKILL:** playbook:subagent-driven-development. Use playbook:executing-plans only if the user asked for inline execution.
 
 ## Red Flags
 
@@ -385,3 +389,7 @@ The tier decides the execution path — do not offer a menu the tier already set
 | "I should spell out every function body" | Spell out decisions. A body the test already pins is transcription. |
 | "One more reviewer pass will help" | One pass, then you fix. Loops that don't change the outcome are waste. |
 | "The user asked for a plan, so it needs the whole shape" | Ask which tier they want, or size it yourself and say so. |
+| "The plan is done, so I should start implementing" | Stop. A plan file waits unless they asked to execute. |
+| "Build X means execute after the plan" | Direct implements. A written plan waits. |
+| "They approved the design, so continue into code" | Design approval is not execute intent. |
+| "I'll ask which execution approach" | The tier already chose the skill. Wait with a prompt, or invoke that skill. |
