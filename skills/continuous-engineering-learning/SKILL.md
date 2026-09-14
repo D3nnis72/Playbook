@@ -1,6 +1,6 @@
 ---
 name: continuous-engineering-learning
-description: Use when running a recurring personal engineering-learning pass over recent Codex, Cursor, MonoCode, OpenCode, or ChatGPT work to identify reusable agent-workflow improvements and update the CustomSkills repository.
+description: Use when running a recurring personal engineering-learning pass over recent Codex, Cursor, MonoCode, OpenCode, or ChatGPT work to identify reusable agent-workflow, communication, and language improvements and update the CustomSkills repository.
 ---
 
 # Continuous personal AI engineering learning
@@ -17,7 +17,7 @@ Projektspezifische Anforderungen gehören grundsätzlich nicht in diesen Lernpro
 
 ## Betriebsparameter für diesen Skill
 
-Ein täglicher Lauf analysiert standardmäßig die letzten 24 Stunden vor dem Start des Laufs. Verwende die Zeitzone `Europe/Berlin` und dokumentiere Startzeit, Endzeit und Laufzeitpunkt. Verwende Zeitstempel aus den Gesprächs- oder Datensätzen. Dateisystem-ZeitstempeZl sind nur Hinweise für die Suche und kein Beweis für neue Gespräche.
+Ein täglicher Lauf analysiert standardmäßig die letzten 24 Stunden vor dem Start des Laufs. Verwende die Zeitzone `Europe/Berlin` und dokumentiere Startzeit, Endzeit und Laufzeitpunkt. Verwende Zeitstempel aus den Gesprächs- oder Datensätzen. Dateisystem-Zeitstempel sind nur Hinweise für die Suche und kein Beweis für neue Gespräche.
 
 Das Custom Skills Projekt liegt hier:
 
@@ -45,6 +45,20 @@ Aktuelle Benutzeranweisungen haben Vorrang. Wenn der Benutzer für einen einzeln
 ## Quellen und Abdeckung
 
 Prüfe die tatsächlich erreichbaren Quellen read-only. Melde für jede Quelle `complete`, `partial`, `unreadable`, `not_found` oder `not_in_window`.
+
+### Quellenrollen vor der Inhaltsanalyse
+
+Führe vor jeder Inhaltsanalyse einen festen Klassifikationspass aus. Ordne jeden gefundenen Datensatz einer Rolle zu und halte, soweit vorhanden, `source_role`, `canonical_session_id`, `provider_session_id` und den Ausschlussgrund in deinen Arbeitsnotizen fest:
+
+* `primary_transcript`: die kanonische Nutzer-Agent-Unterhaltung und die primäre Evidenzeinheit.
+* `mirror`: dieselbe Unterhaltung aus einer zweiten Quelle. Verknüpfe sie über `provider_session_id` oder eine andere stabile Session-ID und zähle sie nicht ein zweites Mal.
+* `handoff`: eine Fortsetzung mit zusammengefasstem Vorverlauf. Nutze neue Nachrichten, aber zähle eingebettete alte Nachrichten nicht erneut.
+* `generated_meta`: automatisch erzeugte Titel-, Zusammenfassungs- oder Label-Sitzungen. Nicht als Nutzerfeedback oder unabhängige Evidenz zählen.
+* `subagent`: ausgelagerte Agentenarbeit. Als unterstützendes Material markieren, aber nicht als unabhängige Nutzerkorrektur zählen.
+* `current_run`: die laufende Lern-, Such- oder Skill-Autorensitzung. Aus der Evidenz für diese Änderung ausschließen.
+* `unreadable`: gefundene Daten ohne verlässlich dekodierbaren Inhalt. Als Abdeckungsgrenze melden, nicht inhaltlich auswerten.
+
+Wenn die Rolle unklar bleibt, nutze den Datensatz nicht als unabhängigen Beleg. Ein Session-Titel allein reicht nicht für eine positive Klassifikation. Prüfe zuerst aktive Sitzung, generierte Metadaten, Verknüpfung zu einer kanonischen Session und Handoff- oder Subagent-Hinweise. Erst danach darf ein Datensatz als primäre Unterhaltung zählen.
 
 * Codex: `~/.codex/sessions/**/*.jsonl`. Lies die relevanten Session-Ereignisse und ihre Zeitstempel.
 * Cursor: `~/.cursor/acp-sessions/**`. Lies Metadaten. Dekodiere Transcript-BLOBs nur, wenn ihr Format sicher bekannt ist. `~/.cursor2/plans/**` darf als ergänzendes Material dienen, ist aber kein vollständiger Gesprächsverlauf.
@@ -94,6 +108,29 @@ Die relevante Erkenntnis ist dann nicht:
 Sondern beispielsweise:
 
 "Bei kleinen lokalen Änderungen zunächst die kleinste vollständige Lösung bevorzugen. Zusätzliche Abstraktionen nur einführen, wenn sie konkrete Wiederverwendung, klare Verantwortlichkeit oder relevante zukünftige Komplexität adressieren."
+
+## 2a. Analysiere Sprache und Verständnis
+
+Continuous Learning umfasst auch die Qualität der Zusammenarbeit. Untersuche Sprache nicht, um meine Tippfehler zu bewerten, sondern um zu erkennen, ob Intent, Antwort und sichtbares Ergebnis auseinanderliefen.
+
+Rekonstruiere bei relevanten Korrekturen oder Unzufriedenheit immer diese Kette:
+
+`meine Formulierung → Interpretation des Agents → Antwort oder Umsetzung → mein Signal → eigentlich gewünschtes Ergebnis`
+
+Ordne die Reibung danach einer oder mehreren Ursachen zu:
+
+* `ambiguous_user_input`: Die Formulierung ließ mehrere technisch unterschiedliche Ergebnisse zu.
+* `agent_interpretation`: Die Absicht war aus Kontext und Beispielen erkennbar, wurde aber falsch zusammengefasst.
+* `agent_language_or_tone`: Die Antwort war unnatürlich, zu abstrakt, zu lang, zu formell, generisch oder nicht in der passenden Sprache.
+* `missing_verification`: Die Absicht war klar, aber ein sichtbarer Zustand, ein Consumer oder eine Sprache wurde nicht geprüft.
+* `implementation_defect`: Die Umsetzung entsprach dem klaren Vertrag nicht.
+* `handoff_or_source_loss`: Kontext ging bei Übergabe, Zusammenfassung oder Quellenklassifikation verloren.
+
+Typische Signale sind Nachfragen wie „schau noch einmal genauer“, „was meinst du“, „wo ist der Button“, „immer noch“, „nicht das, was ich meinte“, „noch einmal vorschlagen“, „passt nicht“ oder „nicht professionell“. Solche Signale sind eine Korrektur des Arbeitsstands. Beende die Verteidigung der bisherigen Lösung, vergleiche sie mit der konkreten Anforderung und formuliere den korrigierten Vertrag neu. Schweigen ist keine Bestätigung. Klare positive Bestätigungen sind ein positives Signal, aber kein Beweis für eine technische oder sprachliche Verbesserung.
+
+Behandle gesprochene, gemischtsprachige oder fehlerhafte Prompts als komprimierte Absicht. Tippfehler sind keine Anforderungen. Wenn der Kontext die Absicht trägt, normalisiere sie intern und fasse sie in natürlicher Sprache zusammen. Wenn zwei Umsetzungen weiterhin plausibel sind, stelle genau eine fokussierte Frage. Trenne dabei ausdrücklich zwischen Pflicht, Vorschlag, Beispiel, bewahrtem Verhalten und offener Entscheidung.
+
+**REQUIRED COMMUNICATION CHECK:** Bei deutschen Antworten `german` anwenden. Bei jedem User-facing Text `unslop` anwenden. Prüfe kurze Sätze, konkrete Verben, natürliche Wortwahl, passende Sprache und fehlende generische KI- oder Marketingphrasen. Interne Identifier bleiben unverändert. Eine schlechte Formulierung im Nutzerprompt darf nie als Grund dienen, eine erkennbare Absicht nicht zu prüfen oder eine unklare Antwort nicht zu verbessern.
 
 ## 3. Unterscheide lokale Anforderungen von allgemeinen Skills
 
@@ -344,6 +381,7 @@ Bewerte Fortschritt daran, ob Codex, Cursor und OpenCode bei vergleichbaren Aufg
 * bestehende Codebases besser berücksichtigen,
 * sinnvolle Tools und Skills selbstständig einsetzen,
 * weniger Korrekturen von mir benötigen,
+* weniger Nachfragen wegen missverstandenem Intent, unnatürlicher Sprache oder generischem Output auslösen,
 * und konsistenter nach meinen bevorzugten Engineering Prinzipien arbeiten.
 
 Wenn keine belastbare Verbesserung ableitbar ist, ändere nichts.
@@ -366,6 +404,7 @@ Der Bericht enthält:
 * Warum genau dieser Scope gewählt wurde.
 * Welche Repository- und Verhaltenstests durchgeführt wurden.
 * Welche Unsicherheiten oder offenen Kandidaten bleiben.
+* Welche sprachlichen oder verständnisbezogenen Korrekturen aufgetreten sind und ob die Ursache beim Prompt, bei der Interpretation, bei der Sprache oder bei der Verifikation lag.
 * Einen Status: `no change`, `candidate recorded`, `applied`, `verified` oder `blocked`.
 
 Trenne diese Aussagen voneinander:

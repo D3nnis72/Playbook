@@ -67,6 +67,13 @@ digraph brainstorming {
 - Focus on understanding: purpose, constraints, success criteria
 - When the conversation settles or revises something, **rewrite the canvas** in the same turn so chat drift does not outrun the map
 
+**Language and requirement fidelity:**
+
+- Treat spoken, mixed-language, typo-filled input as compressed intent. Normalize it internally without changing its meaning, then state the interpreted outcome in the user's language before choosing a design.
+- Separate required behavior, optional suggestions, examples, preserved behavior, and open questions. Do not turn words such as "maybe", "could", or "what do you think?" into a committed design without marking the choice.
+- If the wording supports materially different implementations, ask one focused question. If the user says "not what I meant", "where is it", "still there", "again", or an equivalent, stop defending the interpretation, compare the request with the delivered behavior, and rewrite the contract.
+- **REQUIRED COMMUNICATION CHECK:** Apply `german` to German wording and `unslop` to user-facing output when those skills are available. Keep the user's natural tone without copying typos or turning it into corporate language.
+
 **Exploring approaches:**
 
 - Propose 2-3 different approaches with trade-offs
@@ -89,6 +96,14 @@ digraph brainstorming {
 - Prefer **Markdown mockups on the canvas** (structure, hierarchy, copy, which existing controls) while brainstorming. That keeps the conversation about *this* product, not a generic wireframe.
 - Do not invent a parallel visual system or design in a disconnected companion UI. Discuss choices against real components the app already has.
 - In-app / route-level mock pages come later only when useful — typically during or after the spec, when committing to a real surface makes the choice clearer. Brainstorm first on the canvas.
+
+Before implementation, turn approved UI intent into a compact contract. Record the observable requirement, its consumer or surface, and what must remain unchanged:
+
+| Requirement | Observable check | Consumer or surface | Preserve |
+|-------------|------------------|--------------------|----------|
+| visible control, copy, state, or motion | present, absent, enabled, disabled, ordered, or timed | route, component, locale, viewport, or build target | neighboring controls, labels, and unrelated states |
+
+Use the matrix for both positive and negative assertions. A shared change is not closed while one relevant consumer still shows the old result, unless the matrix explicitly marks that consumer as intentionally different. If a user reports a missing control or stale copy after implementation, reopen the design and inspect the actual render path instead of treating the report as a new preference.
 
 **Design for isolation and clarity:**
 
