@@ -1,7 +1,7 @@
 ---
 
 name: german
-description: Apply whenever the user writes in German or the response is generated in German. Controls natural German wording, tone, sentence flow, technical language, formulas, punctuation, and the user's preferred speaking style.
+description: Apply whenever the user writes in German or the reponse / some text should be generated in German. Controls natural German wording, tone, sentence flow, technical language, formulas, punctuation, and the user's preferred speaking style.
 ---
 
 # German
