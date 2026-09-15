@@ -226,16 +226,17 @@ A checkpoint reviews **everything since the previous checkpoint**, not just the 
 
 Copy [docs-work-unit-template.md](docs-work-unit-template.md) into the plan as its final task, filling in the feature name and affected domains.
 
-The work unit **discovers** what to document rather than following a pre-written list, and it delegates both halves of that job:
+The work unit **discovers** what to document rather than following a pre-written list, and it delegates the job:
 
 | Job | Skill |
 |-----|-------|
 | Find which docs became false, from the diff | playbook:docdriven-audit, change-scoped mode |
-| Write the updates correctly | playbook:docdriven |
+| Find oversized in-scope docs and plan splits | playbook:docdriven-audit, maintainability pass |
+| Write updates and execute splits | playbook:docdriven |
 
 Why discovery instead of a list: at spec time the code does not exist, so any list of docs to update is a guess that goes stale as soon as a plan task changes. At the end of implementation the evidence is real. This also means the docs describe what was **built** — where implementation diverged from the spec, the divergence gets documented and recorded in `gaps.md` instead of silently contradicting the docs.
 
-**Do not restate documentation rules in the plan.** The plan's docs task names the two skills and the diff range; those skills carry the procedure. Leftover cleanup is the exception: copy the trim-or-delete steps from [docs-work-unit-template.md](docs-work-unit-template.md) so the implementer does not have to reload this skill.
+**Do not restate documentation rules in the plan.** The plan's docs task names the skills and the diff range; those skills carry the procedure (including split plans in `docs/tmp/splits/`). Leftover cleanup is the exception: copy the trim-or-delete steps from [docs-work-unit-template.md](docs-work-unit-template.md) so the implementer does not have to reload this skill.
 
 **Playbook leftover cleanup.** Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history.
 
