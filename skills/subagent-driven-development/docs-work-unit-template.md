@@ -48,9 +48,12 @@ from the spec or the plan.
 Run `docs:audit` (or `audit-docdriven.mjs --format json`) on docs in scope:
 every doc from Step 2, plus every knowledge doc touched in the plan's diff range.
 
-For each doc with `suggestedAction: split-required` or `split-recommended`
-that is in scope, read `_shared/doc-splitting.md` and write a split plan to
-`docs/tmp/splits/YYYY-MM-DD-<id>-split-plan.md` before editing content.
+For each doc with `suggestedAction: split-required` in scope, read
+`_shared/doc-splitting.md` and write a split plan to
+`docs/tmp/splits/YYYY-MM-DD-<id>-split-plan.md` before editing content. For
+`split-review-required` (1,500–3,000 words), review whether the doc is still
+one cohesive concern; split only if it is not, or document a kept exception with
+narrowed routing.
 
 - [ ] **Step 3: Read every doc you are about to change**
 

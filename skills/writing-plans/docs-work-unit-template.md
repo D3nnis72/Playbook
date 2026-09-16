@@ -48,9 +48,12 @@ from the spec or the plan.
 Run `docs:audit` (or `audit-docdriven.mjs --format json`) on docs in scope:
 every doc from Step 2, plus every knowledge doc touched in the plan's diff range.
 
-For each doc with `suggestedAction: split-required` or `split-recommended`
-that is in scope, read `_shared/doc-splitting.md` and write a split plan to
-`docs/tmp/splits/YYYY-MM-DD-<id>-split-plan.md` before editing content.
+For each doc with `suggestedAction: split-required` in scope, read
+`_shared/doc-splitting.md` and write a split plan to
+`docs/tmp/splits/YYYY-MM-DD-<id>-split-plan.md` before editing content. For
+`split-review-required` (1,500–3,000 words), review whether the doc is still
+one cohesive concern; split only if it is not, or document a kept exception with
+narrowed routing.
 
 - [ ] **Step 3: Read every doc you are about to change**
 
@@ -120,8 +123,9 @@ Same job, no dispatch and no checkpoint. These are steps in the Lite plan's clos
 
 ````markdown
 - [ ] Run playbook:docdriven-audit in change-scoped mode over `<PLAN_BASE_COMMIT>..HEAD`
-- [ ] Run maintainability pass (`docs:audit`) on in-scope docs; write split plans to
-      `docs/tmp/splits/` when needed; execute splits before other updates
+- [ ] Run maintainability pass (`docs:audit`) on in-scope docs; review
+      `split-review-required` docs; write split plans for `split-required` docs;
+      execute splits before other updates
 - [ ] Read each doc the audit flagged, then apply its actions per playbook:docdriven —
       update what became false, link rather than restate, append gap rows to
       `docs/agent/gaps.md`
