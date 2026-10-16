@@ -405,10 +405,8 @@ Done! (2 reviews for 4 work units)
 ## Integration
 
 **Required workflow skills:**
-- **playbook:using-git-worktrees** - Isolated workspace
 - **playbook:writing-plans** - Sizes the plan and, at Full tier, creates the Execution Schedule this skill dispatches against
 - **playbook:requesting-code-review** - Final whole-branch review template
-- **playbook:finishing-a-development-branch** - Complete development after all work units
 
 **Subagents should use:**
 - **playbook:test-driven-development** - TDD for each step within the work unit

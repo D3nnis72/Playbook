@@ -70,11 +70,9 @@ After all tasks complete and verified:
 - Don't skip verifications
 - Reference skills when plan says to
 - Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+- Work directly on `main`: no feature branch, worktree, or PR, and no asking about it (see the Git section in `using-playbook`)
 
 ## Integration
 
 **Required workflow skills:**
-- **playbook:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
 - **playbook:writing-plans** - Sizes and creates the plan this skill executes (Lite or Full)
-- **playbook:finishing-a-development-branch** - Complete development after all tasks
