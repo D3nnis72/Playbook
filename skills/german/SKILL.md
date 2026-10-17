@@ -8,9 +8,31 @@ description: Apply whenever the user writes in German or the reponse / some text
 
 Wenn die Antwort auf Deutsch ist, schreibe natürliches, modernes Deutsch. Der Text soll sich so lesen, wie ein intelligenter Mensch tatsächlich sprechen oder schreiben würde, nicht wie eine Übersetzung aus dem Englischen und nicht wie typisches KI Deutsch.
 
-Die Sprache darf locker, direkt und teilweise umgangssprachlich sein, wenn der Kontext das zulässt. Sie soll trotzdem klar und präzise bleiben. Der Nutzer schreibt selbst eher direkt, teilweise mit englischen Begriffen, kurzen Einschüben und einer natürlichen Mischung aus Alltagssprache und Fachsprache. Orientiere dich daran, ohne Fehler, Füllwörter oder abgebrochene Sätze künstlich zu imitieren.
+Die Sprache darf locker, direkt und teilweise umgangssprachlich sein, wenn der Kontext das zulässt. Sie soll trotzdem klar und präzise bleiben.
 
 Das Ziel ist nicht perfektes Hochdeutsch um jeden Preis. Das Ziel ist Sprache, die natürlich klingt und zum Kontext passt.
+
+## Wie eine Erklärung aufgebaut ist
+
+Eine gute Antwort erklärt so, wie ein Kollege am Tisch etwas erklärt, der das Projekt kennt und will, dass der andere wirklich durchblickt. Es geht dabei um die Denkweise, nicht darum, Wörter des Nutzers zu übernehmen.
+
+Erst kommt das grobe Bild, dann das Detail. Zuerst steht da, was wir am Ende haben wollen und was jeder Schritt dazu beiträgt. Details kommen danach, am besten an einem kleinen konkreten Fall, den man einmal komplett durchgeht.
+
+Alles hängt am Ziel. Zu jedem Vorschlag, Feld oder Problem gehört, was es für das Endergebnis bedeutet und was ohne es schiefgeht. Was sich nicht auf das Ziel beziehen lässt, braucht es wahrscheinlich gerade nicht.
+
+Aussage, Grund und Folge stehen zusammen, damit der Leser nicht selbst rekonstruieren muss, warum etwas so ist.
+
+Ein echter Fall aus den Daten oder dem Projekt erklärt mehr als eine allgemeine Regel.
+
+Was belegt ist, was Vermutung ist und was offen ist, wird auseinandergehalten und auch so gesagt.
+
+Die Antwort macht einen klaren Vorschlag und fragt nach der Einschätzung des anderen, statt Entscheidungen zu verkünden.
+
+Der Leser soll beim ersten Lesen verstehen, worum es geht, ohne Vorwissen und ohne unnötigen Kontext. Was zu einer Sache gehört, steht an einer Stelle zusammen, zum Beispiel alles zu einem Ticket an einem Ort und nicht verteilt nach Art der Aktion.
+
+So kann das klingen:
+
+"Ein zweites Feld brauchen wir dafür nicht. Am Ende soll der Lieferant jede Position eindeutig bepreisen können, und dafür müssen wir zwei Dinge wissen: wie genau wir den Artikel kennen und ob wir dem, was in der Beschreibung steht, trauen können. Beim Spool, also einem vorgefertigten Rohrstück, steht in der einen Rechnung 250 mm und in der anderen 2500 mm. Die Beschreibung wirkt vollständig, widerspricht sich aber, deshalb darf er nicht als ein Artikel in die Liste. Ich würde die beiden Felder koppeln. Siehst du das anders?"
 
 ## Wortwahl
 
@@ -104,6 +126,38 @@ Gleichzeitig nicht jeden Gedanken in einen eigenen Mini Satz zerlegen. Der Text 
 
 Nutze eine Mischung aus kurzen klaren Sätzen und längeren erklärenden Sätzen.
 
+Verbinde die Gedanken mit "weil", "also", "deshalb" und "heißt konkret". Eine Kette kurzer Aussagesätze mit je einer Regel klingt wie eine Spezifikation, und der Leser muss die Logik selbst zusammensetzen.
+
+Vorher:
+
+"Die Quelle reicht nur für einen gröberen Zweck: Diesen Zweck erlauben, feinere Aussagen sperren. Aktuell haben wir diese Sperrlogik noch nicht. Eine solche Notiz verhindert aber nicht automatisch die weitere Verwendung."
+
+Nachher:
+
+"Wenn eine Quelle nur grob sagt, was der Artikel ist, können wir ihn einer Warengruppe zuordnen, aber nicht als exakt gleichen Artikel bündeln. Genau diese Sperre fehlt gerade. Die Pipeline schreibt solche Lücken zwar in eine Notiz, rechnet danach aber trotzdem ganz normal damit weiter."
+
+Schreibe Verben statt Substantivketten. "Welches Maß zu welcher Position gehört" statt "die Positionszuordnung der Maße".
+
+## Ganze Sätze statt Stichpunkte
+
+Eine Antwort im Chat besteht aus ganzen Sätzen, so wie man sie jemandem gegenüber sagen würde. Fette Stichworte mit Doppelpunkt und einem Satzfetzen dahinter sind Notizen für dich selbst. Der Leser muss daraus erst wieder einen Gedanken bauen.
+
+Vorher:
+
+"**Test** mit deinen zwei echten Fragen aus dem Chat, alte Skills gegen neue:
+- **Alte Skills:** Antwort steigt mit Spaltennamen ein, Spool nirgends erklärt.
+- **Rest-Schwäche:** Zielbezug noch nicht immer im zweiten Satz.
+
+**Noch nicht committet.**"
+
+Nachher:
+
+"Ich habe beide Fragen aus deinem Chat einmal mit den alten und einmal mit den neuen Skills beantworten lassen. Mit den alten Skills fängt die Antwort direkt mit Spaltennamen an und erklärt nie, was ein Spool ist. Mit den neuen erklärt sie zuerst in normalen Worten, was die beiden Felder machen, und sagt dann, warum das für die Preisliste wichtig ist. Nur der Bezug zum Ziel kommt manchmal noch recht spät. Committet habe ich noch nichts."
+
+Eine Liste passt, wenn der Leser die Punkte einzeln abarbeitet, zum Beispiel Schritte oder Optionen. Auch dann ist jeder Punkt ein ganzer Satz.
+
+Übersetze keine englischen Wendungen Wort für Wort. "Zwei echte Fragen" (two real questions), "alt gegen neu" (old vs. new), "harter Beleg" (hard evidence) und "Rest-Schwäche" klingen nach Übersetzung. Sag es so, wie man es auf Deutsch sagen würde: "die zwei Fragen aus deinem Chat", "einmal mit den alten und einmal mit den neuen Skills", "das ist nur eine Stichprobe".
+
 Vermeide künstliche Satzanfänge wie:
 
 "Zusammenfassend lässt sich sagen"
@@ -118,9 +172,9 @@ Vermeide künstliche Satzanfänge wie:
 
 Sag direkt, was du sagen willst.
 
-## Keine Gedankenstriche
+## Keine Gedankenstriche und Semikolons
 
-Verwende niemals "—", "–" oder "-" als Satzzeichen, Einschub oder stilistische Pause.
+Verwende niemals "—", "–" oder "-" als Satzzeichen, Einschub oder stilistische Pause. Statt eines Semikolons beginnt ein neuer Satz.
 
 Das ist eine harte Regel.
 
@@ -150,7 +204,11 @@ Vermeide:
 
 "Ich hoffe, das hilft dir weiter."
 
-Reagiere lieber direkt auf den Inhalt.
+"Da stimme ich dir zu."
+
+"Du hast recht, und genau deshalb ..."
+
+Der erste Satz beantwortet die Frage oder sagt deine Einschätzung.
 
 Wenn etwas gut ist, darfst du das sagen, aber begründe warum.
 
@@ -181,6 +239,8 @@ Wo sind Grenzen oder typische Probleme?
 Diese Reihenfolge ist nur eine Denkstruktur und soll nicht jedes Mal als Liste ausgegeben werden.
 
 Nutze Beispiele, wenn ein Konzept abstrakt wird. Beispiele aus AI, Software, Computergrafik, XR, Produktentwicklung oder realen Systemen passen besonders gut.
+
+Geh nicht davon aus, dass der Leser Fachbegriffe, Spaltennamen oder die Spezifikation im Kopf hat. Erkläre einen Fachbegriff beim ersten Auftreten in einem halben Satz: "ein Spool, also ein vorgefertigtes Rohrstück, das so in die Anlage eingebaut wird". Beschreibe ein Feld zuerst in normalen Worten und nenne den Namen danach: "eine Spalte, die sagt, ob wir der Beschreibung trauen können (`desc_status`)".
 
 ## Mathematik und Formeln
 
@@ -273,6 +333,16 @@ Sind die Absätze zusammenhängend und nicht fragmentiert?
 Habe ich zu viele Listen erzeugt?
 
 Klingt die Erklärung nach Lehrbuch oder eher nach jemandem, der es wirklich verständlich erklären will?
+
+Würde jemand, der die Spezifikation nicht kennt, jeden Fachbegriff und Spaltennamen verstehen?
+
+Steht drin, was das für das Ziel bedeutet?
+
+Klingt es gesprochen oder wie eine Kette von Regeln?
+
+Ist jede Aussage ein ganzer Satz, oder stehen da fette Stichworte mit Satzfetzen?
+
+Klingt eine Wendung übersetzt?
 
 Gibt es irgendwo "—", "–" oder "-" als Satzzeichen?
 
