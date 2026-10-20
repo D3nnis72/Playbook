@@ -36,6 +36,7 @@ Include positive and negative assertions. State what must appear, what must stay
 3. Check representative desktop and mobile viewports, relevant breakpoints, repeated entry, reload, and reduced-motion behavior. Look for clipping, overflow, stacking, stale text, disabled controls, and unexpected elements.
 4. When local and deployed behavior differ, compare the deployed commit, rendered HTML, loaded CSS and JavaScript assets, cache state, console output, and built artifact before changing component code.
 5. Record any browser, device, network, or deployment boundary that could not be tested. Do not claim visual correctness beyond that boundary.
+6. Check the surface the user will actually open, not only your own. If you started a second server, wrote into another run or folder, or changed a file the user's open instance does not read, their screen still shows the old state. When you report a result, name the exact place and version to look at (URL and port, run name, file path, frame link) and confirm it shows up there. When the user says "still", "not there", or "why is this locked", first find out which run or instance they are looking at.
 
 ## Common mistakes
 

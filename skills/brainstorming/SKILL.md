@@ -66,6 +66,7 @@ digraph brainstorming {
 - Only one question per message - if a topic needs more exploration, break it into multiple questions
 - Focus on understanding: purpose, constraints, success criteria
 - When the conversation settles or revises something, **rewrite the canvas** in the same turn so chat drift does not outrun the map
+- **Discussing is not building, and thinking out loud is not an edit order.** An opinion ("I think we should merge these"), a question, or a pick between your options ("B, but keep X in mind") is answered in chat. It does not start implementation, and it does not write your own proposal onto the canvas as if it were agreed. Write to the canvas what the user has settled or asked you to write, and build only after an explicit go ("build it", approval of the design). If you are unsure whether they decided or are still thinking, say what you would change and ask. The exception is a direct implementation request ("add that now", "ja mach das"): that is the approval, do not hold it behind a second confirmation.
 
 **Language and requirement fidelity:**
 

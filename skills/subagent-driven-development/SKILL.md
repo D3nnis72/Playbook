@@ -202,6 +202,14 @@ Implementer subagents report one of four statuses. Handle each appropriately:
 
 **Never** ignore an escalation or force the same model to retry without changes.
 
+## Long-Running Work and Controller Reports
+
+A worker or run that takes long is still yours. Do not end your turn with "it is running" when the user expects you to carry on to the next checkpoint. Poll, and judge liveness by activity, not by waiting out the timeout: if the worker's transcript, log, or output file has had no new event for about ten minutes while similar calls took a fraction of that, treat it as stalled, look at the process, and restart it or report it. When the user asks "still open?" or "what is it doing", answer with the current step and the time of its last activity, found by looking, not from memory.
+
+When a worker report or checkpoint reaches the user, it ends with what it means and the decision you recommend, in plain words. The user should not have to read the worker's status list and work out what to do. If you paste a report, add the meaning yourself after reading it.
+
+When the user states a principle after a failure ("stop only for structural errors, never for content disagreements"), check every validator or stop condition of the module against it, not only the cases they named.
+
 ## Handling Review Findings
 
 **Approved:** Record the checkpoint clean in the ledger and set `CHECKPOINT_BASE` to HEAD.
