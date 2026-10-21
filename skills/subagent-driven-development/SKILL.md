@@ -208,6 +208,8 @@ A worker or run that takes long is still yours. Do not end your turn with "it is
 
 When a worker report or checkpoint reaches the user, it ends with what it means and the decision you recommend, in plain words. The user should not have to read the worker's status list and work out what to do. If you paste a report, add the meaning yourself after reading it.
 
+The same holds when the plan ends and when you escalate. The final report lists every planned item under the plan's own label as built and verified, built but not wired in, or not built, and names where to look (see Closing Report in playbook:executing-plans). An escalation says in one sentence what is wrong and where, what you recommend and what each option causes, so it makes sense to someone who has not read the worker reports.
+
 When the user states a principle after a failure ("stop only for structural errors, never for content disagreements"), check every validator or stop condition of the module against it, not only the cases they named.
 
 ## Handling Review Findings

@@ -56,6 +56,12 @@ After all tasks complete and verified:
 
 **Ask for clarification rather than guessing.**
 
+**A stop message stands alone.** Your partner reads it without the plan, the diff or your log in view. Say in one sentence what is wrong and where (screen, file, test, ticket), in the words they see on screen and not in labels you coined. Then say what you recommend and what happens with each option. "Should I fix A or leave it to B?" is not a question until it says what broke and why you cannot pick. When the answer is "what is the problem" or "where", the message lacked this: start the next one with a concrete example from their own screen or data.
+
+## Closing Report
+
+Report what exists, not that you are done. For every item the plan or canvas named, use its own label and say whether it is built and verified, built but not wired in or not reachable from where your partner starts, or not built. Name the exact place to look (URL and port, path, frame link) and check it from their entry point, not yours. When you ask "does this fit?" or "do you approve?", say what is being approved and what each label in front of them stands for. A partner who asks "is it already in?", "where is it" or "which ones do you mean" got a report that skipped this.
+
 ## When to Revisit Earlier Steps
 
 **Return to Review (Step 1) when:**

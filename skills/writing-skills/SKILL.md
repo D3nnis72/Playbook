@@ -11,6 +11,8 @@ description: Use when creating new skills, editing existing skills, or verifying
 
 **Personal skills live in your runtime's skills directory** — see the `using-playbook` skill's `references/` folder for platform paths (`claude-code-tools.md`, `codex-tools.md`, `copilot-tools.md`, `gemini-tools.md`). Codex, Copilot CLI, and Gemini CLI all also recognize `~/.agents/skills/` as a cross-runtime alias.
 
+**Edit a skill in its source repository, not in the installed copy.** When skills are installed from a source repository (for example with a skills CLI), change the source, commit, push and update the installation. An edit made in the installed copy is overwritten by the next update and never reaches the other runtimes.
+
 You write test cases (pressure scenarios with subagents), watch them fail (baseline behavior), write the skill (documentation), watch tests pass (agents comply), and refactor (close loopholes).
 
 **Core principle:** If you didn't watch an agent fail without the skill, you don't know if the skill teaches the right thing.
