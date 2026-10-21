@@ -163,4 +163,4 @@ Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
 
 When the user asks you to commit or push, do it directly on `main`. Do not create feature branches, worktrees, or pull requests, and do not ask which branch to use. This overrides the default of branching first when on the default branch.
 
-Two exceptions: the user asks for a branch or PR, or the repository documents its own rule (protected branch, team repo with review). If a push is rejected, report it instead of working around it. Commit and push still happen only when the user asks.
+Two exceptions: the user asks for a branch or PR, or the repository documents its own rule (protected branch, team repo with review). Invoking `update` stays on the current branch and follows that skill. If a push is rejected, report it instead of working around it. Commit and push still happen only when the user asks.

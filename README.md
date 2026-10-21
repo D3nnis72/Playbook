@@ -63,6 +63,7 @@ the opening request asked to execute after planning, or the user later says go.
 | `subagent-driven-development` | Execute a Full plan with work units and checkpoint reviews |
 | `executing-plans` | Execute a Lite plan, or a Full plan in a separate session |
 | `writing-skills` | Create or improve skills with a TDD-style process |
+| `update` | Commit the current work, pull, and push the current branch |
 
 ### Process Chain
 
