@@ -24,7 +24,7 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, design system, existing components, recent commits
-2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living map under `docs/playbook/`; rewrite it as the direction moves. Skip for obvious one-file fixes. See Brainstorming Canvas below.
+2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living map under `docs/playbook/canvases/`; rewrite it as the direction moves, and split into a numbered topic folder when it grows large or spans several slices. Skip for obvious one-file fixes. See Brainstorming Canvas below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **rewrite the canvas** when answers change the map
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction by collapsing candidates on the canvas
 5. **Present design** — in sections scaled to their complexity, get user approval after each section; keep the canvas the consistent summary of what you have agreed. UI/layout choices as Markdown mockups on the canvas, grounded in the project's existing components and design language — not arbitrary external mockups.
@@ -125,8 +125,20 @@ A **canvas** is the collaborative map of the brainstorm — started near the beg
 
 **Start a canvas early when** the user's idea needs a design conversation that could drift — a feature, flow, multi-step capability, or anything where keeping a written vision consistent matters. Skip for tiny pinned fixes ("rename X", "fix this typo") where you will implement directly after a short approval.
 
-**Path:** `docs/playbook/canvases/YYYY-MM-DD-<topic>-canvas.md`  
-(User preference for location overrides this default.)
+**Path and structure** (user preference for location overrides this default):
+
+- **Single canvas (default):** `docs/playbook/canvases/<topic>.md` — lowercase kebab-case topic name, no `YYYY-MM-DD-` date prefix, and no `-canvas` suffix (`docs/playbook/canvases/photo-agent.md`). Do not create a subfolder for a single file.
+- **Topic folder (when a canvas exceeds ~1,500 words or splits into multiple slices/steps worked in order):** `docs/playbook/canvases/<topic>/` where the folder carries the topic name in lowercase kebab-case and the files inside are numbered in two-digit working order with underscores:
+  ```text
+  docs/playbook/canvases/<topic>/
+    00_overview.md
+    01_<first_slice>.md
+    02_<second_slice>.md
+  ```
+  - `00_overview.md` is always the entry point: the overarching question, current overall status, and a compact table mapping each numbered file (`01_...`, `02_...`) to its scope and when it runs.
+  - Detailed design, open questions, and mockups for a slice live only in its numbered file (`01_...`, `02_...`), never duplicated in `00_overview.md`.
+  - Child filenames do not repeat the folder's topic name (`kpi-validation/01_data_completeness.md`, not `kpi-validation/01_kpi_data_completeness.md`).
+  - If a numbered step itself grows large enough to need a subfolder, name the subfolder `NN_<step>/` and start inside with `00_overview.md`, `01_...`.
 
 **Header every canvas starts with:**
 
@@ -156,15 +168,15 @@ Structure when a direction starts to form: lead with the current vision, then op
 **When design is approved:** the map is now the basis for specs. Stop exploring on it; rewrite only to keep remaining work accurate.
 
 1. Mark canvas status **Approved — basis for specs**.
-2. If the canvas covers several deliveries, note a short delivery order (optional temporary roadmap under `docs/playbook/specs/`).
-3. Invoke write-spec for the **current** work. Pass `**Canvas:** …`. write-spec authors one spec distilled from that canvas, not the whole file as one mega-spec.
-4. Later work distills from the same canvas + shipped knowledge — do not paste the whole canvas into every spec.
+2. If the canvas covers several deliveries or exceeds ~1,500 words and is still a single file, split it into `docs/playbook/canvases/<topic>/00_overview.md` plus `01_<slice>.md`, `02_<slice>.md` in delivery order so each slice has its own focused file.
+3. Invoke write-spec for the **current** slice. Pass `**Canvas:** docs/playbook/canvases/<topic>.md` (or `docs/playbook/canvases/<topic>/NN_<slice>.md` for a topic folder). write-spec authors one spec distilled from that slice (reading `00_overview.md` only for framing), not the whole folder as one mega-spec.
+4. Later work distills from its own slice file + shipped knowledge — do not paste the whole canvas into every spec.
 
 **Lifecycle (playbook is temporary):**
 
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
-| Canvas | Living map → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain, **remove** the shipped slice so the canvas holds remaining work only. Same when there was no spec or plan. **Ask** only if ownership is unclear. |
+| Canvas | Living map → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain: on a single file, **remove** the shipped slice; in a topic folder (`canvases/<topic>/`), **delete** the shipped `NN_<slice>.md` file, mark its row done in `00_overview.md` with a link to the owning knowledge doc, and **keep remaining file numbers unchanged** (`02_...` stays `02_...` so links do not break). Same when there was no spec or plan. **Ask** only if ownership is unclear. |
 | Spec / plan | Working files for a slice | **Delete** the plan. **Delete** the spec when the slice is complete and no open spec still Depends on that file; otherwise **strip** shipped units. **Ask** only when Depends-on or unfinished slices make ownership unclear. |
 
 Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history. Never treat `docs/playbook/**` as the long-term source of truth for product behavior.

@@ -13,7 +13,7 @@ A spec is the **contract between the canvas and the planning agent**. The canvas
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
-**Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/...`) when one exists; otherwise the approved design in this session.
+**Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/<topic>.md` or `docs/playbook/canvases/<topic>/NN_<slice>.md`) when one exists; otherwise the approved design in this session.
 
 **Outputs:**
 1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md` — **temporary** working artifact, not durable product knowledge
@@ -25,7 +25,7 @@ A spec is the **contract between the canvas and the planning agent**. The canvas
 
 You MUST create a task for each item and complete them in order:
 
-1. **Read the Canvas** — the approved brainstorm this spec covers; if there is no canvas, use the approved design in this session
+1. **Read the Canvas** — the approved brainstorm this spec covers (in a topic folder `docs/playbook/canvases/<topic>/NN_<slice>.md`, read `00_overview.md` for framing and the target `NN_<slice>.md` for the slice); if there is no canvas, use the approved design in this session
 2. **Recon the project** — look at the real system for where this lives, what already exists, and which docs bind it
 3. **Carry what the conversation already settled** — summary into Target, mechanism into Approach when needed, exclusions into Not now; keep the canvas nouns
 4. **Size the work** — S / M / L; **S exits this skill**
@@ -63,7 +63,7 @@ The user already approved the canvas. A spec approval pause is not a gate. Do no
 
 ## Step 1: Carry what the conversation already settled
 
-After reading the canvas (or the approved design in session), **look at the project**. Scope is not inferred from the chat. Find where this lives, what already exists, and which docs constrain it.
+After reading the canvas (or `00_overview.md` plus the target `NN_<slice>.md` in a multi-file canvas folder, or the approved design in session), **look at the project**. Scope is not inferred from the chat. Find where this lives, what already exists, and which docs constrain it.
 
 Then put settled content in the section that owns it. Target is a readable summary of what we are building, not a packed inventory. Point at the canvas for copy and long detail. Keep the nouns.
 

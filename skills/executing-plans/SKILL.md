@@ -54,7 +54,7 @@ After all tasks complete and verified:
 - You don't understand an instruction
 - Verification fails repeatedly
 
-**Ask for clarification rather than guessing.**
+**Ask for clarification rather than guessing.** First apply "Look Before You Ask" from `using-playbook`: a gap you can close by reading sibling repos, docs, config, or the MCP tools is not a stop reason.
 
 **A stop message stands alone.** Your partner reads it without the plan, the diff or your log in view. Say in one sentence what is wrong and where (screen, file, test, ticket), in the words they see on screen and not in labels you coined. Then say what you recommend and what happens with each option. "Should I fix A or leave it to B?" is not a question until it says what broke and why you cannot pick. When the answer is "what is the problem" or "where", the message lacked this: start the next one with a concrete example from their own screen or data.
 

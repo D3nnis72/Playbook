@@ -99,7 +99,10 @@ canvases may only hold remaining work — strip shipped content, do not
 annotate it as history. After durable knowledge is updated via docdriven:
 delete this plan; delete the spec if this slice is complete and no open spec
 still Depends on that file, otherwise strip shipped units; delete the canvas
-if every slice on it has shipped, otherwise remove the shipped slice. Ask
+(and its `<topic>/` folder when multi-file) if every slice on it has shipped,
+otherwise remove the shipped slice (in a topic folder `canvases/<topic>/`,
+delete the shipped `NN_<slice>.md`, mark its row done in `00_overview.md` with
+its knowledge doc link, and keep remaining `NN_` numbers unchanged). Ask
 only when Depends-on or unfinished slices make ownership unclear.
 
 - [ ] **Step 9: Commit**

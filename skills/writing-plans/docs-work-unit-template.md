@@ -103,8 +103,8 @@ annotate it as history. After durable knowledge is updated via docdriven:
 | This plan | **Delete.** It is finished. |
 | Spec — every unit shipped, and no *open* spec still Depends on that file | **Delete.** |
 | Spec — some units or later slices still open | **Strip** shipped units from Target, Approach, Verification, and Not now. Remaining work only. |
-| Canvas — every slice it covers has shipped | **Delete.** |
-| Canvas — other slices still open | **Remove** the shipped slice. Remaining work only. |
+| Canvas — every slice it covers has shipped | **Delete** (including the `<topic>/` folder when it was a multi-file canvas). |
+| Canvas — other slices still open | **Remove** the shipped slice (in a topic folder `canvases/<topic>/`, delete the shipped `NN_<slice>.md`, mark its row done in `00_overview.md` with its knowledge doc link, and keep remaining `NN_` numbers unchanged). Remaining work only. |
 | Unclear Depends-on, ownership, or whether a slice is done | **Ask.** Do not leave a finished design sitting next to `docs/knowledge/`. |
 
 - [ ] **Step 9: Commit**

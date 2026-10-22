@@ -16,7 +16,7 @@ Execute a plan by dispatching a fresh implementer subagent per **work unit**, re
 **Narration:** between tool calls, narrate at most one short line — the
 ledger and the tool results carry the record.
 
-**Continuous execution:** Do not pause to check in with your human partner between work units. Execute all waves from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, ambiguity that genuinely prevents progress, or all work units complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in with your human partner between work units. Execute all waves from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, ambiguity that genuinely prevents progress, or all work units complete. A gap you can close by reading sibling repos, docs, config, or MCP tools is not a stop reason (see "Look Before You Ask" in `using-playbook`). "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
 
 ## When to Use
 

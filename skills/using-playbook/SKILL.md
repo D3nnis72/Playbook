@@ -159,6 +159,10 @@ The skill itself tells you which.
 
 Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
 
+## Look Before You Ask
+
+A missing host, path, mapping, credential location, or system name is not a blocker until you have searched where it could be: sibling repositories and parent folders, the project's docs, config and env files, and the MCP tools or CLIs you have. Ask only for what is still missing and say what you searched. Do not ask the user, or hand a question to another agent or colleague, for something a repository or tool you can read already answers. Access that really is missing (a login, a permission) is for the user.
+
 ## Git
 
 When the user asks you to commit or push, do it directly on `main`. Do not create feature branches, worktrees, or pull requests, and do not ask which branch to use. This overrides the default of branching first when on the default branch.
