@@ -1,6 +1,6 @@
 ---
 name: continuous-engineering-learning
-description: Use when running a recurring or backfill engineering-learning pass over Claude Code, Codex, Cursor, MonoCode, OpenCode, or ChatGPT conversations (including archived sessions) to identify reusable agent-workflow, communication, and language improvements and update the skills in a configured learning workspace.
+description: Use when running a recurring or backfill engineering-learning pass over Claude Code, Codex, Cursor, MonoCode, T3 Code, OpenCode, or ChatGPT conversations (including archived sessions) to identify reusable agent-workflow, communication, and language improvements and update the skills in a configured learning workspace.
 ---
 
 # Continuous personal AI engineering learning
@@ -87,6 +87,7 @@ Die folgenden Pfade sind Defaults. Prüfe nur Quellen, die laut Workspace-Konfig
 * Codex: `~/.codex/sessions/**/*.jsonl` und archivierte Sessions unter `~/.codex/archived_sessions/*.jsonl`. Archivierte Sessions sind normale primäre Transcripts. Lies die relevanten Session-Ereignisse und ihre Zeitstempel.
 * Cursor: `~/.cursor/acp-sessions/**`. Lies Metadaten. Dekodiere Transcript-BLOBs nur, wenn ihr Format sicher bekannt ist. `~/.cursor2/plans/**` darf als ergänzendes Material dienen, ist aber kein vollständiger Gesprächsverlauf.
 * MonoCode: `~/Library/Application Support/com.monocode.desktop/monocode.db`. Verwende SQLite read-only. Die Tabelle `sessions` darf für Gesprächssitzungen verwendet werden, insbesondere `cwd`, `harness`, `model`, `title`, `provider_session_id`, `blocks_json`, `archived`, `automation_id`, `created_at` und `updated_at`. Archivierte Sitzungen (`archived = 1`) gehören dazu. `harness` bestimmt, welchem Agenten eine Sitzung zugeordnet wird, zum Beispiel Claude Code, Codex oder Cursor; `provider_session_id` dient zum Verknüpfen mit der zugrunde liegenden Session. Wenn `blocks_json` lesbare Gesprächsblöcke enthält, ist MonoCode für diese Sitzung eine primäre Transcript-Quelle. Zähle eine über MonoCode gefundene und zusätzlich direkt gefundene Session nur einmal. Verwende keine Auth-, Credential-, Token- oder Secret-Daten aus der Datenbank.
+* T3 Code: `~/.t3/userdata/statev2.sqlite`. Verwende SQLite read-only (`file:<pfad>?mode=ro`). Relevant sind `orchestration_v2_projection_threads` (Projekt, Modell, `lineage.relationshipToParent`), `orchestration_v2_projection_messages` (`role`, `created_at`, im `payload_json` die Felder `text` und `createdBy`) und `orchestration_v2_projection_provider_threads` (`driver`, `nativeThreadRef.nativeId`). Threads mit Treiber `claudeAgent` oder `codex` sind `mirror` der direkten Transcripts und werden über `nativeId` verknüpft. Sie dürfen aber Lücken füllen, wenn das direkte Transcript schon gelöscht ist. Threads anderer Treiber wie `cursor` sind primäre Transcripts. Nur Nachrichten mit `role = 'user'` und `createdBy = 'user'` stammen von mir. Threads mit `relationshipToParent = 'subagent'` sind `subagent`. Lies keine Tabellen zu Auth, Pairing, Secrets oder Webhooks.
 * OpenCode und OpenCodeChat: `~/.local/share/opencode/opencode.db` und `~/.local/state/opencode/prompt-history.jsonl`. Verwende SQLite ausschließlich read-only und beschränke Abfragen auf Gesprächsdaten wie `session`, `message`, `part`, `session_input` und `project`. Lies niemals `account`, `credential`, `control_account`, `account_state`, `session_share` oder andere Token-, Auth- und Secret-Daten.
 * ChatGPT Desktop: `~/Library/Application Support/com.openai.chat/conversations-v3-*`. Verwende nur einen verfügbaren Connector, einen Export oder einen bekannten Parser. Opaque `.data` Dateien sind keine lesbare Evidenz. Behaupte keine ChatGPT-Abdeckung, wenn sie nicht zuverlässig dekodiert werden können.
 
@@ -164,6 +165,20 @@ Typische Signale sind Nachfragen wie „schau noch einmal genauer“, „was mei
 Behandle gesprochene, gemischtsprachige oder fehlerhafte Prompts als komprimierte Absicht. Tippfehler sind keine Anforderungen. Wenn der Kontext die Absicht trägt, normalisiere sie intern und fasse sie in natürlicher Sprache zusammen. Wenn zwei Umsetzungen weiterhin plausibel sind, stelle genau eine fokussierte Frage. Trenne dabei ausdrücklich zwischen Pflicht, Vorschlag, Beispiel, bewahrtem Verhalten und offener Entscheidung.
 
 **REQUIRED COMMUNICATION CHECK:** Bei deutschen Antworten `german` anwenden. Bei jedem User-facing Text `unslop` anwenden. Prüfe kurze Sätze, konkrete Verben, natürliche Wortwahl, passende Sprache und fehlende generische KI- oder Marketingphrasen. Interne Identifier bleiben unverändert. Eine schlechte Formulierung im Nutzerprompt darf nie als Grund dienen, eine erkennbare Absicht nicht zu prüfen oder eine unklare Antwort nicht zu verbessern.
+
+## 2b. Miss, ob ich die Antworten verstehe
+
+Korrekturen zeigen nur die lauten Fälle. Ob eine Antwort ankam, siehst du an meiner nächsten Nachricht. Ordne für jede Agent-Antwort an mich, die eine Erklärung, Rückfrage, einen Befund oder einen Abschlussbericht enthält, meine direkt folgende Nachricht genau einer Kategorie zu:
+
+* `continued`: Ich arbeite auf dem Ergebnis weiter, entscheide oder gebe die nächste Aufgabe.
+* `comprehension_question`: Ich frage nach einem Begriff, einer Zahl, einem Ort oder dem Sinn („was ist X“, „was meinst du“, „check ich nicht“, „wo steht das“).
+* `repeat`: Ich wiederhole meine Bitte, weil sie nicht beantwortet wurde.
+* `correction`: Ich korrigiere Inhalt, Ton oder Umsetzung.
+* `none`: keine Folgenachricht oder Themenwechsel.
+
+Zähle pro Quelle, Agent und Woche, wie viele Antworten zu `comprehension_question` oder `repeat` führen, und nenne immer die Basis („9 von 64 Antworten in Claude-Sitzungen“). Eine Regex-Vorauswahl ist erlaubt, die Zuordnung prüfst du am Text. Notiere bei `comprehension_question` kurz, woran es lag: unerklärter Begriff oder Kürzel, Zahl ohne Basis, das Wichtige stand nicht vorne, zu lang, Ton, oder die Antwort setzte Kontext voraus, den ich nicht sehe. Notiere außerdem, ob `unslop` in der Sitzung geladen war.
+
+Diese Quote ist die Verhaltensprüfung für Änderungen an `unslop`, `german` und an Berichtsregeln. Vergleiche sie vor und nach einer Änderung mit derselben Zählung. Erst wenn sie über mindestens eine Woche sinkt, darf eine Sprachänderung als beobachtete Verbesserung gelten. Kleine Zahlen sind ein Hinweis, kein Beweis.
 
 ## 3. Unterscheide lokale Anforderungen von allgemeinen Skills
 
@@ -436,32 +451,8 @@ Trenne immer zwischen einer erwarteten Verbesserung und einer tatsächlich beoba
 
 ## Ergebnis eines Laufs
 
-Gib immer einen kurzen Bericht aus, auch wenn keine Änderung vorgenommen wurde.
+Der Bericht folgt `unslop`, auch dem Abschnitt zu Abschlussberichten. Schreibe ihn als kurze Prosa für mich, nicht als Protokoll. Die vollständigen Details stehen im Journal und im State.
 
-Der Bericht enthält:
+Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommt die Verständnisquote aus 2b mit Basis und Vergleich zum letzten Lauf, und dazu die zwei, drei häufigsten Gründe für Rückfragen mit je einem kurzen echten Beispiel. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
 
-* Zeitfenster und Zeitzone, bei Backfill den Fortschritt, und die neuen Checkpoints.
-* Für jede Quelle den Status und die Einschränkungen.
-* Welche Fälle analysiert wurden.
-* Welche Muster erkannt wurden.
-* Welche Kandidaten behalten, verworfen oder zurückgestellt wurden.
-* Welche Skills geprüft wurden.
-* Welche Skills angepasst wurden und welche Vorschläge mit welchem Zielort angelegt wurden.
-* Warum genau dieser Scope gewählt wurde.
-* Welche Repository- und Verhaltenstests durchgeführt wurden.
-* Welche Unsicherheiten oder offenen Kandidaten bleiben.
-* Welche sprachlichen oder verständnisbezogenen Korrekturen aufgetreten sind und ob die Ursache beim Prompt, bei der Interpretation, bei der Sprache oder bei der Verifikation lag.
-* Einen Status: `no change`, `candidate recorded`, `applied`, `verified` oder `blocked`.
-
-Trenne diese Aussagen voneinander:
-
-* Eine Quelle wurde gefunden.
-* Eine Quelle war lesbar.
-* Eine Skill-Datei wurde geändert.
-* Repository-Prüfungen waren erfolgreich.
-* Das Agent-Verhalten wurde geprüft.
-* Eine zukünftige Verbesserung wird erwartet.
-
-Behaupte die letzten beiden Punkte nur mit frischer entsprechender Evidenz.
-
-Projektspezifische Erkenntnisse dürfen erwähnt werden, sollen aber nicht automatisch in globale Skills übertragen werden.
+Halte dabei auseinander, was geändert wurde, was per Repository-Check geprüft ist und was am Agent-Verhalten tatsächlich beobachtet wurde. Eine erwartete Verbesserung ist keine beobachtete. Verworfene Kandidaten, geprüfte Skills und Testdetails erwähnst du nur, wenn sie für meine Entscheidung zählen. Projektspezifische Erkenntnisse dürfen vorkommen, wandern aber nicht automatisch in globale Skills.
