@@ -13,11 +13,11 @@ A spec is the **contract between the canvas and the planning agent**. The canvas
 
 **Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
 
-**Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/<topic>.md` or `docs/playbook/canvases/<topic>/NN_<slice>.md`) when one exists; otherwise the approved design in this session.
+**Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/<topic>.md` or `docs/playbook/canvases/<topic>/NN_<step>.md`) when one exists; otherwise the approved design in this session.
 
 **Outputs:**
 1. Spec file: `docs/playbook/specs/YYYY-MM-DD-<topic>-design.md` — **temporary** working artifact, not durable product knowledge
-2. Optional companion — same directory, `YYYY-MM-DD-<topic>-<kind>.md` where `<kind>` is `roadmap` or `adr` (roadmap is temporary with the canvas; keep an ADR only when the team wants a durable decision record outside knowledge docs)
+2. Optional companion — same directory, `YYYY-MM-DD-<topic>-<kind>.md` where `<kind>` is `roadmap` or `adr` (both temporary with the canvas; a decision that outlives the work goes to its knowledge owner, as a `type: decision` doc where it needs its own reasoning, and an ADR may only keep history that links there)
 
 **Not an output: documentation updates.** This skill never edits canonical docs and never guesses which docs will need editing. Canonical docs explain current truth, and the code does not exist yet. Every plan's final work unit discovers and performs the doc updates from the real diff — see writing-plans. After that, leftover playbook files may only hold remaining work: delete or strip specs/plans/canvases; ask only when dependencies or ownership are unclear.
 
@@ -25,7 +25,7 @@ A spec is the **contract between the canvas and the planning agent**. The canvas
 
 You MUST create a task for each item and complete them in order:
 
-1. **Read the Canvas** — the approved brainstorm this spec covers (in a topic folder `docs/playbook/canvases/<topic>/NN_<slice>.md`, read `00_overview.md` for framing and the target `NN_<slice>.md` for the slice); if there is no canvas, use the approved design in this session
+1. **Read the Canvas** — the approved brainstorm this spec covers (in a step folder `docs/playbook/canvases/<topic>/NN_<step>.md`, read `00_overview.md` for framing and the target `NN_<step>.md` for the step); if there is no canvas, use the approved design in this session
 2. **Recon the project** — look at the real system for where this lives, what already exists, and which docs bind it
 3. **Carry what the conversation already settled** — summary into Target, mechanism into Approach when needed, exclusions into Not now; keep the canvas nouns
 4. **Size the work** — S / M / L; **S exits this skill**
@@ -63,7 +63,7 @@ The user already approved the canvas. A spec approval pause is not a gate. Do no
 
 ## Step 1: Carry what the conversation already settled
 
-After reading the canvas (or `00_overview.md` plus the target `NN_<slice>.md` in a multi-file canvas folder, or the approved design in session), **look at the project**. Scope is not inferred from the chat. Find where this lives, what already exists, and which docs constrain it.
+After reading the canvas (or `00_overview.md` plus the target `NN_<step>.md` in a multi-file canvas folder, or the approved design in session), **look at the project**. Scope is not inferred from the chat. Find where this lives, what already exists, and which docs constrain it.
 
 Then put settled content in the section that owns it. Target is a readable summary of what we are building, not a packed inventory. Point at the canvas for copy and long detail. Keep the nouns.
 
@@ -81,7 +81,7 @@ Detail is proportional to size. Decide the size **before writing anything**, and
 
 | Size | Looks like | What to write |
 |------|------------|---------------|
-| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, then **delete** the canvas if nothing remains open or **remove** the shipped work if remaining work is still on it. Write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
+| **S** | One contained change: a component tweak, a copy change, a fix with a known cause, one endpoint's behavior | **No spec.** Implement directly, then close the step by its exit (Step exits in brainstorming) and delete the canvas when no step is open. Write a **Lite** plan when the user wants an artifact — say the tier out loud so writing-plans does not default to its Full shape. |
 | **M** | One capability or contained change — even when it touches several files, runtimes, or domains. No new product flow; Verification is usually a short Check walkthrough | `Vision` (with `Target`), `Scope`, short `Verification`, plus `Approach` when the design introduces named units or picks a mechanism. Skip `Not now` when there is nothing to exclude. **Usual plan tier: Lite.** |
 | **L** | Multiple independent capabilities in one spec, a complete user/system flow, or a new subsystem with Flow-level verification. Touching several domains alone is not L | All sections. **Usual plan tier: Full.** |
 
@@ -89,7 +89,7 @@ Detail is proportional to size. Decide the size **before writing anything**, and
 
 **Multi-domain ≠ L.** A shared-package extraction, a cross-runtime contract move, or a change that lists several Affected domains is still M when it is one capability that stands or falls together. L is for scope that could be split into separate specs, or for a flow others will extend as a subsystem.
 
-Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming invoked this skill but the work is clearly **S**, say so and move on — do not pad a small change into a full spec. Implement, then delete or strip the canvas the same way.
+Brainstorming already decided whether a spec is warranted at all ("pipeline vs. local fix"). This step decides how much spec. When brainstorming invoked this skill but the work is clearly **S**, say so and move on — do not pad a small change into a full spec. Implement, then close the canvas step the same way.
 
 **Size travels downstream.** Put the expected plan tier in the header (`Direct` / `Lite` / `Full`). writing-plans owns the final call and the tier definitions, but it starts from this hint — do not leave it blank and let "several files" upgrade an M spec into a Full plan.
 

@@ -24,7 +24,7 @@ Every project goes through this process. A todo list, a single-function utility,
 You MUST create a task for each of these items and complete them in order:
 
 1. **Explore project context** — check files, docs, design system, existing components, recent commits
-2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living map under `docs/playbook/canvases/`; rewrite it as the direction moves, and split into a numbered topic folder when it grows large or spans several slices. Skip for obvious one-file fixes. See Brainstorming Canvas below.
+2. **Start a Brainstorming Canvas when useful** — early, when the idea is more than a tiny pinned fix. Living map under `docs/playbook/canvases/`; rewrite it as the direction moves, and split into a step folder when the work has several steps built in order. Skip for obvious one-file fixes. See Brainstorming Canvas below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria; **rewrite the canvas** when answers change the map
 4. **Propose 2-3 approaches** — with trade-offs and your recommendation; record the chosen direction by collapsing candidates on the canvas
 5. **Present design** — in sections scaled to their complexity, get user approval after each section; keep the canvas the consistent summary of what you have agreed. UI/layout choices as Markdown mockups on the canvas, grounded in the project's existing components and design language — not arbitrary external mockups.
@@ -128,15 +128,18 @@ A **canvas** is the collaborative map of the brainstorm — started near the beg
 **Path and structure** (user preference for location overrides this default):
 
 - **Single canvas (default):** `docs/playbook/canvases/<topic>.md` — lowercase kebab-case topic name, no `YYYY-MM-DD-` date prefix, and no `-canvas` suffix (`docs/playbook/canvases/photo-agent.md`). Do not create a subfolder for a single file.
-- **Topic folder (when a canvas exceeds ~1,500 words or splits into multiple slices/steps worked in order):** `docs/playbook/canvases/<topic>/` where the folder carries the topic name in lowercase kebab-case and the files inside are numbered in two-digit working order with underscores:
+  - A single canvas that tracks one strand of work (`batch1-enrichment.md`, not one canvas per source) passes the same test as a step: it names its end ("batch 1 enriched in the ground truth, supplier packages rebuilt"), holds open work only, and links numbers and rules. When the strand grows several steps, it becomes a step folder. A canvas named after one source or topic, with no end, is the anti-pattern.
+- **Step folder (when the work has several steps built in order):** `docs/playbook/canvases/<topic>/` where the folder carries the topic name in lowercase kebab-case and the files inside are numbered in two-digit build order with underscores:
   ```text
   docs/playbook/canvases/<topic>/
     00_overview.md
-    01_<first_slice>.md
-    02_<second_slice>.md
+    01_<first_step>.md
+    02_<second_step>.md
   ```
-  - `00_overview.md` is always the entry point: the overarching question, current overall status, and a compact table mapping each numbered file (`01_...`, `02_...`) to its scope and when it runs.
-  - Detailed design, open questions, and mockups for a slice live only in its numbered file (`01_...`, `02_...`), never duplicated in `00_overview.md`.
+  - **Cut by work steps, never by topic or chapter.** Test every file: *can this file be finished?* A step finishes when it is built, deferred, or dropped (see Step exits). A file that cannot finish is a chapter. Its content belongs to the knowledge owner from the start, and the canvas only links it. A file that mixes both is split: the chapter part goes to the owner, the step stays.
+  - **Anti-pattern:** `data-prep/requirements.md`, `measurements.md`, `columns.md`, `outlook.md`, `invoices.md`. Requirements, measurements, and column rules are never "built", so these files never leave, and they turn into a second copy of their owners. Step cut instead: `data-prep/00_overview.md`, `01_invoice_extraction.md`, `02_batch_rebuild.md`, with requirements and measurements linked from their owners.
+  - `00_overview.md` is always the entry point: the overarching question, current overall status, a compact table mapping each open step (`01_...`, `02_...`) to its scope and when it runs, and one line per closed step (see Step exits).
+  - Detailed design, open questions, and mockups for a step live only in its numbered file (`01_...`, `02_...`), never duplicated in `00_overview.md`.
   - Child filenames do not repeat the folder's topic name (`kpi-validation/01_data_completeness.md`, not `kpi-validation/01_kpi_data_completeness.md`).
   - If a numbered step itself grows large enough to need a subfolder, name the subfolder `NN_<step>/` and start inside with `00_overview.md`, `01_...`.
 
@@ -153,6 +156,10 @@ A **canvas** is the collaborative map of the brainstorm — started near the beg
 > work only, then delete when nothing remains.
 ```
 
+Every canvas file carries this header, step files included. There is no "Deferred" status: a deferred step leaves the canvas as a decision doc (see Step exits).
+
+**Numbers and measurements never live on a canvas.** Counts, rates, and result tables stay in the finding or knowledge doc that produced them; the canvas links it. A copied table goes stale the next time the analysis runs.
+
 Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header. Add ideas freely, then **fold them in**. Reshape the document as you clarify; rewrite so it stays a current map rather than a log of every conversational beat. UI mockups name existing project components and patterns where possible.
 
 **During brainstorming:** the canvas is a living map, not a transcript and not yet the fixed vision. If chat strays or the user revises something, rewrite the canvas in the same turn before treating the new idea as settled. A reader should see the current direction, what is still open, and (briefly) what you set aside.
@@ -168,18 +175,29 @@ Structure when a direction starts to form: lead with the current vision, then op
 **When design is approved:** the map is now the basis for specs. Stop exploring on it; rewrite only to keep remaining work accurate.
 
 1. Mark canvas status **Approved — basis for specs**.
-2. If the canvas covers several deliveries or exceeds ~1,500 words and is still a single file, split it into `docs/playbook/canvases/<topic>/00_overview.md` plus `01_<slice>.md`, `02_<slice>.md` in delivery order so each slice has its own focused file.
-3. Invoke write-spec for the **current** slice. Pass `**Canvas:** docs/playbook/canvases/<topic>.md` (or `docs/playbook/canvases/<topic>/NN_<slice>.md` for a topic folder). write-spec authors one spec distilled from that slice (reading `00_overview.md` only for framing), not the whole folder as one mega-spec.
-4. Later work distills from its own slice file + shipped knowledge — do not paste the whole canvas into every spec.
+2. If the canvas covers several work steps and is still a single file, split it into `docs/playbook/canvases/<topic>/00_overview.md` plus `01_<step>.md`, `02_<step>.md` in build order so each step has its own focused file. A single file over ~1,500 words that is still one step holds chapter material: move settled rules to their owner and link them.
+3. Invoke write-spec for the **current** slice. Pass `**Canvas:** docs/playbook/canvases/<topic>.md` (or `docs/playbook/canvases/<topic>/NN_<step>.md` for a step folder). write-spec authors one spec distilled from that slice (reading `00_overview.md` only for framing), not the whole folder as one mega-spec.
+4. Later work distills from its own step file + shipped knowledge — do not paste the whole canvas into every spec.
 
 **Lifecycle (playbook is temporary):**
 
 | Artifact | During work | After ship + docdriven |
 |----------|-------------|-------------------------|
-| Canvas | Living map → basis for specs | **Delete** when every slice has shipped and knowledge is updated. If other slices remain: on a single file, **remove** the shipped slice; in a topic folder (`canvases/<topic>/`), **delete** the shipped `NN_<slice>.md` file, mark its row done in `00_overview.md` with a link to the owning knowledge doc, and **keep remaining file numbers unchanged** (`02_...` stays `02_...` so links do not break). Same when there was no spec or plan. **Ask** only if ownership is unclear. |
+| Canvas | Living map → basis for specs | Close each finished step by its exit (Step exits below), with or without a spec or plan. **Delete** the canvas, or the whole folder, when no step is open. **Ask** only if ownership is unclear. |
 | Spec / plan | Working files for a slice | **Delete** the plan. **Delete** the spec when the slice is complete and no open spec still Depends on that file; otherwise **strip** shipped units. **Ask** only when Depends-on or unfinished slices make ownership unclear. |
 
 Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history. Never treat `docs/playbook/**` as the long-term source of truth for product behavior.
+
+**Step exits.** Every step (a numbered file, or one slice of a single canvas) ends in exactly one of four ways. Apply the exit the moment the step ends: at the end of a plan, after a direct implementation, or when a data analysis or a decision settles it without any spec or plan.
+
+| Exit | What goes to knowledge | What happens on the canvas |
+|------|------------------------|----------------------------|
+| **Built** | Behavior and rules, to the owning knowledge doc (via docdriven) | Delete the step file; one line in `00_overview.md` linking the owner |
+| **Deferred** | The decision with its reason, plus the draft, as a `type: decision` doc at the owner with `status: deferred` and a `revisitWhen` trigger (docdriven knowledge schema) | Delete the step file; one line in `00_overview.md` linking the decision doc |
+| **Dropped** | Nothing | Delete the step file; one sentence in `00_overview.md` saying why |
+| **Open** | Nothing yet | Stays |
+
+Keep the numbers of remaining steps unchanged (`02_...` stays `02_...` so links do not break). When no step is open, delete the folder or the single canvas.
 
 ## After the Design
 
@@ -187,13 +205,13 @@ Knowledge docs own shipped truth. Specs and canvases may only hold remaining wor
 
 Do not invent source paths or code. Keep product names the conversation settled (assets, types, screens, fields, commands). The spec keeps those names; the plan adds source locations.
 
-**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. After implementing, **delete** the canvas if nothing remains open; if remaining work is still on it, **remove** what you just shipped. Do this even when there was no spec or plan — a fully implemented canvas is leftover. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
+**Size** is your read on how much spec the work needs — write-spec confirms it. **S means no spec at all:** stop at design approval and implement. After implementing, close the step by its exit (Step exits) and delete the canvas when no step is open. Do this even when there was no spec or plan — a fully implemented canvas is leftover. **Plan tier** is the expected writing-plans tier — Lite for one cohesive capability even across runtimes; Full only when packages could be reviewed independently. Note both on the canvas when you mark it approved.
 
 **Transition to write-spec** (substantive features only):
 
 - Invoke write-spec — it writes the spec from the canvas, runs review, and continues to writing-plans. Canvas approval is the user gate. Do not wait for the user to approve the spec. writing-plans then waits with an execute prompt unless they asked to execute after the plan.
 - Do NOT invoke writing-plans directly; write-spec continues into it after the spec review pass
-- For small approved changes, skip write-spec and implement directly. Then **delete** the canvas if nothing remains open; if it still holds remaining work, **remove** what you just shipped.
+- For small approved changes, skip write-spec and implement directly. Then close the step by its exit (Step exits) and delete the canvas when no step is open.
 
 ## Key Principles
 

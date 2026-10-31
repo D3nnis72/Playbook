@@ -103,8 +103,8 @@ annotate it as history. After durable knowledge is updated via docdriven:
 | This plan | **Delete.** It is finished. |
 | Spec — every unit shipped, and no *open* spec still Depends on that file | **Delete.** |
 | Spec — some units or later slices still open | **Strip** shipped units from Target, Approach, Verification, and Not now. Remaining work only. |
-| Canvas — every slice it covers has shipped | **Delete** (including the `<topic>/` folder when it was a multi-file canvas). |
-| Canvas — other slices still open | **Remove** the shipped slice (in a topic folder `canvases/<topic>/`, delete the shipped `NN_<slice>.md`, mark its row done in `00_overview.md` with its knowledge doc link, and keep remaining `NN_` numbers unchanged). Remaining work only. |
+| Canvas — a step this plan finished | Close it by its exit. **Built:** rules to the owner, delete the step file (`NN_<step>.md`, or the slice on a single canvas), one line in `00_overview.md` linking the owner. **Deferred:** decision, reason, and draft as a `type: decision` doc at the owner (`status: deferred`, `revisitWhen`), delete the file, one line linking it. **Dropped:** delete the file, one sentence why in `00_overview.md`. Keep remaining `NN_` numbers unchanged. |
+| Canvas — no step left open | **Delete** (including the `<topic>/` folder). |
 | Unclear Depends-on, ownership, or whether a slice is done | **Ask.** Do not leave a finished design sitting next to `docs/knowledge/`. |
 
 - [ ] **Step 9: Commit**
@@ -130,8 +130,10 @@ Same job, no dispatch and no checkpoint. These are steps in the Lite plan's clos
       update what became false, link rather than restate, append gap rows to
       `docs/agent/gaps.md`
 - [ ] Delete leftover playbook files when documentation is clearly done: delete
-      this plan; delete or strip the spec; delete or strip the canvas. Knowledge
-      docs own shipped truth; specs and canvases may only hold remaining work.
+      this plan; delete or strip the spec; close each finished canvas step by
+      its exit (built → owner, deferred → `decision` doc at the owner, dropped →
+      one sentence in the overview) and delete the canvas when no step is open.
+      Knowledge docs own shipped truth; specs and canvases may only hold remaining work.
       Ask only if Depends-on / unfinished canvas slices make ownership unclear.
       Do not add an implemented history.
 - [ ] Commit

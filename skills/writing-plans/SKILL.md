@@ -151,10 +151,11 @@ One page. No Execution Schedule, no work unit table, no separate documentation w
 - [ ] Clean up playbook leftovers: Knowledge docs own shipped truth; specs and
       canvases may only hold remaining work. Delete this plan. Delete the spec
       if this slice is complete and no open spec still Depends on that file;
-      otherwise strip shipped units so only remaining work stays. Delete the
-      canvas if every slice on it has shipped; otherwise remove the shipped
-      slice. Ask only when Depends-on or unfinished slices make ownership
-      unclear. Do not add an implemented history.
+      otherwise strip shipped units so only remaining work stays. Close each
+      finished canvas step by its exit (built → owner, deferred → `decision`
+      doc at the owner, dropped → one sentence in the overview); delete the
+      canvas when no step is open. Ask only when Depends-on or unfinished
+      steps make ownership unclear. Do not add an implemented history.
 - [ ] Commit
 ````
 
@@ -240,14 +241,7 @@ Why discovery instead of a list: at spec time the code does not exist, so any li
 
 **Playbook leftover cleanup.** Knowledge docs own shipped truth. Specs and canvases may only hold remaining work — strip shipped content, do not annotate it as history.
 
-| If | Then |
-|----|------|
-| This plan | **Delete.** It is finished. |
-| Spec — every unit shipped, and no *open* spec still Depends on that file | **Delete.** |
-| Spec — some units or later slices still open | **Strip** shipped units from Target, Approach, Verification, and Not now. Remaining work only. |
-| Canvas — every slice it covers has shipped | **Delete** (including the `<topic>/` folder when it was a multi-file canvas). |
-| Canvas — other slices still open | **Remove** the shipped slice (in a topic folder `canvases/<topic>/`, delete the shipped `NN_<slice>.md`, mark its row done in `00_overview.md` with its knowledge doc link, and keep remaining `NN_` numbers unchanged). Remaining work only. |
-| Unclear Depends-on, ownership, or whether a slice is done | **Ask.** Do not leave a finished design sitting next to `docs/knowledge/`. |
+The cleanup table is Step 8 of [docs-work-unit-template.md](docs-work-unit-template.md): delete the plan, delete or strip the spec, and close every finished canvas step by its exit (built, deferred, dropped, open; see Step exits in brainstorming).
 
 Direct implementation (no plan file) still runs this after docdriven if a spec or canvas exists.
 
