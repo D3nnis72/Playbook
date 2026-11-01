@@ -102,6 +102,7 @@ Analysiere meine Interaktionen mit allen erreichbaren Quellen aus dem relevanten
 Berücksichtige insbesondere:
 
 * Situationen, in denen ich einen Agent korrigiere, stoppe oder neu ausrichte.
+* Verlangte Überarbeitungen von Canvas, Dokumenten, Plänen, Erklärungen und anderen Ergebnissen, auch wenn ich dabei keinen technischen Fehler benenne (siehe 2c).
 * Wiederholte Aufforderungen, die eigentlich bereits automatisch berücksichtigt werden könnten.
 * Technische Entscheidungen, die ich mehrfach ähnlich treffe.
 * Vorgehensweisen, die zu unnötigem Overengineering, falschem Scope oder schlechter Architektur führen.
@@ -179,6 +180,22 @@ Korrekturen zeigen nur die lauten Fälle. Ob eine Antwort ankam, siehst du an me
 Zähle pro Quelle, Agent und Woche, wie viele Antworten zu `comprehension_question` oder `repeat` führen, und nenne immer die Basis („9 von 64 Antworten in Claude-Sitzungen“). Eine Regex-Vorauswahl ist erlaubt, die Zuordnung prüfst du am Text. Notiere bei `comprehension_question` kurz, woran es lag: unerklärter Begriff oder Kürzel, Zahl ohne Basis, das Wichtige stand nicht vorne, zu lang, Ton, oder die Antwort setzte Kontext voraus, den ich nicht sehe. Notiere außerdem, ob `unslop` in der Sitzung geladen war.
 
 Diese Quote ist die Verhaltensprüfung für Änderungen an `unslop`, `german` und an Berichtsregeln. Vergleiche sie vor und nach einer Änderung mit derselben Zählung. Erst wenn sie über mindestens eine Woche sinkt, darf eine Sprachänderung als beobachtete Verbesserung gelten. Kleine Zahlen sind ein Hinweis, kein Beweis.
+
+## 2c. Werte Feedback zu Canvas und anderen Ergebnissen aus
+
+Prüfe alle echten Nutzernachrichten im Zeitfenster gezielt auf Feedback zu bereits gelieferten Ergebnissen. Beschränke dich weder auf die direkt folgende Chatnachricht noch auf Codefehler oder ausdrückliche Wörter wie „Feedback“. Auch „schreib das nochmal um“, „das ist unübersichtlich“, „so versteht man nicht, was gilt“, „nicht einfach anhängen“ oder meine eigene korrigierte Fassung können Qualitätsmängel zeigen. Eine Suche nach Schlüsselwörtern ist nur Vorauswahl. Entscheide anhand des Gesprächskontexts, auch bei indirektem Feedback ohne diese Wörter.
+
+Canvas, Spezifikationen, Pläne, Berichte und andere gespeicherte Texte gehören zum gelieferten Ergebnis. Eine verständliche Chatantwort kann ein schlechtes Dokument nicht ausgleichen. Bearbeite jede relevante Rückmeldung als zusammenhängenden Fall:
+
+1. **Bezug herstellen:** Verknüpfe meine Rückmeldung mit der ursprünglichen Aufgabe und dem beanstandeten Ergebnis, bei Dateien mit Pfad und damaliger Version, soweit verfügbar. Feedback kann mehrere Nachrichten später kommen oder sich auf mehrere Abschnitte beziehen.
+2. **Mangel prüfen:** Lies die betroffenen Stellen mit ihrem Zusammenhang. Nutze aufgezeichnete Schreibvorgänge, Diffs oder lesbare Versionshistorie read-only, um den Stand vor und nach der Überarbeitung zu vergleichen. Der heutige Dateistand beweist nicht, was ich damals gesehen habe. Fehlt eine Version, notiere diese Grenze. Die belegte Nutzerkorrektur bleibt ein Signal, der genaue Dokumentmangel ist dann nur berichtet oder teilweise rekonstruierbar.
+3. **Änderungsgrund unterscheiden:** Trenne Qualitätskorrektur, neue Anforderung, normale Ideenentwicklung und situationsgebundene Präferenz. „Das ist unverständlich, schreib es um“ beanstandet Qualität. „Nimm noch Export als neue Idee auf“ ergänzt den Scope. Beides kann in derselben Nachricht vorkommen. Eine Überarbeitungsbitte allein beweist noch keinen Fehler und keine dauerhafte Präferenz.
+4. **Verlauf auswerten:** Halte knapp fest, was beanstandet wurde, was der Agent änderte und wie ich darauf reagierte. Wiederholte Beanstandungen desselben Mangels nach einer Überarbeitung zeigen, dass sie nicht genügte. Ein „fertig“ des Agents oder ein plausibler Diff beweist keinen Erfolg. Ohne meine erkennbare Reaktion bleibt der Erfolg `unclear`.
+5. **Ursache und Ziel bestimmen:** Prüfe, ob eine passende Anleitung fehlte, nicht geladen, missverstanden oder trotz klarer Regel nicht angewendet wurde. Leite daraus eine gezielte Verbesserung des zuständigen Skills ab. Prüfe etwa `brainstorming` bei Canvas-Struktur, `write-spec` bei Spezifikationen und `unslop` oder `german` bei Verständlichkeit. Eine persönliche Schreibpräferenz gehört ins dafür konfigurierte persönliche Repository. Evidenzschwellen und Zielwahl aus 3 bis 5a gelten weiterhin.
+
+Ergänze bei diesen Fällen im Journal aus Abschnitt 11 die Ergebnisreferenz, den konkret beanstandeten Mangel, den Änderungsgrund, eine kurze Zusammenfassung der Überarbeitung, meine Reaktion darauf und fehlende Versionen oder Belege. Speichere keine vollständigen Dokumente. Mehrere Korrekturschleifen an derselben Aufgabe bleiben eine unabhängige Evidenzeinheit. Spiegel erhöhen diese Zahl nicht.
+
+Zähle pro Quelle, Agent und Woche die ausgewerteten Ergebnisfälle und wie viele davon Qualitätskorrekturen verlangten. Nenne die Basis und zusätzlich, bei wie vielen dieser Fälle derselbe Mangel nach einer Überarbeitung erneut beanstandet wurde. Fälle ohne rekonstruierbaren Änderungsgrund bleiben ausdrücklich unklar. Diese Zählung ergänzt die Verständnisquote aus 2b und wird nicht mit deren Antwortzahlen vermischt. Vergleiche bei späteren Läufen vergleichbare Ergebnisarten und nenne fehlende Abdeckung. Weniger Korrekturen allein beweisen keine Verbesserung, wenn beispielsweise weniger Canvas bearbeitet wurden.
 
 ## 3. Unterscheide lokale Anforderungen von allgemeinen Skills
 
@@ -453,6 +470,6 @@ Trenne immer zwischen einer erwarteten Verbesserung und einer tatsächlich beoba
 
 Der Bericht folgt `unslop`, auch dem Abschnitt zu Abschlussberichten. Schreibe ihn als kurze Prosa für mich, nicht als Protokoll. Die vollständigen Details stehen im Journal und im State.
 
-Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommt die Verständnisquote aus 2b mit Basis und Vergleich zum letzten Lauf, und dazu die zwei, drei häufigsten Gründe für Rückfragen mit je einem kurzen echten Beispiel. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
+Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommen die Verständnisquote aus 2b und die Qualitätskorrekturen aus 2c, jeweils mit eigener Basis und Vergleich zum letzten Lauf. Nenne die häufigsten Probleme mit kurzen echten Beispielen. Wenn Feedback zu einem Canvas oder anderen Ergebnis vorliegt, zeige daran knapp, was beanstandet wurde und welche Skill-Anpassung daraus folgt oder warum es bei einem Kandidaten bleibt. Fehlen passende Fälle, sage das, statt eine Quote zu erfinden. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
 
 Halte dabei auseinander, was geändert wurde, was per Repository-Check geprüft ist und was am Agent-Verhalten tatsächlich beobachtet wurde. Eine erwartete Verbesserung ist keine beobachtete. Verworfene Kandidaten, geprüfte Skills und Testdetails erwähnst du nur, wenn sie für meine Entscheidung zählen. Projektspezifische Erkenntnisse dürfen vorkommen, wandern aber nicht automatisch in globale Skills.
