@@ -170,6 +170,16 @@ When the conversation moves:
 - A new framing **rewrites** the old problem statement. Do not leave both.
 - Unresolved conflicts stay visible as tensions or open questions. That is useful. Two competing essays are not.
 
+**Every canvas update, in this order:**
+
+1. Read the whole canvas, not only the section you came to change.
+2. Put each new point into the section that already owns its topic. Open a new section only for a topic the canvas does not cover yet.
+3. Settle what the conversation settled. A proposal is settled when the user agrees, or when their next message only makes sense if it stands ("and boxplots too?" after you proposed charts). Move it to the agreed direction, drop its "proposal" label, and delete the open question that asked for it. When you cannot tell, ask in one line in chat; do not leave the label as a placeholder.
+4. Remove what the turn replaced from every place it appears: tables, lists, examples, open questions. When one thing merges into another, the old name survives only as one line under set aside.
+5. Read the result top to bottom as someone who missed the chat. Each topic appears once, with one current state, and no label contradicts the conversation.
+
+When more than one section changes, write the whole file in one pass instead of patching section by section.
+
 Structure when a direction starts to form: lead with the current vision, then open questions, then not-now. Early on, loose notes are fine. Prefer short, clear prose. Keep the nouns.
 
 **When design is approved:** the map is now the basis for specs. Stop exploring on it; rewrite only to keep remaining work accurate.
