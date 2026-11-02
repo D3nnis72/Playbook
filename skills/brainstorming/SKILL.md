@@ -158,6 +158,8 @@ A **canvas** is the collaborative map of the brainstorm — started near the beg
 
 Every canvas file carries this header, step files included. There is no "Deferred" status: a deferred step leaves the canvas as a decision doc (see Step exits).
 
+If the `visual-markdown` skill is available, load it before writing a canvas and use its blocks for work steps, decisions and questions.
+
 **Numbers and measurements never live on a canvas.** Counts, rates, and result tables stay in the finding or knowledge doc that produced them; the canvas links it. A copied table goes stale the next time the analysis runs.
 
 Write free-form sections that fit the conversation (promise, principles, journey, Markdown UI mockups, decisions, not-now, open questions). No fixed section list beyond the status header. Add ideas freely, then **fold them in**. Reshape the document as you clarify; rewrite so it stays a current map rather than a log of every conversational beat. UI mockups name existing project components and patterns where possible.
