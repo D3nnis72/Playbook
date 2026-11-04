@@ -1,6 +1,6 @@
 ---
 name: excel-workflow
-description: Use when reading, inspecting, validating, editing, or generating .xlsx or .xlsm Excel workbooks, streaming large spreadsheet extracts, automating Microsoft Excel with xlwings on macOS, or rebuilding review workbooks with formulas, hyperlinks, and manual input columns.
+description: Use when reading, inspecting, validating, editing, or generating .xlsx or .xlsm Excel workbooks, exporting CSV or Excel files that another system or Excel will import, streaming large spreadsheet extracts, automating Microsoft Excel with xlwings on macOS, or rebuilding review workbooks with formulas, hyperlinks, and manual input columns.
 ---
 
 # Excel Workflow
@@ -76,6 +76,7 @@ digraph excel_choice {
 * Nach dem Speichern das Ergebnis durch erneutes Einlesen der gespeicherten Datei und, wo eine Render- oder Excel-Umgebung verfügbar ist, über PNG-Vorschauen der betroffenen Bereiche (`wb.render()` oder `Range.copy_picture()`) prüfen.
 * In den Vorschauen auf abgeschnittenen Text, Zeilenhöhen, Spaltenbreiten, Zahlen- und Datumsformate, Statusfarben und versehentliche Durchstreichungen (aus Excels manuellem Berechnungsmodus) achten.
 * **Bildexport ist nicht gleich Bildprüfung:** Im Bericht klar trennen, ob Bilder nur erzeugt oder tatsächlich vom Agenten gelesen und visuell kontrolliert wurden.
+* **Exporte gegen ihren Verbraucher prüfen:** Eine CSV- oder Excel-Datei, die ein anderes System importiert oder jemand in Excel öffnet, vor der Übergabe gegen dieses Ziel prüfen: Größen- und Zeilenlimit des Uploads, die erwarteten Spalten und ihr Mapping (beim Nutzer oder in der Importvorlage nachsehen, nicht raten), Trennzeichen und Encoding. Excel fasst höchstens 32.767 Zeichen pro Zelle und 1.048.576 Zeilen pro Blatt; längere Inhalte werden beim Öffnen abgeschnitten oder verschieben die Zeilen. Die längste Zelle und die Zeilenzahl deshalb messen und im Bericht nennen.
 * **Nur bestandene Prüfungen melden:** Konnte eine Prüfung mangels laufendem Excel oder fehlender Vorschau nicht durchgeführt werden, diese Grenze im Abschlussbericht ausdrücklich offen benennen.
 
 ## 3. Häufige Ausreden und rote Linien

@@ -11,7 +11,7 @@ Author and validate a design spec from an approved canvas. Size the work, write 
 
 A spec is the **contract between the canvas and the planning agent**. The canvas is the thinking document the user approved. The spec formalizes what to build and already did the project homework so the planner does not have to rediscover the system. It is not an implementation plan. Source file paths (`src/...:134`), code blocks, and step sequences belong in writing-plans. Product names the canvas settled belong in the spec.
 
-**Announce at start:** "I'm using the write-spec skill to author and validate the design spec."
+**Announce at start,** in the user's language: "I'm using the write-spec skill to author and validate the design spec."
 
 **Inputs:** Approved brainstorming **Canvas** (`docs/playbook/canvases/<topic>.md` or `docs/playbook/canvases/<topic>/NN_<step>.md`) when one exists; otherwise the approved design in this session.
 
@@ -67,7 +67,7 @@ After reading the canvas (or `00_overview.md` plus the target `NN_<step>.md` in 
 
 Then put settled content in the section that owns it. Target is a readable summary of what we are building, not a packed inventory. Point at the canvas for copy and long detail. Keep the nouns.
 
-- **Vision** gets intent and why.
+- **Vision** gets intent and why, starting from the canvas's main question. When the canvas has none, take the goal the user stated at the start of the brainstorm, not the sub-question discussed last.
 - **Target** gets the written-out summary of what we are building from the canvas. If the canvas named `hero-dashboard-{locale}@2x.png`, Target says that, not "a retina asset pair".
 - **Approach** gets kinds, conceptual homes, and mechanisms **only when Target plus Scope would not already tell the planner what to do**.
 - **Scope** gets the project map from the recon.
@@ -130,7 +130,7 @@ Fixed section order. Section names are literal — use them verbatim.
 
 **`Depends on` — one canonical spec per concept.** Before writing, scan `docs/playbook/specs/` for specs whose subject overlaps this one. Declare each as a link with its relation: **depends on** (this consumes a contract, model, or flow that spec defines), **supersedes** (this replaces part of it — name the part), or **overlaps** (both touch a shared surface that could drift — name the surface). Reference the other spec's content; never restate it. Restated content becomes a second source of truth and will drift. Use `—` when there are none.
 
-**Readability test:** after Vision (including Target), would a planner who missed the brainstorm know what we are building and the names the canvas used? If Target is a packed inventory they have to decode, it fails. If they would notice the same rule or description three times, it also fails.
+**Readability test:** after Vision (including Target), would a planner who missed the brainstorm know what we are building and the names the canvas used? If Target is a packed inventory they have to decode, it fails. If they would notice the same rule or description three times, it also fails. If Target answers a sub-question from late in the brainstorm instead of the canvas's main question, it fails too.
 
 ### Vision
 

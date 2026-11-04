@@ -11,7 +11,7 @@ Write implementation plans for an engineer who has zero context for this codebas
 
 **Plans carry decisions, not volume.** Size the plan before writing it. Most changes need far less than the full template, and ceremony spent on a small change is not recoverable. DRY. YAGNI. TDD. Frequent commits.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan — [tier] tier, because [reason]. Execution: wait (default) / same-session after the plan."
+**Announce at start,** in the user's language: "I'm using the writing-plans skill to create the implementation plan — [tier] tier, because [reason]. Execution: wait (default) / same-session after the plan."
 
 **Upstream:** The spec, when there is one, has passed write-spec's review pass. The user already approved the canvas; write-spec does not wait for spec approval. Plan review verifies traceability, buildability, parsimony, and execution topology — it does not re-audit whether the design is doable, which write-spec settled.
 

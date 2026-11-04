@@ -148,6 +148,8 @@ A **canvas** is the collaborative map of the brainstorm — started near the beg
 ```markdown
 # <Topic> — Brainstorming Canvas
 
+> **Main question:** <what the user wants to reach, in their words, one sentence>
+>
 > **Status:** Brainstorming | Approved — basis for specs | Implementing | Leftover — ready to delete
 >
 > Living map of this brainstorm. Rewrite it when the direction changes.
@@ -175,10 +177,11 @@ When the conversation moves:
 **Every canvas update, in this order:**
 
 1. Read the whole canvas, not only the section you came to change.
-2. Put each new point into the section that already owns its topic. Open a new section only for a topic the canvas does not cover yet.
-3. Settle what the conversation settled. A proposal is settled when the user agrees, or when their next message only makes sense if it stands ("and boxplots too?" after you proposed charts). Move it to the agreed direction, drop its "proposal" label, and delete the open question that asked for it. When you cannot tell, ask in one line in chat; do not leave the label as a placeholder.
-4. Remove what the turn replaced from every place it appears: tables, lists, examples, open questions. When one thing merges into another, the old name survives only as one line under set aside.
-5. Read the result top to bottom as someone who missed the chat. Each topic appears once, with one current state, and no label contradicts the conversation.
+2. Hold the update against the main question in the header. A sub-question the user raises, even one they stress ("check first whether X is good enough"), gets its own section under the current direction. It does not take over the title, the lead section, or the main question. Only the user changes the main question; when their message sounds like they did, ask in one line.
+3. Put each new point into the section that already owns its topic. Open a new section only for a topic the canvas does not cover yet.
+4. Settle what the conversation settled. A proposal is settled when the user agrees, or when their next message only makes sense if it stands ("and boxplots too?" after you proposed charts). Move it to the agreed direction, drop its "proposal" label, and delete the open question that asked for it. When you cannot tell, ask in one line in chat; do not leave the label as a placeholder.
+5. Remove what the turn replaced from every place it appears: tables, lists, examples, open questions. When one thing merges into another, the old name survives only as one line under set aside.
+6. Read the result top to bottom as someone who missed the chat. Each topic appears once, with one current state, and no label contradicts the conversation. The first section still answers the main question.
 
 When more than one section changes, write the whole file in one pass instead of patching section by section.
 

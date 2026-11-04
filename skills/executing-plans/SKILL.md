@@ -11,7 +11,7 @@ Load plan, review critically, execute all tasks, report when complete.
 
 **This is the low-drama execution path:** no per-task subagent reviewers, no review loops. Use when you want straight execution with verifications built into the plan steps — including many **small and medium** changes that never needed write-spec or subagent dispatch.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+**Announce at start,** in the user's language: "I'm using the executing-plans skill to implement this plan."
 
 **This is the default path for Lite plans.** writing-plans sizes plans Direct, Lite, or Full. A Lite plan is one work unit with its documentation audit folded into the closing task — execute it here, or inline when it is only a task or two. Do not route it through subagent-driven-development, and do not grow it a schedule to qualify.
 
