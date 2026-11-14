@@ -165,7 +165,19 @@ A missing host, path, mapping, credential location, or system name is not a bloc
 
 The same holds before you report that something cannot be done, such as no access, no export, no write permission or no way to copy. Handing the step back is the same claim in a polite form: "you'll need to enter this yourself, I can only read", "please sign in in the browser", "have a look yourself" or "shall I ask a colleague to investigate". A limit of the first path you tried is not a limit of what you can reach. First try the other paths: the APIs, MCP tools and CLIs you already use, env files in sibling repositories, and the secret store the project uses. Then name what you tried and what exactly still fails. Access counts as really missing (a login, a permission only the user can grant) only after that, and then it is for the user.
 
+Look before you propose, too. Before you suggest a feature, a process, a plan or a ticket, check what already covers it: the product's own functions, the project's plans and canvases, and the work already done in this repository or conversation. Then propose only the difference: what exists and where, and what is still missing. Do not present existing behavior as new or re-plan work that is already done. If the user asks for a fresh approach, name what exists in one sentence and go on.
+
 When the way that worked was not the obvious one, because the first path failed or the user had to point you to it, write it down where the next agent will look: first in the custom skill that covers that system or task, and only if none fits, in the project's AGENTS.md or CLAUDE.md. A detail that holds for one project goes into that project's skill, not into a skill shared across projects. Access details that belong to one person's setup, such as where their credentials live or which rights their accounts have, go into that person's own skills when they keep personal skills, not into a skill shared with a team. Write where it is and how to use it, never the secret itself, and say in one sentence that you added it.
+
+When a correction leads you to change a skill, write the general rule behind it, not the incident. Leave the case's PR and ticket numbers, quotes and dates out of the skill text; name the case in the commit message instead. A skill full of single cases fits the agent to those cases and misses the next one. A short neutral example is fine when it makes the rule clearer, a project's own skill may still name that project's systems and people, and a voice or style skill may keep the user's own wording as an example.
+
+## Review Fixes and Simplification
+
+Treat a review finding as a claim: check the reachable behavior, existing protections and current diff before accepting it. Fix the verified problem; reject or defer a claim with evidence when it does not apply or belongs outside the agreed scope. Resolve legitimate findings and required checks rather than changing correct code merely to obtain a clean bot verdict. Project approval requirements still apply.
+
+When findings recur around one mechanism, revisit the cause and affected paths together. Preserve earlier fixes, group related corrections and verify them before requesting another review. Keep this investigation within the affected behavior; a typo does not need a new review process.
+
+Simplification preserves the behavior and technical properties already established. Check a shared helper's actual contract before replacing working code with it. Select tests by the plausible failures they catch, not line count: retain protection for known defects when reducing tests, and reuse existing scenarios where possible.
 
 ## Git
 

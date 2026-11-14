@@ -217,11 +217,11 @@ When the user states a principle after a failure ("stop only for structural erro
 **Approved:** Record the checkpoint clean in the ledger and set `CHECKPOINT_BASE` to HEAD.
 
 **Needs fixes (Critical/Important):**
-1. Dispatch one fix subagent with the reviewer's finding list
+1. Verify the findings against the current code and existing mechanisms, following `using-playbook`'s Review Fixes and Simplification guidance. Dispatch one fix subagent with the accepted findings and the properties earlier fixes must preserve; record evidence for rejected or deferred findings.
 2. **Controller verifies** — do not re-dispatch the reviewer subagent
-3. Read the fix diff against each Critical/Important finding
+3. Read the fix diff against each accepted Critical/Important finding
 4. Re-run the test commands the implementers reported (you, not a new reviewer)
-5. If fixes address all findings → record the checkpoint clean, advance `CHECKPOINT_BASE`
+5. If accepted findings are addressed and required checks pass → record the checkpoint clean, advance `CHECKPOINT_BASE`; unresolved approval requirements or disputed blocking findings stay open
 6. If still broken after one fix pass → escalate to the human; do not loop
 
 **One fix pass per checkpoint.** No implement → review → fix → review cycles.
@@ -262,7 +262,7 @@ Checkpoint reviews are scoped gates. When you fill a reviewer template:
 - Hand the reviewer its diff as a file via `scripts/review-package CHECKPOINT_BASE HEAD`
 - Name every work unit in the package and pass each of their briefs and reports — the reviewer is judging the package, not one dispatch
 - A dispatch prompt describes the package, not the session's history
-- Dispatch fix subagents for Critical and Important findings — then **you** verify fixes
+- Dispatch fix subagents for accepted Critical and Important findings — then **you** verify fixes
 
 **Final checkpoint:** run `scripts/review-package MERGE_BASE HEAD` instead of
 `CHECKPOINT_BASE`, so the last gate sees the whole branch, and dispatch
@@ -404,7 +404,7 @@ Done! (2 reviews for 4 work units)
 - Re-dispatch a reviewer after a fix pass — controller verifies instead
 
 **If reviewer finds issues:**
-- Dispatch one fix subagent with the finding list
+- Verify the claims, then dispatch one fix subagent with the accepted finding list
 - Controller verifies fixes — do not re-dispatch the reviewer
 - Escalate to human if still broken after one fix pass
 
