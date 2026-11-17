@@ -47,7 +47,7 @@ Du darfst innerhalb dieses Auftrags selbstständig nur folgende Pfade ändern:
 
 Neue Skills legst du nicht direkt in einem Skill-Repository an, sondern als Vorschlag unter `.learning/proposals/` (siehe Abschnitt 5a).
 
-Ändere keinen Anwendungscode, keine projektspezifischen `AGENTS.md` Dateien, keine Workspace-Konfiguration, keine globalen Agent Instructions, keine installierten Skill-Kopien (zum Beispiel unter `~/.agents/skills`, `~/.claude/skills` oder `~/.codex/skills`), keine Gesprächsdaten, keine App-Daten, keine Deployments und keine Produktionssysteme. Commit, Push und Skill-Installation gehören nicht zu diesem Lauf. Lege keine Skills direkt im Workspace-Root an.
+Ändere keinen Anwendungscode, keine projektspezifischen `AGENTS.md` Dateien, keine Workspace-Konfiguration, keine globalen Agent Instructions, keine Gesprächsdaten, keine App-Daten, keine Deployments und keine Produktionssysteme. Installierte Skill-Kopien (zum Beispiel unter `~/.agents/skills`, `~/.claude/skills` oder `~/.codex/skills`) bearbeitest du nie von Hand, sondern aktualisierst sie nur über den Installationsweg in Abschnitt 13. Lege keine Skills direkt im Workspace-Root an.
 
 ### Zeitfenster und Checkpoints
 
@@ -372,7 +372,7 @@ Dabei:
 * Betrachte den vollständigen Diff des betroffenen Unter-Repositories.
 * Ändere keinen Anwendungscode im Rahmen dieser Routine.
 * Führe keine Deployments oder Produktionsänderungen durch.
-* Erstelle keine Commits und pushe nichts.
+* Committe und pushe erst am Ende des Laufs, wie in Abschnitt 13 beschrieben.
 * Übernimm keine Secrets oder vollständigen Gesprächsprotokolle in Skills oder das Lernjournal.
 
 Es gibt keine Änderungsquote.
@@ -466,10 +466,20 @@ Wenn keine belastbare Verbesserung ableitbar ist, ändere nichts.
 
 Trenne immer zwischen einer erwarteten Verbesserung und einer tatsächlich beobachteten Verbesserung. Behaupte keine kausale Verbesserung aufgrund eines einzelnen erfolgreichen Laufs.
 
+## 13. Committe, pushe und installiere am Ende
+
+Jeder Lauf endet damit, dass die Skill-Repositories veröffentlicht und die installierten Skills aktuell sind. Sonst laufen die Agents weiter mit dem alten Stand, und eine Änderung lässt sich nie am Verhalten messen.
+
+1. Führe für jedes Skill-Repository mit Änderungen den Skill `update` aus: ein Commit pro Repository, danach Pull mit Rebase und Push. Committet werden alle offenen Änderungen an Skills im Repository, auch die aus früheren Läufen oder anderen Sitzungen. Lass nur weg, was `update` ausschließt (Secrets, Systemdateien, Caches), und nenne es im Bericht. Liegt in einem Repository außerhalb von `skills/` fremde Arbeit, etwa Code oder Theme, committe dort nur `skills/` und nenne den Rest.
+2. Aktualisiere danach die installierten Kopien der geänderten Skills über den Installationsweg, den Workspace-Konfiguration oder README des Repositories nennen. Skills aus einem öffentlichen Remote kommen nach dem Push über das Update der Skills CLI, Skills aus einem lokalen Ordner über ein erneutes Add aus diesem Ordner. Neue Skills, die noch nicht installiert sind, installierst du nur, wenn der Benutzer sie freigegeben hat.
+3. Prüfe danach, dass die installierte Kopie dem Quellstand entspricht, zum Beispiel per `diff` gegen die Quelle.
+
+`.learning/` gehört nicht in ein Skill-Repository und wird nicht committet. Scheitert Pull, Push oder Installation, melde Repository und Grund im Bericht und mach mit den anderen weiter. Sagt der Benutzer für einen Lauf ausdrücklich, dass nichts committet werden soll, entfällt dieser Abschnitt.
+
 ## Ergebnis eines Laufs
 
 Der Bericht folgt `unslop`, auch dem Abschnitt zu Abschlussberichten. Schreibe ihn als kurze Prosa für mich, nicht als Protokoll. Die vollständigen Details stehen im Journal und im State.
 
-Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommen die Verständnisquote aus 2b und die Qualitätskorrekturen aus 2c, jeweils mit eigener Basis und Vergleich zum letzten Lauf. Nenne die häufigsten Probleme mit kurzen echten Beispielen. Wenn Feedback zu einem Canvas oder anderen Ergebnis vorliegt, zeige daran knapp, was beanstandet wurde und welche Skill-Anpassung daraus folgt oder warum es bei einem Kandidaten bleibt. Fehlen passende Fälle, sage das, statt eine Quote zu erfinden. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
+Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommen die Verständnisquote aus 2b und die Qualitätskorrekturen aus 2c, jeweils mit eigener Basis und Vergleich zum letzten Lauf. Nenne die häufigsten Probleme mit kurzen echten Beispielen. Wenn Feedback zu einem Canvas oder anderen Ergebnis vorliegt, zeige daran knapp, was beanstandet wurde und welche Skill-Anpassung daraus folgt oder warum es bei einem Kandidaten bleibt. Fehlen passende Fälle, sage das, statt eine Quote zu erfinden. Danach sagst du in einem Satz, welche Repositories committet, gepusht und installiert sind und wo etwas gescheitert ist. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
 
 Halte dabei auseinander, was geändert wurde, was per Repository-Check geprüft ist und was am Agent-Verhalten tatsächlich beobachtet wurde. Eine erwartete Verbesserung ist keine beobachtete. Verworfene Kandidaten, geprüfte Skills und Testdetails erwähnst du nur, wenn sie für meine Entscheidung zählen. Projektspezifische Erkenntnisse dürfen vorkommen, wandern aber nicht automatisch in globale Skills.
