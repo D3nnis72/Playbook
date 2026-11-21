@@ -47,7 +47,9 @@ Du darfst innerhalb dieses Auftrags selbstständig nur folgende Pfade ändern:
 
 Neue Skills legst du nicht direkt in einem Skill-Repository an, sondern als Vorschlag unter `.learning/proposals/` (siehe Abschnitt 5a).
 
-Ändere keinen Anwendungscode, keine projektspezifischen `AGENTS.md` Dateien, keine Workspace-Konfiguration, keine globalen Agent Instructions, keine Gesprächsdaten, keine App-Daten, keine Deployments und keine Produktionssysteme. Installierte Skill-Kopien (zum Beispiel unter `~/.agents/skills`, `~/.claude/skills` oder `~/.codex/skills`) bearbeitest du nie von Hand, sondern aktualisierst sie nur über den Installationsweg in Abschnitt 13. Lege keine Skills direkt im Workspace-Root an.
+Ändere keinen Anwendungscode, keine projektspezifischen `AGENTS.md` Dateien (Ausnahme unten), keine Workspace-Konfiguration, keine globalen Agent Instructions, keine Gesprächsdaten, keine App-Daten, keine Deployments und keine Produktionssysteme. Installierte Skill-Kopien (zum Beispiel unter `~/.agents/skills`, `~/.claude/skills` oder `~/.codex/skills`) bearbeitest du nie von Hand, sondern aktualisierst sie nur über den Installationsweg in Abschnitt 13. Lege keine Skills direkt im Workspace-Root an.
+
+Projekt-Repositories darfst du nur ändern, wenn die Workspace-Konfiguration das ausdrücklich freigibt und das Projekt dem Benutzer gehört. Dann gehören dazu nur projektlokale Skills und die Agent-Anweisungen des Projekts (`AGENTS.md`, `CLAUDE.md`), kein Anwendungscode und keine Dokumentation. Prüfe vorher Status und Diff des Projekt-Repositories und lass fremde offene Änderungen dort unangetastet. Team-Repositories, die über Branch und Review laufen, bleiben Vorschlag.
 
 ### Zeitfenster und Checkpoints
 
@@ -273,7 +275,7 @@ Prüfe vor dem Schreiben alle vorhandenen `SKILL.md` Dateien, ihre Namen, Beschr
 
 Bevor du eine Änderung oder einen neuen Skill vorschlägst, ordne die Erkenntnis genau einem Ziel zu. Prüfe die Stufen in dieser Reihenfolge:
 
-1. **Projektspezifisch:** Sie gilt nur für ein Repository, eine Domäne, ein konkretes Framework-Setup oder ein Team. Sie gehört nicht in den Workspace. Halte sie als Vorschlag mit Ziel im Projekt fest, zum Beispiel die `AGENTS.md` des Projekts oder ein projektlokaler Skill. Schreibe nie selbst in Projekt-Repositories.
+1. **Projektspezifisch:** Sie gilt nur für ein Repository, eine Domäne, ein konkretes Framework-Setup oder ein Team. Sie gehört nicht in den Workspace. Ziel ist die `AGENTS.md` des Projekts oder ein projektlokaler Skill. Gibt die Workspace-Konfiguration das Projekt frei (siehe Schreibrechte), setzt du sie dort bei ausreichender Evidenz direkt um. Sonst hältst du sie als Vorschlag mit Ziel im Projekt fest.
 2. **Spezialisiert, passendes Repository vorhanden:** Sie betrifft ein klar abgegrenztes Thema, für das ein Skill-Repository im Workspace existiert, zum Beispiel Documentation Driven Development. Sie gehört in dieses Repository. Den Zweck eines Repositories liest du aus der Workspace-Konfiguration, sonst aus README und vorhandenen Skills.
 3. **Allgemein:** Sie gilt unabhängig von Projekt, Sprache, Framework und Tool. Sie gehört in das Repository für allgemeine Engineering Skills, das die Workspace-Konfiguration nennt.
 4. **Allgemein, aber ohne passendes Repository:** Sie ist wiederverwendbar, passt aber thematisch in keines der vorhandenen Repositories. Halte sie als Vorschlag fest und nenne ein mögliches Ziel. Lege kein neues Repository an und verbiege sie nicht in ein unpassendes.
@@ -473,6 +475,7 @@ Jeder Lauf endet damit, dass die Skill-Repositories veröffentlicht und die inst
 1. Führe für jedes Skill-Repository mit Änderungen den Skill `update` aus: ein Commit pro Repository, danach Pull mit Rebase und Push. Committet werden alle offenen Änderungen an Skills im Repository, auch die aus früheren Läufen oder anderen Sitzungen. Lass nur weg, was `update` ausschließt (Secrets, Systemdateien, Caches), und nenne es im Bericht. Liegt in einem Repository außerhalb von `skills/` fremde Arbeit, etwa Code oder Theme, committe dort nur `skills/` und nenne den Rest.
 2. Aktualisiere danach die installierten Kopien der geänderten Skills über den Installationsweg, den Workspace-Konfiguration oder README des Repositories nennen. Skills aus einem öffentlichen Remote kommen nach dem Push über das Update der Skills CLI, Skills aus einem lokalen Ordner über ein erneutes Add aus diesem Ordner. Neue Skills, die noch nicht installiert sind, installierst du nur, wenn der Benutzer sie freigegeben hat.
 3. Prüfe danach, dass die installierte Kopie dem Quellstand entspricht, zum Beispiel per `diff` gegen die Quelle.
+4. Hat der Lauf in einem freigegebenen Projekt-Repository etwas geändert, committe dort nur diese Dateien, pushe und installiere geänderte projektlokale Skills über den Weg, den das Projekt nennt.
 
 `.learning/` gehört nicht in ein Skill-Repository und wird nicht committet. Scheitert Pull, Push oder Installation, melde Repository und Grund im Bericht und mach mit den anderen weiter. Sagt der Benutzer für einen Lauf ausdrücklich, dass nichts committet werden soll, entfällt dieser Abschnitt.
 

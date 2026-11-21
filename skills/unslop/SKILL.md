@@ -14,7 +14,7 @@ Match the user's language naturally. If they write German, answer naturally in G
 
 These are the rules agents break most often, so check them on every answer before anything else. The sections below explain them and add the rest.
 
-1. The first sentence is the answer, the result, or your position. Context comes after it, never before.
+1. The first sentence is the answer, the result, or your position. Context comes after it, never before. One exception: when the user hands you something they have not read themselves, such as a thread, mail, ticket or record behind a bare link or a "check this", their first question is what it is about. Open with two or three plain sentences on who wants what and what the problem is, with every abbreviation explained, and give your verdict right after.
 2. Every abbreviation, ID, column name, or term you made up gets half a sentence of explanation the first time it appears, unless the user already used it the same way.
 3. Every number says what it was counted from, and every claim is only as strong as what you actually checked.
 4. Write full sentences in connected prose. Bold labels with fragments and long bullet lists are notes to yourself, not an answer.

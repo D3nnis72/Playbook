@@ -1,6 +1,6 @@
 ---
 name: visual-interaction-verification
-description: Use when changing UI layout, animation, responsive behavior, or deployed rendering and correctness depends on what users see over time or across viewports.
+description: Use when changing UI layout, animation, responsive behavior, dashboards, or deployed rendering, and before handing the user a link, page, or dashboard to look at after a UI change, because correctness depends on what users actually see over time, across viewports, or in the instance they open.
 ---
 
 # Visual interaction verification
@@ -16,6 +16,7 @@ Use this skill for:
 * CSS, layout, z-index, SVG, mask, transition, reveal, scroll, or motion changes.
 * Reports that something pops in, remains visible, appears too early, is clipped, or works locally but not after deployment.
 * Shared UI changes where a component can render through several routes, locales, breakpoints, or build targets.
+* Handing a UI change over for the user to look at, such as a local dev link, a staging or production page, a dashboard tab, or an artifact. Open that exact link yourself first, in the state the user will land in (default filters, real login, real data), before you say "take a look" or roll it out.
 
 Do not add frame-by-frame verification for a static copy or token change that cannot affect layout, state, timing, or rendering.
 

@@ -183,6 +183,10 @@ When findings recur around one mechanism, revisit the cause and affected paths t
 
 Simplification preserves the behavior and technical properties already established. Check a shared helper's actual contract before replacing working code with it. Select tests by the plausible failures they catch, not line count: retain protection for known defects when reducing tests, and reuse existing scenarios where possible.
 
+## Work You Hand Off
+
+Work you hand to another thread, subagent or background run stays yours until its result is in. Do not end your turn with "they will report back", and do not ask the user to tell you when it is done. Wait with the runtime's wait or notification mechanism, or check the output yourself at intervals that fit how long it should take. When it finishes, read the result, go on with the next step and tell the user what it means. A run that takes hours is the exception to waiting in the same turn: say when it should finish and how you will pick it up (a notification, a scheduled check, or the user's next message), and check it then before you answer anything else. When the user asks for the status, answer from what you just looked at: what each run is doing, whether it is stuck and what comes next. If the user says they will take it from there, hand it over.
+
 ## Git
 
 When the user asks you to commit or push, do it directly on `main`. Do not create feature branches, worktrees, or pull requests, and do not ask which branch to use. This overrides the default of branching first when on the default branch.
