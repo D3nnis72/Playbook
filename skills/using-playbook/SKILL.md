@@ -175,6 +175,16 @@ When the way that worked was not the obvious one, because the first path failed 
 
 When a correction leads you to change a skill, write the general rule behind it, not the incident. Leave the case's PR and ticket numbers, quotes and dates out of the skill text; name the case in the commit message instead. A skill full of single cases fits the agent to those cases and misses the next one. A short neutral example is fine when it makes the rule clearer, a project's own skill may still name that project's systems and people, and a voice or style skill may keep the user's own wording as an example.
 
+## Plans Follow the Information
+
+A plan, decision or structure set up earlier holds only as long as what it was based on still holds. When something new comes in (a decision by the user, a changed design, a result, a constraint), check what the earlier plan assumed before you go on with it, also when the request in front of you sits inside the old plan. If an assumption fell away, say so first and decide again from the current state, as if you were planning fresh. This holds for your own earlier proposals too.
+
+Work that is already done is not a reason to keep a plan. Ask which option you would pick today, then count what the switch costs.
+
+Rework is cheap or expensive depending on the project. In a solo or small project, where one person owns the code and docs and nobody else depends on them yet, rebuild instead of patching: replace the outdated part, do not append to it or bend the new information into the old structure. In a team repository, or once others depend on the work (open reviews, merged code, live data, things already sent), a change costs other people time, so name the trade and propose the switch instead of making it silently.
+
+When you revise, say in one or two sentences what changed and why, and update the documents that still carry the old version.
+
 ## Review Fixes and Simplification
 
 Treat a review finding as a claim: check the reachable behavior, existing protections and current diff before accepting it. Fix the verified problem; reject or defer a claim with evidence when it does not apply or belongs outside the agreed scope. Resolve legitimate findings and required checks rather than changing correct code merely to obtain a clean bot verdict. Project approval requirements still apply.
