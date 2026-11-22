@@ -175,6 +175,8 @@ When the way that worked was not the obvious one, because the first path failed 
 
 When a correction leads you to change a skill, write the general rule behind it, not the incident. Leave the case's PR and ticket numbers, quotes and dates out of the skill text; name the case in the commit message instead. A skill full of single cases fits the agent to those cases and misses the next one. A short neutral example is fine when it makes the rule clearer, a project's own skill may still name that project's systems and people, and a voice or style skill may keep the user's own wording as an example.
 
+Write a rule into a skill only once the decision behind it has settled. While the user is still trying an idea, asking whether something works or weighing options ("could we…", "maybe", "or does that not work?"), do the task and propose the rule in one sentence instead; write it after they confirm, or when they say to put it in the skill. A rule written from the first message of an exploration often has to be reverted a few minutes later, and every agent in between works with it.
+
 ## Plans Follow the Information
 
 A plan, decision or structure set up earlier holds only as long as what it was based on still holds. When something new comes in (a decision by the user, a changed design, a result, a constraint), check what the earlier plan assumed before you go on with it, also when the request in front of you sits inside the old plan. If an assumption fell away, say so first and decide again from the current state, as if you were planning fresh. This holds for your own earlier proposals too.
