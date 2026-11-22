@@ -181,6 +181,8 @@ Write a rule into a skill only once the decision behind it has settled. While th
 
 A plan, decision or structure set up earlier holds only as long as what it was based on still holds. When something new comes in (a decision by the user, a changed design, a result, a constraint), check what the earlier plan assumed before you go on with it, also when the request in front of you sits inside the old plan. If an assumption fell away, say so first and decide again from the current state, as if you were planning fresh. This holds for your own earlier proposals too.
 
+Do not stop at the piece the new information touches. Go through the rest of the plan, the earlier decisions and the documents built on them, and ask for each whether you would still choose it with what you know now. Rewrite what a better idea now replaces, so the result is consistent again instead of an old plan with one patched spot. Stay neutral toward the current plan, including the parts you proposed yourself.
+
 Work that is already done is not a reason to keep a plan. Ask which option you would pick today, then count what the switch costs.
 
 Rework is cheap or expensive depending on the project. In a solo or small project, where one person owns the code and docs and nobody else depends on them yet, rebuild instead of patching: replace the outdated part, do not append to it or bend the new information into the old structure. In a team repository, or once others depend on the work (open reviews, merged code, live data, things already sent), a change costs other people time, so name the trade and propose the switch instead of making it silently.

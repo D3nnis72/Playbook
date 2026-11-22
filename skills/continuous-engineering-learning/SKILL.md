@@ -269,6 +269,8 @@ Prüfe insbesondere:
 
 Bevorzuge immer die Verbesserung vorhandener Skills gegenüber der Erstellung neuer, wenn beide Möglichkeiten sinnvoll sind.
 
+Hänge eine neue Erkenntnis nicht einfach als weiteren Absatz an. Lies die Regeln daneben und frühere Änderungen aus diesem Lernprozess neu und prüf, ob sie mit dem, was jetzt bekannt ist, noch stimmen. Schreib eine Regel um oder fass mehrere zusammen, wenn das heute besser wäre, auch wenn sie aus einem früheren Lauf stammt.
+
 Prüfe vor dem Schreiben alle vorhandenen `SKILL.md` Dateien, ihre Namen, Beschreibungen, Trigger und relevanten Abschnitte. Verändere keine bestehende Arbeit, die nicht zu diesem Lauf gehört.
 
 ## 5a. Entscheide, wohin eine Erkenntnis gehört
@@ -482,8 +484,18 @@ Jeder Lauf endet damit, dass die Skill-Repositories veröffentlicht und die inst
 
 ## Ergebnis eines Laufs
 
-Der Bericht folgt `unslop`, auch dem Abschnitt zu Abschlussberichten. Schreibe ihn als kurze Prosa für mich, nicht als Protokoll. Die vollständigen Details stehen im Journal und im State.
+Der Bericht beantwortet eine Frage: Was hat dieser Lauf an meinen Skills geändert, was genau steht jetzt drin, und warum? Er folgt `unslop` und ist kurze Prosa, kein Protokoll. Messwerte, Kandidaten und Details stehen im Journal und im State, nicht im Bericht.
 
-Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und was sich an meinen Skills geändert hat. Danach folgt, was ich entscheiden oder tun soll, zum Beispiel ein Vorschlag außerhalb des Workspace. Dann kommen die Verständnisquote aus 2b und die Qualitätskorrekturen aus 2c, jeweils mit eigener Basis und Vergleich zum letzten Lauf. Nenne die häufigsten Probleme mit kurzen echten Beispielen. Wenn Feedback zu einem Canvas oder anderen Ergebnis vorliegt, zeige daran knapp, was beanstandet wurde und welche Skill-Anpassung daraus folgt oder warum es bei einem Kandidaten bleibt. Fehlen passende Fälle, sage das, statt eine Quote zu erfinden. Danach sagst du in einem Satz, welche Repositories committet, gepusht und installiert sind und wo etwas gescheitert ist. Zum Schluss nennst du die Abdeckung in einem Satz: welche Quellen gelesen wurden, welche nur teilweise oder gar nicht, und das Zeitfenster mit den neuen Checkpoints.
+Der erste Satz sagt den Status (`no change`, `candidate recorded`, `applied`, `verified` oder `blocked`) und wie viele Änderungen es gab.
 
-Halte dabei auseinander, was geändert wurde, was per Repository-Check geprüft ist und was am Agent-Verhalten tatsächlich beobachtet wurde. Eine erwartete Verbesserung ist keine beobachtete. Verworfene Kandidaten, geprüfte Skills und Testdetails erwähnst du nur, wenn sie für meine Entscheidung zählen. Projektspezifische Erkenntnisse dürfen vorkommen, wandern aber nicht automatisch in globale Skills.
+Danach kommt jede Änderung als eigener kurzer Absatz mit drei Teilen:
+
+1. **Wo:** Skill und Abschnitt, mit Link auf die Datei.
+2. **Was genau:** Die neue oder geänderte Regel in ein bis zwei Sätzen, so wie sie jetzt gilt. Bei einer Umformulierung auch, was vorher dastand und was weggefallen ist.
+3. **Warum:** Die Fälle dahinter, in meinen Worten nacherzählt. Was ist passiert, was habe ich gesagt oder getan, und wie oft kam das unabhängig vor. Datum und Thema reichen, keine Session-IDs. Sag auch, ob es Gegenbeispiele gab und wie die Regel sie berücksichtigt.
+
+Hat eine Sitzung selbst schon einen Skill geändert und der Lauf nur geprüft, nenn das in einem Satz pro Skill. Gab es keine Änderung, sag in ein oder zwei Sätzen, warum nicht, und nenne höchstens den einen Kandidaten, der einer Änderung am nächsten ist.
+
+Danach folgt, was ich entscheiden oder tun soll, falls es etwas gibt. Zum Schluss ein einziger kurzer Absatz mit dem Rest: committet, gepusht und installiert (oder wo es gescheitert ist), die Verständnisquote aus 2b und die Qualitätskorrekturen aus 2c je in einem Halbsatz mit Basis, und die Abdeckung mit Zeitfenster. In diesem Teil keine Fettdruck-Labels und keine Listen.
+
+Halte auseinander, was geändert wurde, was per Repository-Check geprüft ist und was am Agent-Verhalten tatsächlich beobachtet wurde. Eine erwartete Verbesserung ist keine beobachtete. Projektspezifische Erkenntnisse dürfen vorkommen, wandern aber nicht automatisch in globale Skills.
