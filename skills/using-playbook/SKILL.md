@@ -201,6 +201,12 @@ Simplification preserves the behavior and technical properties already establish
 
 Work you hand to another thread, subagent or background run stays yours until its result is in. Do not end your turn with "they will report back", and do not ask the user to tell you when it is done. Wait with the runtime's wait or notification mechanism, or check the output yourself at intervals that fit how long it should take. When it finishes, read the result, go on with the next step and tell the user what it means. A run that takes hours is the exception to waiting in the same turn: say when it should finish and how you will pick it up (a notification, a scheduled check, or the user's next message), and check it then before you answer anything else. When the user asks for the status, answer from what you just looked at: what each run is doing, whether it is stuck and what comes next. If the user says they will take it from there, hand it over.
 
+## Before You Say Done
+
+"Done", "fixed", "updated" and "ready for the next step" are claims about a state the user will look at, so check that state before you write them. Look where the user will look, not at what you meant to do: the file or page actually shows the change, review threads are answered and resolved, the record is in the system and not only in a note. Go through the request item by item instead of through your own steps. What you could not check, name with the reason instead of rounding it up to done. A change whose result is the diff itself, such as a typo or a rename, needs no check beyond the diff.
+
+Whether a design, plan or exploration is complete enough for the next stage (spec, build, rollout) is the user's call. Instead of announcing that everything is ready, name what is still open, such as missing states, edit or create flows, empty states or leftover markers, and let the user decide.
+
 ## Git
 
 When the user asks you to commit or push, do it directly on `main`. Do not create feature branches, worktrees, or pull requests, and do not ask which branch to use. This overrides the default of branching first when on the default branch.

@@ -46,4 +46,4 @@ Include positive and negative assertions. State what must appear, what must stay
 * A desktop pass can hide a mobile regression. Recheck every changed responsive branch.
 * A local pass does not prove deployment parity. Inspect the served asset graph before blaming the source component.
 
-**REQUIRED BACKGROUND:** Use `verification-before-completion` before claiming the change is complete. Use `systematic-debugging` when the observed visual result contradicts the intended contract.
+**REQUIRED BACKGROUND:** Follow "Before You Say Done" in `using-playbook` before claiming the change is complete. When the observed visual result contradicts the intended contract, find the cause in the render path (step 1 and 4 above) before changing timing or styles.
