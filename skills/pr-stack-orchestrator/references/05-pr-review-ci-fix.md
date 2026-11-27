@@ -7,17 +7,18 @@ You are a fresh-context child spawned asynchronously by the Orchestrator wheneve
 1. **Inspect PR & CI:**
    - Call `pull_request_read` on `pr_url` to read all review comments, threads, and check statuses.
    - Call `ci_logs` on any failed check run to inspect the exact failure.
-2. **Triage every review comment honestly (no blind bloat):**
-   - Verify each claim against live code and the PR Contract Card.
-   - **Valid P1 / P2 (MUST fix):** Real bug, edge case, missing test, convention/lint/type/OpenAPI/translation defect, or CI failure.
-   - **False positive / Out-of-scope / P3 (DO NOT add speculative code):** Invented edge cases prevented by invariants or scope outside the PR Card.
-   - **Cross-PR Insights:** If a bot (like Kira sampling staging/prod DBs) surfaces a genuine insight relevant to a **later** PR, capture it in your summary so the Orchestrator records it in `state.json` and the affected downstream card.
-3. **Apply fixes & re-verify:**
-   - Fix all valid P1/P2 findings and CI failures in the PR worktree (if a fix requires editing files outside `Allowed write files` / external subsystems, report `EXTERNAL_FIX_NEEDED` instead of expanding scope).
+2. **Triage every review comment honestly (no blind bloat, no silent skips):**
+   - Read BOTH inline review threads AND top-level review bodies (e.g., Kira's numbered follow-ups even when she says `"I'd merge this"`).
+   - Verify each claim against live code and the PR Contract Card, and classify into one of three dispositions:
+     - **Fix now (in this PR):** Real bug, P1/P2 foundation/convention defect that is cheapest to fix here (e.g., wrong Shell V2 table, fail-closed router default, broken link styling, wrong German declension), or CI failure.
+     - **Defer to a planned downstream PR (valid, belongs later):** Write the exact requirement/note onto the owning downstream PR card (`cards/PR-XX-*.md`) and `state.json`, and cite that exact PR ID in your reply on GitHub so reviewers and Kira see where it is handled.
+     - **Skip (false positive / P3 nit / out-of-scope):** Explain in 1 factual sentence in your reply on GitHub; never add speculative code.
+3. **Apply fixes, re-verify & sync integration branch:**
+   - Fix all "Fix now" items and CI failures in the PR worktree (if a fix requires editing files outside `Allowed write files` / external subsystems, report `EXTERNAL_FIX_NEEDED` instead of expanding scope).
    - Re-run affected local gates (changed-files-only `ruff format --check` for `.py`).
    - Follow repo `squash`/`push` conventions as appropriate and push to the PR branch.
-4. **Respond clearly on the PR and sync labels:**
-   - Use `pull_request_respond` to reply concisely on every addressed thread with the fix commit SHA, or a 1-sentence factual explanation when skipped.
+4. **Reply visibly on the PR:**
+   - Use `pull_request_respond` to post one concise reply addressing every numbered point from the bot review (listing commit SHA for fixes, exact future `PR-XX` card for deferred items, and 1-sentence factual note for skipped items).
    - If a failed check was a transient CI flake unrelated to the diff, call `ci_rerun` once.
    - Once all required CI checks are green and bot review (`kira-the-beagle`) has approved with 0 unresolved P1/P2 threads:
      - Ensure PR assignee (`@me`) is set.
