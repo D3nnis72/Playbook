@@ -37,8 +37,9 @@ Once **0 P1 and 0 P2 remain** and all gates pass:
 1. Follow the repo's `squash` skill so the branch has **one clean commit** on top of `<base>` (verify `--shortstat` matches before and after).
 2. Push the branch (`git push -u origin HEAD`, or `--force-with-lease` if squashed over an already-pushed branch).
 3. Write the PR body following the repo's `description` skill (terse 1–6 feature bullets, plus any required migration/MCP/codegen notes).
-4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch). Request bot review (e.g., Kira) if not triggered automatically.
-5. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
+4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch).
+5. **Assignee & Labels (mandatory):** Immediately set the PR assignee (`@me` or `runtime.pr_defaults.assignee`) and add the repo's bot-review label (e.g., `kira pls review` in `askLio`) so reviewers and bots see the PR right away. Do **not** add `ready-for-review` until CI is green and the bot review passes (Phase 05 adds `ready-for-review` when human approval is still needed).
+6. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
 
 ## Orchestrator P1 Double-Check Rule
 

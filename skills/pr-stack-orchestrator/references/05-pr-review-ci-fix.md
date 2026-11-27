@@ -16,11 +16,14 @@ You are a fresh-context child spawned asynchronously by the Orchestrator wheneve
    - Fix all valid P1/P2 findings and CI failures in the PR worktree (if a fix requires editing files outside `Allowed write files` / external subsystems, report `EXTERNAL_FIX_NEEDED` instead of expanding scope).
    - Re-run affected local gates (changed-files-only `ruff format --check` for `.py`).
    - Follow repo `squash`/`push` conventions as appropriate and push to the PR branch.
-4. **Respond clearly on the PR:**
+4. **Respond clearly on the PR and sync labels:**
    - Use `pull_request_respond` to reply concisely on every addressed thread with the fix commit SHA, or a 1-sentence factual explanation when skipped.
    - If a failed check was a transient CI flake unrelated to the diff, call `ci_rerun` once.
+   - Once all required CI checks are green and bot review (`kira-the-beagle`) has approved with 0 unresolved P1/P2 threads:
+     - Ensure PR assignee (`@me`) is set.
+     - Check `mergeStateStatus` and Darkplane AutoMerge: if `mergeStateStatus == "BLOCKED"` (human `CODEOWNERS` review still needed), add label `ready-for-review` (plus `Core Approval` only if a core path was touched) and report `human_approval_needed=yes` with the exact pending reviewers so the Orchestrator adds the PR to `APPROVAL-QUEUE.md`. If `mergeStateStatus == "CLEAN"` (Darkplane satisfied mergeability without human approval), report `human_approval_needed=no`.
 5. **Never call `watch_pull_request` yourself:** The Orchestrator owns the persistent watch.
 
 ## Required Final Line
 
-`PR <full URL>, head <SHA>, checks and reviews <state> | fixed_p1_p2=<N> | skipped=<M> | ci_fixed=<yes|no|none> | downstream_notes=<none or short summary>`
+`PR <full URL>, head <SHA>, checks and reviews <state> | fixed_p1_p2=<N> | skipped=<M> | ci_fixed=<yes|no|none> | human_approval_needed=<yes|no> | downstream_notes=<none or short summary>`
