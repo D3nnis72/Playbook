@@ -1,60 +1,52 @@
-# Phase 04: Code Review & Mandatory P1/P2 Fix Gate Playbook
+# Phase 04: Single-Pass Cross-Model Review, P1/P2 Fix, and PR Open Playbook
 
-Every PR runs through two fresh-context roles before pushing or opening a PR:
-- **04A · Code Review Child** (read-only audit, cross-model from the Execute child).
-- **04B · Mandatory Fix Child** (runs automatically whenever **any P1 or P2 finding** exists).
+You are a fresh-context **Cross-Model Code Reviewer & Gatekeeper** (running on a different model family from the Execute child) operating directly on the PR's isolated worktree. In **one cohesive pass**, you audit the diff, fix every P1 and P2 finding yourself, re-verify all gates, apply the repository's own PR flow skills, push, and open the PR.
 
-No PR may be pushed until a fresh 04A check reports **P1 = 0, P2 = 0**, and all verification commands pass.
+## Inputs to Read First
 
----
+1. The PR Contract Card (`cards/PR-XX-*.md`) and its `R-xx` rows in `requirements.md`.
+2. If `repo_skills_root` is provided (e.g., `askLio/.skillshare/skills/`), read and follow the applicable repo PR skills:
+   - `architectural-review/SKILL.md` (staff-engineer review bar against surrounding callers)
+   - `consolidating-branch-tests/SKILL.md` (when >15 new tests were added)
+   - `squash/SKILL.md` (single clean commit with `--shortstat` safety check)
+   - `description/SKILL.md` (terse, feature-focused PR description format)
+   - `push/SKILL.md` (clean push conventions)
 
-## Role 04A: Code Review Child (Read-Only)
+## Step 1: Audit `git diff <base>..HEAD`
 
-You did not write this code. Audit the actual `git diff` against the PR Contract Card, `requirements.md`, and repository conventions.
+Check every item and classify findings strictly as **P1**, **P2**, or **P3**:
 
-### Checklist
+1. **Diff & Scope:** Zero edits outside `Allowed write files`, zero unauthorized `CODEOWNERS` / core edits, proper markers outside `/experimental/`.
+2. **100 % `R-xx` Trace:** Every `R-xx` ID on the card is genuinely implemented and tested.
+3. **Architecture & Bugs (repo `architectural-review` bar):** Read surrounding callers (never review in isolation). Check edge cases (`None`/empty, legacy persisted Mongo docs, tenant isolation, flag-off behavior), strict Pydantic/TS types, OpenAPI client sync (`api:check`), Shell V2 / `en`+`de` translation rules, security/MCP rules.
+4. **Test Quality:** Run `scripts/audit_test_quality.py` (when present on backend tests) and check test budget.
 
-1. **Diff & Scope Audit:** Run `git diff <base>..HEAD --stat` and `git diff <base>..HEAD`. Confirm zero edits outside `Allowed write files`, zero forbidden/`CODEOWNERS` violations, and exact required markers.
-2. **Requirement Trace Audit:** Verify every `R-xx` ID on the PR Card is genuinely implemented and verified (not stubbed or half-wired).
-3. **Engineering & Bug Audit:** Check edge cases (`None`/empty inputs, legacy persisted records, tenant isolation, flag-off backward compatibility), strict typing/Pydantic/TS contracts, generated API artifacts, UI/design-system/translation rules, and security/permission/MCP rules.
-4. **Test Quality Audit:** If tests were added, run the repo's test quality audit script (when present) and verify tests assert real behavior within the card's test budget.
-5. **Independent Gate Check:** Re-run fast lint/type/test checks if anything looks unformatted or stale.
+- **P1 (Blocker — MUST fix):** Bug, wrong behavior, missing `R-xx`, broken backward compatibility, security/tenant leak, failing CI check, out-of-scope file edit.
+- **P2 (Important — MUST fix):** Convention violation, missing real edge-case test, over-mocked/redundant test, stale generated client, brittle coupling.
+- **P3 (Nit — DO NOT fix):** Style preferences or speculative ideas outside the card. Log at most 3 P3 notes.
 
-### Severity Rules
+## Step 2: Fix All P1 and P2 Findings Directly
 
-- **P1 (Blocker — MUST fix):** Bug, wrong behavior, missing `R-xx` requirement, broken backward compatibility, security/tenant leak, failing CI gate, or out-of-scope/forbidden file edit.
-- **P2 (Important — MUST fix before PR):** Convention violation (naming, markers, wrong locale/glossary, design-system violation), missing edge-case test for a real failure mode, over-mocked/redundant test, stale generated client, or brittle coupling.
-- **P3 (Nit — DO NOT fix / DO NOT block):** Pure style preferences or speculative ideas outside the PR Card. Log at most 3 P3 notes; never fail the gate for P3s.
+- If `p1 > 0` or `p2 > 0`, fix **every P1 and P2** cleanly right here in the worktree (ignore P3s).
+- Re-run all verification commands from the PR Card (using changed-files-only `ruff format --check` on `.py` files). Confirm every gate is green.
 
-### Required Final Block (Role 04A)
+## Step 3: Squash, Push, and Open PR (Using Repo PR Skills)
 
-```text
-CODE_REVIEW: PASS | p1=0 | p2=0 | p3=<K>
-```
+Once **0 P1 and 0 P2 remain** and all gates pass:
+
+1. Follow the repo's `squash` skill so the branch has **one clean commit** on top of `<base>` (verify `--shortstat` matches before and after).
+2. Push the branch (`git push -u origin HEAD`, or `--force-with-lease` if squashed over an already-pushed branch).
+3. Write the PR body following the repo's `description` skill (terse 1–6 feature bullets, plus any required migration/MCP/codegen notes).
+4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch). Request bot review (e.g., Kira) if not triggered automatically.
+5. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
+
+## Orchestrator P1 Double-Check Rule
+
+- If `fixed_p1 == 0`: the PR is immediately `pr_open` (no extra child spawn needed!).
+- If `fixed_p1 > 0`: the Orchestrator may run one fast read-only verification check on the P1 fix commit if the bug was subtle; otherwise it proceeds straight to `pr_open` and lets CI + Kira verify in parallel.
+
+## Required Final Line
+
+`PHASE04_RESULT: OPENED | pr=<full URL> | branch=<branch> | head=<sha> | fixed_p1=<N> | fixed_p2=<M> | p3=<K>`
 or
-```text
-CODE_REVIEW: FIX_REQUIRED | p1=<N> | p2=<M> | p3=<K>
-- [P1] <file:line> — <exact defect> | Fix: <concrete fix>
-- [P2] <file:line> — <exact defect> | Fix: <concrete fix>
-```
-
----
-
-## Role 04B: Mandatory P1/P2 Fix Child
-
-Spawned automatically by the Orchestrator on the PR's worktree branch whenever Role 04A reports `p1 > 0` or `p2 > 0`.
-
-1. Fix **every P1 and P2 finding** cleanly. Ignore P3 nits unless trivial on an already-touched line.
-2. Re-run **all** verification commands on the PR Card (and codegen if schemas changed).
-3. Confirm `git diff --stat` remains strictly inside `Allowed write files`.
-4. Commit cleanly (squash to one commit before push if repo conventions require single-commit PRs).
-
-### Required Final Line (Role 04B)
-
-`FIX_RESULT: DONE | branch=<branch> | head=<sha> | fixed_p1=<N> | fixed_p2=<M> | gates=<passed-list>`
-
-### Orchestrator Gate Policy
-
-- After 04B finishes, run a **fresh** 04A verification pass.
-- Max **2** fix rounds per PR; if the same P1/P2 persists, mark the PR `blocked` in `state.json` and notify the user.
-- On `CODE_REVIEW: PASS | p1=0 | p2=0`, push the branch, open the PR via `pull_request_create`, apply the bot-review label if needed, call `watch_pull_request`, set `state.json` to `pr_open`, and immediately proceed to the next runnable PR.
+`PHASE04_RESULT: BLOCKED | reason=<one sentence>`
