@@ -78,11 +78,13 @@ pending
 
 ### Mandatory Orchestrator PR-Green Transition Checklist (Runs on EVERY PR)
 
-Whenever `watch_pull_request` wakes the Orchestrator and a PR has **all required CI checks green + bot review posted**:
+Whenever `watch_pull_request` wakes the Orchestrator with new comments, review events, or CI updates — and ALWAYS before marking any PR `ready_to_merge` or advancing a dependent wave:
 
-1. **Triage bot review findings BEFORE marking `ready_to_merge`:** Even if Kira says `"I'd merge this"` with 0 unresolved inline threads, check whether her review body lists concrete numbered follow-ups (real P1/P2 defects such as wrong Shell V2 table, loose router permissions, delimiter collisions, or unsafe defaults).
-   - If the review has **zero** actionable P1/P2 points: continue directly to Step 2.
-   - If the review has **any** actionable P1/P2 points: spawn a fresh **Phase 05 (`05-pr-review-ci-fix.md`) child** on that PR's worktree (while other PRs keep running in parallel!). That child either fixes cheap in-PR P1/P2s directly (pushing + re-merging into `integration_branch`) OR explicitly logs future-PR items onto the owning downstream PR card (`cards/PR-XX-*.md`) AND posts one clear reply comment on the PR stating what was fixed vs. which planned PR owns each deferred point.
+1. **Triage ALL reviewer comments & threads (humans + bots — never only Kira):** Inspect `pull_request_read(include=["comments", "threads"])` across **all authors** (human teammates, code owners, AI reviewers like Kira, and inline threads). Never silently ignore a human comment, and never blindly accept every suggestion either — apply real engineering judgment via Phase 05 (`05-pr-review-ci-fix.md`):
+   - **Actionable & clearly right** (real bug, missing flag/guard, naming/collection choice that would force a migration later, or P1/P2 convention fix) → spawn Phase 05 to fix cleanly, push, re-merge into `integration_branch`, and post one concise reply confirming what changed.
+   - **Valid but belongs in a later PR** → record the requirement on the owning downstream PR card (`cards/PR-XX-*.md`) + `state.json` and reply briefly stating where it lands.
+   - **Disagree / breaks a constraint or widens blast radius** (e.g., would break an existing assertion, expand into `@askLio/core`, or edit another owner's untouched files) → verify against live code and **push back respectfully with concrete evidence** (`file:line` / tradeoff); if a human reviewer asks for a structural or cross-PR scope change with real tradeoffs, **escalate to the user** before executing or arguing.
+   - **Informational / no response needed** (empty `APPROVED`, Darkplane scorecard, PR-assigner notice, `"On it"`) → do **not** reply; keep PR threads noise-free.
 2. Inspect live PR metadata (`gh pr view <n> --json assignees,labels,mergeStateStatus,reviewRequests,reviews`).
 3. Ensure `runtime.pr_defaults.assignee` (e.g., `@me`) is assigned; if missing, add it immediately.
 4. Check `mergeStateStatus`, target base, draft state, and automated approvals (e.g., Darkplane AutoMerge):
@@ -101,7 +103,7 @@ Pass the matching file path in every `delegate_task` prompt, plus `runtime.repo_
 - `references/02-plan-review.md` — look-ahead plan audit (`full` tier only).
 - `references/03-execute.md` — implement in isolated worktree, run changed-files lint/format + card tests, commit cleanly.
 - `references/04-code-review-gate.md` — single-pass cross-model review (using repo `architectural-review` & `consolidating-branch-tests` when present), fix ALL P1 and P2 directly, re-run gates, run repo `squash` + `description` + `push` + `pull_request_create`.
-- `references/05-pr-review-ci-fix.md` — async triage & fix of Kira/bot comments and CI failures without blocking other PRs.
+- `references/05-pr-review-ci-fix.md` — async triage & fix of ALL reviewer comments (human engineers + bots like Kira) and CI failures with genuine engineering judgment (fix, defer, challenge/escalate, or skip noise) without blocking other PRs.
 
 ## Continuous Plan Sync and Orchestrator Flexibility
 
@@ -115,3 +117,4 @@ Mark only the affected PR `blocked` in `state.json` and keep running independent
 2. Live `origin/main` contradicts a frozen requirement or forces an unauthorized `@askLio/core` / critical-path edit.
 3. A required secret, auth token, or local service (e.g., Docker) is missing.
 4. All available providers are rate-limited.
+5. A human reviewer requests a structural, naming, or cross-PR scope change with non-obvious tradeoffs (or disagrees with an architectural guardrail) — present the comment, concrete evidence, and options to the user instead of blindly accepting or silently ignoring it.
