@@ -19,8 +19,8 @@ Turn one T3 Code thread into a lean autonomous orchestrator for a large multi-PR
 1. Read the project's orchestration pack: `state.json`, `requirements.md`, and the PR Contract Cards (`cards/PR-*.md`).
 2. Call `orchestrator_capabilities` **once** to inspect live providers (`claudeAgent`, `cursor`, `codex`) and available models.
 3. **Target Machine & Project Selection:**
+   - **Critical T3 Code rule:** Local `delegate_task` children and `isolation: "worktree"` always inherit the Orchestrator thread's own T3 project. Therefore, the Orchestrator thread itself **must live inside the target code repository's T3 project** (e.g., `askLio`, never a separate docs/customer repo). Omit `target.projectId` on local `delegate_task` calls; pass `target.environmentId` + `target.projectId` only when delegating to a different linked machine.
    - If the user asked to run on a specific linked machine (e.g., MacBook Air), check `t3_environment_links` and reachability first. If that machine is offline or unreachable, **fall back cleanly to the current machine** and note it in `state.json` (`runtime.active_environment_id`). Never block waiting for an offline machine.
-   - Always run coding/review children inside the **target code repository's T3 project** (find its `projectId` via `t3_project_list`, e.g., `askLio`) with `isolation: "worktree"`. Keep spec/card paths absolute so children can read them from any repo.
 4. Fetch `origin/main` cleanly in the target repo without modifying the main checkout. Never create git worktrees in shell.
 
 ## Model Routing and Coding-Limit Failover
