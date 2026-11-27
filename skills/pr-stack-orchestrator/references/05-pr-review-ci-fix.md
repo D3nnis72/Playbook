@@ -26,7 +26,11 @@ You are a fresh-context child spawned asynchronously by the Orchestrator wheneve
    - Skip posting any reply if all new activity was purely informational noise.
    - If a failed check was a transient CI flake unrelated to the diff, call `ci_rerun` once.
    - Once all required CI checks are green, all human comments are resolved/answered, and bot review (`kira-the-beagle`) has approved with 0 unresolved P1/P2 threads:
-     - Check `mergeStateStatus` and Darkplane AutoMerge: if `mergeStateStatus == "BLOCKED"` (human `CODEOWNERS` review still needed), **swap Assignee off `@me` onto the designated human reviewer** (and request them in Reviewers if not already requested; never leave a `ready-for-review` PR assigned to the author), add label `ready-for-review` (plus `Core Approval` only if a core path was touched), and report `human_approval_needed=yes` with the exact assigned reviewer so the Orchestrator adds the PR to `APPROVAL-QUEUE.md`. If `mergeStateStatus == "CLEAN"` (Darkplane satisfied mergeability without human approval), report `human_approval_needed=no`.
+     - Check `mergeStateStatus` and Darkplane AutoMerge: if `mergeStateStatus == "BLOCKED"` or the PR is stacked awaiting bottom-up merge:
+       - If the PR needs `@askLio/approvers` or `@askLio/core` approval (shared wiring, flags, Celery task, or core path): **remove `@me` from Assignees and add `Core Approval`** (`pr_defaults.approvers_trigger_label`) even while stacked (`Do Not Merge` stays on) so `pr-assigner` assigns an approver for early review.
+       - If the PR is 100% covered by a domain owner (`pr_defaults.domain_owner_assignee_for_isolated_packages`, e.g. `the-hugo`): **do NOT add `Core Approval`** — remove `@me` and **assign + request the domain owner directly**.
+       - Add label `ready-for-review` and report `human_approval_needed=yes` with the assigned reviewer/routing so the Orchestrator keeps `APPROVAL-QUEUE.md` current.
+     - If `mergeStateStatus == "CLEAN"` on `main` (Darkplane satisfied mergeability without human approval), report `human_approval_needed=no`.
 5. **Never call `watch_pull_request` yourself:** The Orchestrator owns the persistent watch.
 
 ## Required Final Line
