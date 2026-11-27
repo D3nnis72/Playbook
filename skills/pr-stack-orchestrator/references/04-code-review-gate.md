@@ -43,7 +43,8 @@ Once **0 P1 and 0 P2 remain** and all gates pass:
      - Use short scannable headings (**Why this change**, **What changes**, **Who is affected**, **Verification**, **Out of scope / next PRs**; add **Before / after** with screenshots for UI changes).
      - State clearly *why* this is built (e.g., high-priority customer project) and *why* any scaffolds, empty endpoints, or unused types exist right now ("this is an incremental step so the planner and UI PRs can follow in parallel; the next PRs wire up X and Y").
 4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch).
-   - If the repo uses draft-first PRs (like `askLio` in `lio-asklio-change/references/git-and-pr.md`), open as **Draft** (`draft: true`), assign `@me`, add **`kira pls review`** (and **`Do Not Merge`** when `base != main`), and only mark Ready for Review (`ready: true` + `ready-for-review` label) in the Orchestrator's PR-Green Transition Checklist once CI is green and Kira has reviewed.
+   - If the repo uses draft-first PRs (like `askLio`): open as **Draft** (`draft: true`), assign `@me`, and add **`Do Not Merge`** when `base != main` — do **NOT** add `kira pls review` yet while the PR is still a Draft, because label-triggered review bots (including Kira) skip Draft PRs (and leave the label stuck without triggering when the PR later leaves Draft).
+   - Once CI is green on the Draft PR, the Orchestrator marks it Ready (`pull_request_update(..., ready=True)`) and **then** adds `kira pls review` (so Kira's `labeled` webhook triggers cleanly on the non-draft PR), waits for Kira's review, triages all findings, and applies `ready-for-review` + reviewer/assignee handoff (`Core Approval` or domain owner).
 5. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
 
 ## Orchestrator P1 Double-Check Rule
