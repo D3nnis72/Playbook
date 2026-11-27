@@ -63,12 +63,24 @@ Pick models dynamically from `orchestrator_capabilities`:
 pending
   -> [planning -> plan_reviewing]   (full tier only, pipelined 1 wave ahead)
   -> executing                      (Phase 03 in isolated worktree)
-  -> reviewing_and_opening          (Phase 04 single-pass cross-model: review + fix P1/P2 + repo squash/description/push + open PR)
+  -> reviewing_and_opening          (Phase 04 single-pass cross-model: review + fix P1/P2 + repo squash/description/push + open PR + assign @me + add `kira pls review`)
   -> [verify_p1_fix]                (only if Phase 04 fixed a real P1 bug)
   -> pr_open                        (watch_pull_request active + merged into integration_branch + plan checklist updated)
-  -> [bot_ci_fixing]                (Phase 05 async on watch wake-up, non-blocking)
-  -> ready_to_merge -> merged
+  -> [bot_ci_fixing]                (Phase 05 async on watch wake-up if CI failed or bot has P1/P2 comments)
+  -> ready_to_merge                 (Orchestrator ALWAYS runs the PR-Green Transition Checklist below!)
+  -> merged
 ```
+
+### Mandatory Orchestrator PR-Green Transition Checklist (Runs on EVERY PR, Even When Phase 05 Was Skipped!)
+
+Whenever `watch_pull_request` wakes the Orchestrator and a PR now has **all required CI checks green + bot review approved + 0 unresolved P1/P2 threads** (whether directly on first pass or after Phase 05):
+
+1. Inspect live PR metadata (`gh pr view <n> --json assignees,labels,mergeStateStatus,reviewRequests,reviews`).
+2. Ensure `runtime.pr_defaults.assignee` (e.g., `@me`) is assigned; if missing, add it immediately.
+3. Check `mergeStateStatus` and automated approvals (e.g., Darkplane AutoMerge):
+   - **`mergeStateStatus == "CLEAN"` (auto-approvable / no human gate blocking):** set `human_approval_needed: false` in `state.json` and add the PR under **Auto-Merge Ready** in `approval_queue_doc` (`APPROVAL-QUEUE.md`) without pinging reviewers.
+   - **`mergeStateStatus == "BLOCKED"` (human `CODEOWNERS` approval still required):** add `runtime.pr_defaults.ready_labels_when_human_review_needed` (`ready-for-review`, plus `Core Approval` only if a core path was touched), set `human_approval_needed: true`, and update `APPROVAL-QUEUE.md` (table row + copy-pasteable Slack/Teams ping message listing PR link, 1-line change/zero-risk summary, CI/Darkplane/Kira state, and exact approvers).
+4. Update `state.json` (`status: "ready_to_merge"`) AND sync the human checklist in `plan_doc_to_sync` (e.g., `06_prs_und_review.md`).
 
 ## Phase Playbooks
 
