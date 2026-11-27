@@ -37,8 +37,10 @@ Once **0 P1 and 0 P2 remain** and all gates pass:
 1. Follow the repo's `squash` skill so the branch has **one clean commit** on top of `<base>` (verify `--shortstat` matches before and after).
 2. Push the branch (`git push -u origin HEAD`, or `--force-with-lease` if squashed over an already-pushed branch).
 3. Write the PR body following the repo's `description` skill (terse 1–6 feature bullets, plus any required migration/MCP/codegen notes).
-4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch).
-5. **Assignee & Labels (mandatory):** Immediately set the PR assignee (`@me` or `runtime.pr_defaults.assignee`) and add the repo's bot-review label (e.g., `kira pls review` in `askLio`) so reviewers and bots see the PR right away. Do **not** add `ready-for-review` until CI is green and the bot review passes (Phase 05 adds `ready-for-review` when human approval is still needed).
+4. Open the PR via `pull_request_create` against the PR's target base (`main`, parent stacked branch, or `integration_branch` base tag).
+   - **Stacked-PR Guardrail (mandatory whenever target base != `main`):** Prepend line 1 of the PR description with:
+     `> **Stacked PR (base: \`<base>\`) — Do not merge into the parent feature branch.** Merge bottom-up into \`main\`; remove \`Do Not Merge\` once retargeted to \`main\`.`
+5. **Assignee & Labels (mandatory):** Immediately set the PR assignee (`@me` or `runtime.pr_defaults.assignee`) and add the repo's bot-review label (e.g., `kira pls review` in `askLio`). If target base != `main`, also add **`Do Not Merge`** immediately so nobody accidentally merges a child PR into its parent feature branch. Do **not** add `ready-for-review` until CI is green and the bot review passes.
 6. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
 
 ## Orchestrator P1 Double-Check Rule
