@@ -112,7 +112,7 @@ Pass the matching file path in every `delegate_task` prompt, plus `runtime.repo_
 
 ## Continuous Plan Sync and Orchestrator Flexibility
 
-- **Keep plans live:** After every PR reaches `pr_open` or `ready_to_merge`, update **both** `state.json` (with PR URL, head SHA, timings, and any non-blocking reviewer notes for later PRs) **and** the human-readable plan checklist listed in `state.json` (`plan_doc_to_sync`).
+- **Keep plans and `APPROVAL-QUEUE.md` continuously live:** On EVERY PR transition (`pr_open`, `ready_to_merge`, reviewer assigned by `pr-assigner`, human `APPROVED` or `CHANGES_REQUESTED`, retargeted to `main`, or `merged`), update **all three**: `state.json` (PR URL, head SHA, timings, reviewer notes), the human-readable plan checklist (`plan_doc_to_sync`), and `APPROVAL-QUEUE.md` (live columns for what is ready from our side, who is assigned, who already approved, current base/merge order, and merged PRs).
 - **Autonomous plan adjustment:** You are authorized to re-order independent PRs, split an oversized PR, add a separate external-fix PR off `origin/main`, or adjust a later card based on real findings from an earlier PR (such as Kira's DB sampling notes). **Never weaken the `north_star_goal`** in `state.json`: full feature built cleanly, zero skipped requirements, zero silent hacks, zero unauthorized core/outside edits, and verified end-to-end.
 
 ## Escalation Rules
