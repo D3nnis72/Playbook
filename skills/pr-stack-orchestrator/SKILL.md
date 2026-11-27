@@ -81,10 +81,12 @@ Whenever `watch_pull_request` wakes the Orchestrator and a PR has **all required
    - If the review has **any** actionable P1/P2 points: spawn a fresh **Phase 05 (`05-pr-review-ci-fix.md`) child** on that PR's worktree (while other PRs keep running in parallel!). That child either fixes cheap in-PR P1/P2s directly (pushing + re-merging into `integration_branch`) OR explicitly logs future-PR items onto the owning downstream PR card (`cards/PR-XX-*.md`) AND posts one clear reply comment on the PR stating what was fixed vs. which planned PR owns each deferred point.
 2. Inspect live PR metadata (`gh pr view <n> --json assignees,labels,mergeStateStatus,reviewRequests,reviews`).
 3. Ensure `runtime.pr_defaults.assignee` (e.g., `@me`) is assigned; if missing, add it immediately.
-4. Check `mergeStateStatus`, target base, and automated approvals (e.g., Darkplane AutoMerge):
+4. Check `mergeStateStatus`, target base, draft state, and automated approvals (e.g., Darkplane AutoMerge):
+   - If `runtime.open_as_draft_until_green` is `true` and the PR is still a Draft, mark it Ready (`pull_request_update(..., ready=True)`) once CI is green and Kira has reviewed.
    - If base != `main`: ensure **`Do Not Merge`** is set until retargeted to `main`.
    - If base == `main` and `mergeStateStatus == "CLEAN"` (auto-approvable / no human gate blocking): set `human_approval_needed: false` in `state.json` and add the PR under **Auto-Merge Ready** in `approval_queue_doc` (`APPROVAL-QUEUE.md`) without pinging reviewers.
    - Otherwise (`mergeStateStatus == "BLOCKED"` or stacked awaiting bottom-up merge): add `runtime.pr_defaults.ready_labels_when_human_review_needed` (`ready-for-review`, plus `Core Approval` only if a core path was touched), set `human_approval_needed: true`, and update `APPROVAL-QUEUE.md` (bottom-up **Merge Order**, table row, and copy-pasteable Slack/Teams ping message).
+   - Never commit playbook files, orchestration JSON/cards, or `.env` into the target code repo; never mention internal wave names or card IDs in GitHub PR text.
 5. Update `state.json` (`status: "ready_to_merge"`) AND sync the human checklist in `plan_doc_to_sync` (e.g., `06_prs_und_review.md`).
 
 ## Phase Playbooks

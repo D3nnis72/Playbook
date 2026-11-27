@@ -36,21 +36,15 @@ Once **0 P1 and 0 P2 remain** and all gates pass:
 
 1. Follow the repo's `squash` skill so the branch has **one clean commit** on top of `<base>` (verify `--shortstat` matches before and after).
 2. Push the branch (`git push -u origin HEAD`, or `--force-with-lease` if squashed over an already-pushed branch).
-3. Write the PR body combining the repo's `description` skill (terse, plain product language, no raw file-path dumps or test-log walls) with a **Stack Context header** so human reviewers and bots immediately understand where this PR sits in the multi-PR flow and why any scaffolds/contracts/stubs look the way they do right now:
-   ```markdown
-   > **Stack context (PR <N> of <Total> · <Stack/Wave>):** [If base != main: Stacked on #<parent> (`<base>`). Do not merge into the parent feature branch; merge bottom-up into `main` and drop `Do Not Merge` once retargeted to `main`.]
-   >
-   > **Why it is shaped like this:** [1–2 plain sentences explaining what depends on this PR and which upcoming PRs wire up any scaffolded contracts, empty endpoints, or downstream enforcement.]
-
-   **What this PR adds**
-   - [terse product bullets following repo `description` skill, 8–12 words each]
-
-   **What comes next in this stack**
-   - [1–2 bullets naming the next PRs that consume or extend this PR]
-   ```
-4. Open the PR via `pull_request_create` against the PR's target base (`main`, parent stacked branch, or `integration_branch` base tag).
-5. **Assignee & Labels (mandatory):** Immediately set the PR assignee (`@me` or `runtime.pr_defaults.assignee`) and add the repo's bot-review label (e.g., `kira pls review` in `askLio`). If target base != `main`, also add **`Do Not Merge`** immediately so nobody accidentally merges a child PR into its parent feature branch. Do **not** add `ready-for-review` until CI is green and the bot review passes.
-6. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
+3. Write the PR body following `runtime.pr_description_guide` when configured (for `askLio`: `/Users/dennis/Documents/CustomSkills/LioSkills/skills/lio-asklio-change/references/pr-description.md` and `references/git-and-pr.md`), otherwise the repo's `description` skill.
+   - **Never leak internal orchestration jargon into GitHub PRs:** reviewers do not know internal wave numbers, card IDs (`PR-14-plan`), or playbook paths. Never commit playbook files, canvases, or `.env` into the code repo.
+   - **Always explain product context and incremental split in plain English:**
+     - If stacked (`base != main`), open with `> **Base: #<parent>** (`<base>`). Stacked PR — do not merge into the parent feature branch; merge bottom-up into \`main\` and drop \`Do Not Merge\` once retargeted.`
+     - Use short scannable headings (**Why this change**, **What changes**, **Who is affected**, **Verification**, **Out of scope / next PRs**; add **Before / after** with screenshots for UI changes).
+     - State clearly *why* this is built (e.g., high-priority customer project) and *why* any scaffolds, empty endpoints, or unused types exist right now ("this is an incremental step so the planner and UI PRs can follow in parallel; the next PRs wire up X and Y").
+4. Open the PR via `pull_request_create` against the PR's target base (`main` or parent stacked branch).
+   - If the repo uses draft-first PRs (like `askLio` in `lio-asklio-change/references/git-and-pr.md`), open as **Draft** (`draft: true`), assign `@me`, add **`kira pls review`** (and **`Do Not Merge`** when `base != main`), and only mark Ready for Review (`ready: true` + `ready-for-review` label) in the Orchestrator's PR-Green Transition Checklist once CI is green and Kira has reviewed.
+5. **Do NOT call `watch_pull_request` yourself** — the Orchestrator owns watching.
 
 ## Orchestrator P1 Double-Check Rule
 
