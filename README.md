@@ -62,6 +62,7 @@ the opening request asked to execute after planning, or the user later says go.
 | `writing-plans` | Size the plan, turn a spec into tasks, then wait with an execute prompt |
 | `subagent-driven-development` | Execute a Full plan with work units and checkpoint reviews |
 | `executing-plans` | Execute a Lite plan, or a Full plan in a separate session |
+| `pr-stack-orchestrator` | Explicitly-invoked autonomous multi-PR orchestrator for large stacks (isolated worktrees, P1/P2 review gate, parallel bot-review/CI loop, coding-limit failover) |
 | `writing-skills` | Create or improve skills with a TDD-style process |
 | `excel-workflow` | Read, validate, edit, and build `.xlsx` workbooks safely across tools |
 | `update` | Commit the current work, pull, and push the current branch |
