@@ -83,6 +83,13 @@ pending
 
 Whenever `watch_pull_request` wakes the Orchestrator with new comments, review events, or CI updates — and ALWAYS before marking any PR `ready_to_merge` or advancing a dependent wave:
 
+0. **Review findings ledger (required before `ready_to_merge`):** Every substantive point from every reviewer, including the numbered notes, questions and collapsed "smaller points" of a bot review that says "I'd merge this", gets one entry in `state.json` → `prs[].review_findings[]`: `{source, summary, disposition, ref}`. `disposition` is exactly one of:
+   - `fixed` → `ref` = commit SHA on this PR.
+   - `card:<PR-ID>` → `ref` = the line you wrote into that downstream card. The card must contain the requirement before you reply.
+   - `pushed_back` → `ref` = `file:line` or test evidence posted on the PR.
+   - `decided` (reviewer asked the user a product question) → `ref` = the requirement or card line the answer comes from; only when no requirement answers it, escalate to the user and keep the PR out of `ready_to_merge`.
+   - `no_action` → only for informational output (scorecards, "On it", plain approvals).
+   A reviewer's "fix this before <later step>" where that later step is a PR in this stack is `fixed` now or `card:<that PR>`; it is never left for an unnamed follow-up. A reply on GitHub mirrors the ledger point by point. "Tracked", "follow-up" or "we'll check with product" without one of the refs above is not a disposition. Any PR with at least one `fixed` entry goes through a Phase 05 child; the orchestrator does not answer substantive findings inline.
 1. **Triage ALL reviewer comments & threads (humans + bots — never only Kira):** Inspect `pull_request_read(include=["comments", "threads"])` across **all authors** (human teammates, code owners, AI reviewers like Kira, and inline threads). Never silently ignore a human comment, and never blindly accept every suggestion either — apply real engineering judgment via Phase 05 (`05-pr-review-ci-fix.md`):
    - **Actionable & clearly right** (real bug, missing flag/guard, naming/collection choice that would force a migration later, or P1/P2 convention fix) → spawn Phase 05 to fix cleanly, push, re-merge into `integration_branch`, and post one concise reply confirming what changed.
    - **Valid but belongs in a later PR** → record the requirement on the owning downstream PR card (`cards/PR-XX-*.md`) + `state.json` and reply briefly stating where it lands.
@@ -114,6 +121,13 @@ Pass the matching file path in every `delegate_task` prompt, plus `runtime.repo_
 
 - **Keep plans and `APPROVAL-QUEUE.md` continuously live:** On EVERY PR transition (`pr_open`, `ready_to_merge`, reviewer assigned by `pr-assigner`, human `APPROVED` or `CHANGES_REQUESTED`, retargeted to `main`, or `merged`), update **all three**: `state.json` (PR URL, head SHA, timings, reviewer notes), the human-readable plan checklist (`plan_doc_to_sync`), and `APPROVAL-QUEUE.md` (live columns for what is ready from our side, who is assigned, who already approved, current base/merge order, and merged PRs).
 - **Autonomous plan adjustment:** You are authorized to re-order independent PRs, split an oversized PR, add a separate external-fix PR off `origin/main`, or adjust a later card based on real findings from an earlier PR (such as Kira's DB sampling notes). **Never weaken the `north_star_goal`** in `state.json`: full feature built cleanly, zero skipped requirements, zero silent hacks, zero unauthorized core/outside edits, and verified end-to-end.
+
+## Child Health, Restarts and Recovery
+
+- **After a host restart or any child ending `interrupted`, `cancelled` or `failed`:** before re-dispatching, inspect the child's worktree (`git status`, `git log -1`, remote branch head) and the PR. Re-dispatch the same phase with a brief that says what is already on disk ("uncommitted edits from an interrupted run are valid input; inspect the diff and continue") instead of restarting from scratch. Never repeat a push or PR creation that already happened.
+- **No-progress rule:** a child whose thread shows no activity items several minutes after start, or no new activity for a long stretch while `running`, is stuck. Cancel it and re-dispatch on another provider; record the switch and reason in `runtime` in `state.json`. A user preference for or against a provider is recorded in `runtime` for this run, not in this skill.
+- **Single-provider fallback for the review gate:** when only one model family is usable, Phase 04 runs on a fresh-context child told to review adversarially as if it had never seen the plan. Record that the gate ran same-family.
+- **Review lessons travel forward:** when a reviewer finds a class of defect on one PR (wrong currency source, reads scoped by project instead of the access-checked run, ambiguous master-data matches, UI offering actions the backend refuses), add it to `runtime.review_lessons` in `state.json` and include that list in every later Phase 03 and Phase 04 brief.
 
 ## Escalation Rules
 
