@@ -18,7 +18,7 @@ You are a fresh-context child spawned asynchronously by the Orchestrator wheneve
      - **No reply needed (informational noise):** Empty `APPROVED` reviews, Darkplane auto-scorecards, PR-assigner comments, `"On it"` status updates, or plain acknowledgments (`"LGTM"`, `"Thanks"`) require **zero** reply — never spam PR threads.
 3. **Apply fixes, re-verify & sync:**
    - Fix all "Fix now" items and CI failures in the PR worktree (if a fix requires editing files outside `Allowed write files` / external subsystems, report `EXTERNAL_FIX_NEEDED` instead of expanding scope).
-   - Re-run affected local gates (changed-files-only `ruff format --check` for `.py`).
+   - Re-run affected local gates (changed-files-only `ruff format --check` for `.py`). If CI runs tests in parallel, also run the changed test files once in parallel mode (e.g. `pytest -n 2 <files>`) so a per-worker collection mismatch shows up before the push.
    - Follow repo `squash`/`push` conventions as appropriate and push to the PR branch.
    - **Keep the PR description true in the same round:** if a fix removes or renames a function or type, changes a rule, a stored shape or an error, touches a file the description calls new, or leaves a known limit, update those parts of the description now (`gh pr edit --body-file`) and re-read it with `gh pr view`. Reviewers approve against the text, and bot reviewers block on a description that describes old code. Never state in a reply that the description or a README changed unless you re-read it after the edit.
 4. **Reply concisely on the PR (only where a response adds value):**

@@ -15,6 +15,7 @@ You are a fresh-context **Implementation** child working in an isolated git work
    - Outside `/experimental/`, tag touched lines with the repo's required experimental marker; inside `/experimental/`, follow repo conventions without redundant markers.
    - If you discover a bug or missing hook in an **external/shared** subsystem outside `Allowed write files`, do **not** sneak it into this PR; stop and report `EXECUTE_RESULT: EXTERNAL_FIX_NEEDED | area=<...> | reason=<...>` so the orchestrator can spawn a separate clean PR off `origin/main`.
 3. Run any required codegen (e.g., `npm run api:generate`) and **every** verification command on the PR Card.
+   - If CI runs tests in parallel (pytest-xdist and similar), run the changed test files once in that mode locally too (e.g. `pytest -n 2 <files>`). Parametrize values must be identical in every worker: no generated ids, timestamps or random values in `parametrize`.
    - Run formatting checks (`ruff format --check`) on **changed `.py` files only** (`git diff --name-only <base>...HEAD -- '*.py'`) so pre-existing untouched repo drift never triggers false failures.
 4. Inspect `git diff --stat` and confirm zero edits outside `Allowed write files` and zero stray untracked files.
 5. Create one clean commit on your worktree branch. Do **not** push or open the PR here (Phase 04 Cross-Model Review-and-Fix Gate runs next on this worktree).
