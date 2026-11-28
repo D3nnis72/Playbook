@@ -119,6 +119,8 @@ The user reads your message without the code, the diff, or your last ten steps i
 
 State the situation in one sentence, then the concrete case: the file, screen, row, or ticket. Say what you recommend and what happens with each option. "Which company and variant should it be for X, Y and Z?" is not a question until it says what is missing and why you cannot pick.
 
+Ask one decision at a time. A sentence like "confirm that X, that Y, and that Z" with field names and branch or flag names in it gets one short block per decision: what is being decided in the user's words, what you propose, and what changes for them with yes or with no. Identifiers can follow in brackets, not carry the question. This holds for decision and question cards in a document too, because the user reads them later without the thread that produced them. One "go" for several actions is fine when each action was already explained and agreed; the rule is about decisions the user has not seen yet.
+
 Use the words the user sees: UI labels, file names, their own terms. If you coin a label, define it once with an example, or use plain words instead. Restate an item instead of pointing at its number, because "point 3" means nothing one screen later.
 
 Link what you name. When the answer mentions something the user can open, such as a ticket, pull request, review comment, message thread, record in the app, page or file, put the link at that spot, because they will want to look for themselves and searching costs them more than the link costs you. Prefer the place where they see it, like the record in the app or the thread, over an index or search page. If you have no link, say where it is and why the link is missing.
